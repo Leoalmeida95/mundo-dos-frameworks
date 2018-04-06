@@ -6,42 +6,30 @@
 	<meta charset="utf-8">
 	<title> {% block titulo %}{% endblock %}</title>
 
-	<link rel="icon" href="{% static 'favicon.ico' %}"> {% compress css %}
+	<link rel="icon" href="{% static 'favicon-16x16.png' %}"> {% compress css %}
 	<link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
 	<link href="{% static 'font-awesome/css/font-awesome.min.css' %} " rel="stylesheet"> {% endcompress %}
 </head>
 
 <body>
 	<!-- HEADER -->
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 		 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<a class="navbar-brand ml-1" href="/">
-			<i class="fa fa-book" aria-hidden="true"></i>
+		<a class="navbar-brand ml-1" href="/web">
+			<i class="fa fa-cog" aria-hidden="true"></i>
 		</a>
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="/secretarias">Secretarias</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/disciplinas">Disciplinas</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/alunos">Alunos</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/sobre">Sobre</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/contato">Contato</a>
+					<a class="nav-link" >Linguagens</a>
 				</li>
 			</ul>
 			<div class="form-inline my-2 my-lg-0">
-				<a class="btn btn-outline-info my-2 my-sm-0" href="{% url 'admin:login' %}">Login</a>
+				<a class="btn btn-outline-warning my-2 my-sm-0" href="{% url 'admin:login' %}">Login</a>
 			</div>
 		</div>
 	</nav>
@@ -53,7 +41,7 @@
 		<p>
 			<small>Universidade Federal Rural do Rio de Janeiro</small>
 			<br/>
-			<small>© 2018 Copyright: Leonardo Almeida</small>
+			<small>Copyright© 2018 - Leonardo Almeida</small>
 		</p>
 	</footer>
 	{% compress js %}
