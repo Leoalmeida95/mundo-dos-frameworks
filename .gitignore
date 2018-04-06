@@ -1,6 +1,7 @@
-*.i
-*.ii
-*.gpu
-*.ptx
-*.cubin
-*.fatbin
+*.pyc
+node_modules
+static_files
+.vs
+settings.json
+package.json
+package-lock.json
