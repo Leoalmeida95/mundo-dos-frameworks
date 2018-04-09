@@ -16,7 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
+import wofapp.urls
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('web/', include('web.urls'))
+    path('web/', include('wofapp.urls',namespace='wofapp'))
 ]
