@@ -1,12 +1,12 @@
-{% extends "base.html" %} {% block titulo %}Início{% endblock %} {% block conteudo %} {% load staticfiles %}
+{% extends "web/base.html" %} {% block titulo %}Início{% endblock %} {% block conteudo %} {% load staticfiles %}
 <!-- CONTENT -->
 <p>Seja bem vindo {% if user.is_authenticated %}{{ user.first_name }}{% else %}usuário anônimo{% endif %}</p>
-{% if user.is_authenticated %}
+{% comment %} {% if user.is_authenticated %}
 <p><a href="{% url 'web:logout' %}">Logout</a>.</p>
 {% else %}
 <p><a href="{% url 'web:register' %}">Registre-se</a>.</p>
 <p><a href="{% url 'web:login' %}">Login</a>.</p>
-{% endif %}
+{% endif %} {% endcomment %}
 <div class="container my-5">
 	<div class="col-md-7 mx-auto">
 		<div class="card border-dark mb-3">

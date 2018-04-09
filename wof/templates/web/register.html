@@ -1,7 +1,9 @@
-<h1>Registrarion</h1>
+{% extends "web/base.html" %} {% block titulo %}Login{% endblock %} {% block conteudo %} {% load staticfiles %}
+<h1>Registro</h1>
 
 <form role="form" class="form" method="POST">
 {% csrf_token %}
 {{ form.as_p }}
-<button type="submit" class="btn btn-warning">Register</button>
+<button class="btn btn-outline-info my-2 my-sm-0" type="submit" class="btn btn-warning">Registre-se</button>
 </form>
+{% endblock %}

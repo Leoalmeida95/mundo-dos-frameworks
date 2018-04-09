@@ -22,6 +22,7 @@ class EmailUserManager(BaseUserManager):
 
     def create_superuser(self, *args, **kwargs):
         user = self.create_user(**kwargs)
+        user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
         return user
@@ -59,7 +60,7 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
 
     def __str__(self):
         return self.nome
-        
+
 class Linguagem(models.Model):
     nome = models.CharField(max_length=30)
     

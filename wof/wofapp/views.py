@@ -8,7 +8,7 @@ from django.urls import reverse_lazy, reverse
 from .forms import CustomUserCreationForm
 
 def home(request):
-    return render(request,'home.html')
+    return render(request,'web/home.html')
 
 
 def login_view(request, *args, **kwargs):
