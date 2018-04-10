@@ -29,9 +29,9 @@ class PerfilAdmin(admin.ModelAdmin):
 
 class UsuarioAdmin(admin.ModelAdmin):
     model = Usuario
-    list_display = ['nome']
-    list_filter = ['nome']
-    search_fields = ['nome',]
+    list_display = ['email']
+    list_filter = ['email']
+    search_fields = ['email',]
     save_on_top = True
 
 

@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="br">
+
 <head>
 	<meta charset="utf-8">
 	<title> {% block titulo %}{% endblock %}</title>
@@ -25,24 +26,37 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a class="nav-link" >Linguagens</a>
+					<a class="nav-link">Linguagens</a>
 				</li>
 			</ul>
+			{% if user.is_authenticated %}
 			<div class="form-inline my-2 my-lg-0">
-				<a class="btn btn-outline-info my-2 my-sm-0" href="{% url 'admin:login' %}">Login</a>
+				<a class="btn btn-sm btn-outline-info my-2 my-sm-0" href="{% url 'web:logout' %}">Logout</a>
 			</div>
+			{% else %}
+			<div class="form-inline my-2 my-lg-0 mr-2">
+				<a class="btn btn-sm btn-outline-info my-2 my-sm-0" href="{% url 'admin:login' %}">Login</a>
+			</div>
+			<p style="color:white" class="my-2">ou</p>
+			<div class="form-inline my-2 my-lg-0 ml-2">
+				<a class="btn btn-sm btn-outline-info my-2 my-sm-0" href="{% url 'web:register' %}">Registre-se</a>
+			</div>
+			{% endif %}
 		</div>
 	</nav>
 	<div class="content">
 		{% block conteudo %} {% endblock %}
 	</div>
 	<!-- FOOTER -->
-	<footer class="footer-copyright py-3 text-center">
-		<p>
-			<small>Universidade Federal Rural do Rio de Janeiro</small>
-			<br/>
-			<small>Copyright© 2018 - Leonardo Almeida</small>
-		</p>
+	<hr>
+	<footer class="text-center">
+		<small id="footer">
+			<p>
+				Universidade Federal Rural do Rio de Janeiro
+				<br /> Copyright© 2018 Leonardo Almeida
+				<br /> Todos os direitos reservados
+			</p>
+		</small>
 	</footer>
 	{% compress js %}
 	<script src="{% static 'jquery/dist/jquery.slim.min.js' %}"></script>
