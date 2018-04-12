@@ -1,10 +1,10 @@
 {% extends "web/base.html" %} {% block titulo %}Início{% endblock %} {% block conteudo %} {% load staticfiles %}
 <!-- CONTENT -->
-<h5 class="mt-2">Seja bem vindo {% if user.is_authenticated %}{{ user.first_name }}{% else %}usuário anônimo{% endif %}</h5>
+<h6 class="mt-2 ml-5">Seja bem-vindo {% if user.is_authenticated %}{{ user.first_name }}{% else %}usuário anônimo{% endif %}</h6>
 <div class="container">
 	<div class="col-md-7 mx-auto">
 		<div class="card border-dark mb-3">
-			<div class="col-md-6 mx-auto mt-2 mb-2">
+			<div class="col-md-6 mx-auto mt-4 mb-2">
 				<img class="card-img-top" src="{% static 'code.png' %}" alt="Card image cap">
 			</div>
 			<div class="card-body">

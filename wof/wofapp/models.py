@@ -34,7 +34,7 @@ class Perfil(models.Model):
 
 class Usuario(PermissionsMixin, AbstractBaseUser):
     cpf = models.CharField(max_length=30)
-    is_active = models.BooleanField(default=True)
+    is_activeUser = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     conta_publica = models.BooleanField(default=False)
     formacao = models.CharField(max_length=80,null = True)
@@ -86,7 +86,7 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
 
     @property
     def is_active(self):
-        return self.is_active
+        return self.is_activeUser
 
 class Linguagem(models.Model):
     nome = models.CharField(max_length=30)

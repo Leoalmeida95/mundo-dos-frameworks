@@ -20,5 +20,5 @@ import wofapp.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('web/', include('wofapp.urls',namespace='wofapp'))
+    path('', include('wofapp.urls',namespace='wofapp'))
 ]

@@ -19,14 +19,27 @@
 		 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<a class="navbar-brand ml-1" href="/web/home/">
+		<a class="navbar-brand ml-1" href="/">
 			<i class="fa fa-cog" aria-hidden="true"></i>
 		</a>
-
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a class="nav-link">Linguagens</a>
+					<a class="nav-link" href="/">Início</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+					 aria-expanded="false">Linguagens</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						{%for lg in linguagens %}
+						<a class="dropdown-item" href="{% url 'web:frameworks' lg.id %}">{{lg.nome}}</a>
+						{%endfor%}
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="#">FAQ</a>
+					</div>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link">FAQ</a>
 				</li>
 			</ul>
 			{% if user.is_authenticated %}
@@ -48,12 +61,12 @@
 		{% block conteudo %} {% endblock %}
 	</div>
 	<!-- FOOTER -->
-	<hr>
+	<hr style="border:solid 1p">
 	<footer class="text-center">
 		<small id="footer">
 			<p>
 				Universidade Federal Rural do Rio de Janeiro
-				<br /> Copyright© 2018 Leonardo Almeida
+				<br /> Copyright © 2018 Leonardo Almeida
 				<br /> Todos os direitos reservados
 			</p>
 		</small>

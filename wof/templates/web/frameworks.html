@@ -1,0 +1,17 @@
+{% extends "web/base.html" %} {% block titulo %}Início{% endblock %} {% block conteudo %} {% load staticfiles %}
+<div class="col-sm-5 mx-auto mt-3">
+    <div class="card">
+        <div class="card-header">Informações do Aluno</div>
+        <div class="card-body">
+            {%for frm in frameworks %}
+            <div class="row">
+                <div class="form-group col-md-10">
+                    <label for="usr">Nome:</label>
+                    <input type="text" class="form-control bg-white" id="usr" value="{{frm.nome}}" disabled>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</div>
+{% endblock %}
