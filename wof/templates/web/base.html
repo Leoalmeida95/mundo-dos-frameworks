@@ -32,7 +32,7 @@
 					 aria-expanded="false">Linguagens</a>
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size:70%;">
 						{%for lg in linguagens %}
-						<a class="dropdown-item" href="{% url 'web:frameworks' lg.id %}" >{{lg.nome}}</a>
+						<a class="dropdown-item" href="{% url 'web:frameworks' lg.id %}">{{lg.nome}}</a>
 						{%endfor%}
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="#">FAQ</a>
@@ -87,13 +87,37 @@
 				</li>
 			</ul>
 			{% else %}
-			<div class="form-inline my-2 my-lg-0 mr-2">
-				<a class="btn btn-sm btn-outline-info my-2 my-sm-0" href="{% url 'admin:login' %}">Login</a>
-			</div>
-			<p style="color:white" class="my-2">ou</p>
-			<div class="form-inline my-2 my-lg-0 ml-2">
-				<a class="btn btn-sm btn-outline-info my-2 my-sm-0" href="{% url 'web:register' %}">Registre-se</a>
-			</div>
+			<ul class="navbar-nav mr-5">
+				<li class="nav-item dropdown">
+					<div class="btn-group my-2 my-lg-0 ml-2">
+						<button type="button" class="btn btn-sm btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Login
+						</button>
+						<div class="dropdown-menu dropdown-menu-right">
+							<form class="px-4 py-3">
+								<div class="form-group">
+									<label for="exampleDropdownFormEmail1">Email</label>
+									<input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@exemplo.com">
+								</div>
+								<div class="form-group">
+									<label for="exampleDropdownFormPassword1">Senha</label>
+									<input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Senha">
+								</div>
+								<div class="form-check">
+									<input type="checkbox" class="form-check-input" id="dropdownCheck">
+									<label class="form-check-label mb-2" for="dropdownCheck">
+										Lembre-me
+									</label>
+								</div>
+								<button type="submit" class="btn btn-primary">Entrar</button>
+							</form>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Novo por aqui? Registre-se</a>
+							<a class="dropdown-item" href="{% url 'web:register' %}">Esqueceu a senha?</a>
+						</div>
+					</div>
+				</li>
+			</ul>
 			{% endif %}
 		</div>
 	</nav>
