@@ -1,6 +1,6 @@
 {% extends "web/base.html" %} {% block titulo %}Início{% endblock %} {% block conteudo %} {% load staticfiles %}
 <!-- CONTENT -->
-<h6 class="mt-2 ml-5">Seja bem-vindo {% if user.is_authenticated %}{{ user.first_name }}{% else %}usuário anônimo{% endif %}</h6>
+<h6 class="mt-2 ml-5">Seja bem-vindo {% if user.is_authenticated %}{{ user.first_name }} {% else %}usuário anônimo{% endif %}</h6>
 <div class="container">
 	<div class="col-md-7 mx-auto">
 		<div class="card border-dark mb-3">
@@ -11,7 +11,8 @@
 				<h5 class="card-title text-center">World of Frameworks</h5>
 			</div>
 		</div>
-		<br/><br/>
+		<br/>
+		<br/>
 	</div>
 </div>
 {% endblock %}

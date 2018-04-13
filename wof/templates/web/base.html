@@ -30,22 +30,62 @@
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
 					 aria-expanded="false">Linguagens</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size:70%;">
 						{%for lg in linguagens %}
-						<a class="dropdown-item" href="{% url 'web:frameworks' lg.id %}">{{lg.nome}}</a>
+						<a class="dropdown-item" href="{% url 'web:frameworks' lg.id %}" >{{lg.nome}}</a>
 						{%endfor%}
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="#">FAQ</a>
 					</div>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link">FAQ</a>
+					<a class="nav-link" href="#">FAQ</a>
 				</li>
 			</ul>
 			{% if user.is_authenticated %}
-			<div class="form-inline my-2 my-lg-0">
-				<a class="btn btn-sm btn-outline-info my-2 my-sm-0" href="{% url 'web:logout' %}">Logout</a>
-			</div>
+			<ul class="navbar-nav mr-5">
+				<li class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-user-o" aria-hidden="true"></i>
+						<strong class="ml-1">Usuário</strong>
+					</a>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+						<div class="dropdown-item disabled">
+							<i class="fa fa-user-circle-o" aria-hidden="true"></i>
+							<small>
+								<strong class="ml-2 text-dark">{{user.first_name}} {{user.last_name}}</strong>
+							</small>
+						</div>
+						<div class="dropdown-item disabled">
+							<i class="fa fa-address-card-o" aria-hidden="true"></i>
+							<small>
+								<strong class="ml-2 text-dark">{{ user.perfil }}</strong>
+							</small>
+						</div>
+						<div class="dropdown-item disabled">
+							<i class="fa fa-envelope-o" aria-hidden="true"></i>
+							<small>
+								<strong class="ml-2 text-dark">{{user.email}}</strong>
+							</small>
+						</div>
+						<div class="dropdown-item disabled">
+							<a class="btn btn-outline-warning btn-sm btn-block" role="button" href="/Pessoa/Register">Novo Usuário</a>
+						</div>
+						<div class="dropdown-item disabled">
+							<a class="btn btn-outline-primary btn-sm btn-block" role="button" href="/Pessoa/AtualizarUsuario">Atualizar Dados</a>
+						</div>
+						<div class="dropdown-divider"></div>
+						<div class="dropdown-item disabled">
+							<div class="row">
+								<div class="col-sm-12">
+									<a class="btn btn-outline-danger btn-sm btn-block" role="button" href="/admin/logout/">
+										<i class="fas fa-sign-out-alt"></i> Sair</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
 			{% else %}
 			<div class="form-inline my-2 my-lg-0 mr-2">
 				<a class="btn btn-sm btn-outline-info my-2 my-sm-0" href="{% url 'admin:login' %}">Login</a>
