@@ -16,7 +16,8 @@ def home(request):
 def get_frameworks(request,lg_id):
     linguagem = Linguagem.objects.get(id=lg_id)
     frameworks = Framework.objects.all().filter(linguagem_id=lg_id)
-    return render(request,'web/frameworks.html',{'frameworks':frameworks,'linguagem':linguagem})
+    linguagens = Linguagem.objects.all().order_by('nome')
+    return render(request,'web/frameworks.html',{'frameworks':frameworks,'linguagem':linguagem,'linguagens':linguagens})
 
 def login_view(request, *args, **kwargs):
     if request.user.is_authenticated:

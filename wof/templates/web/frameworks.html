@@ -1,16 +1,208 @@
-{% extends "web/base.html" %} {% block titulo %}Início{% endblock %} {% block conteudo %} {% load staticfiles %}
-<div class="col-sm-5 mx-auto mt-3">
-    <div class="card">
-        <div class="card-header">Frameworks do {{linguagem.nome}}</div>
-        <div class="card-body">
-            {%for frm in frameworks %}
-            <div class="row">
-                <div class="form-group col-md-10">
-                    <label>{{frm.nome}}</label>
-                </div>
-            </div>
-            {%endfor%}
+{% extends "web/base.html" %} {% block titulo %}Frameworks{% endblock %} {% block conteudo %} {% load staticfiles %}
+<br/>
+<div class="ml-3">Frameworks disponíveis do {{linguagem.nome}}</div>
+<br/>
+<ul class="nav nav-tabs ml-2">
+    {%for frm in frameworks %}
+    <li class="nav-item" style="display:inline-block">
+        {% with frameworks|first as first %} {% if frm == first%}
+        <a id="navClick" class="nav-link active" href="#" style="color:black">{{first}}</a>
+        {%else%}
+        <a id="navClick" class="nav-link" href="#" style="color:black">{{frm}}</a>
+        {% endif %}
+    </li>
+    {% endwith %} {%endfor%}
+</ul>
+<br/>
+<div class="row">
+    <div class="col-md-4">
+        <div id="list-example" class="list-group">
+            <a class="list-group-item list-group-item-action active" href="#list-item-1">Hello World</a>
+            <a class="list-group-item list-group-item-action" href="#list-item-2">Versões</a>
+            <a class="list-group-item list-group-item-action" href="#list-item-3">Opiniões</a>
+            <a class="list-group-item list-group-item-action" href="#list-item-4">Links</a>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div data-spy="scroll" data-target="#list-example" data-offset="0" class="scrollspy-example" style="overflow: auto; max-height: 400px;">
+            <h4 id="list-item-1">Hello World
+                <i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal" data-target="#exampleModalLong" title="Editar Hello World"
+                    style="cursor:pointer"></i>
+            </h4>
+            <p>ACillum nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum sunt enim. Irure laboris mollit
+                consequat incididunt sint et culpa culpa incididunt adipisicing magna magna occaecat. Nulla ipsum cillum
+                eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident ullamco ipsum esse elit ut
+                Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit incididunt.met tempor
+                mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit qui et. Aliquip labore
+                ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure consequat id quis ea.
+                Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo eiusmod aliquip est
+                do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip exercitation ullamco
+                adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation officia nisi
+                adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat. ACillum
+                nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum sunt enim. Irure laboris mollit
+                consequat incididunt sint et culpa culpa incididunt adipisicing magna magna occaecat. Nulla ipsum cillum
+                eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident ullamco ipsum esse elit ut
+                Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit incididunt.met tempor
+                mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit qui et. Aliquip labore
+                ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure consequat id quis ea.
+                Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo eiusmod aliquip est
+                do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip exercitation ullamco
+                adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation officia nisi
+                adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat.ACillum
+                nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum sunt enim. Irure laboris mollit
+                consequat incididunt sint et culpa culpa incididunt adipisicing magna magna occaecat. Nulla ipsum cillum
+                eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident ullamco ipsum esse elit ut
+                Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit incididunt.met tempor
+                mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit qui et. Aliquip labore
+                ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure consequat id quis ea.
+                Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo eiusmod aliquip est
+                do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip exercitation ullamco
+                adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation officia nisi
+                adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat.ACillum
+                nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum sunt enim. Irure laboris mollit
+                consequat incididunt sint et culpa culpa incididunt adipisicing magna magna occaecat. Nulla ipsum cillum
+                eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident ullamco ipsum esse elit ut
+                Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit incididunt.met tempor
+                mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit qui et. Aliquip labore
+                ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure consequat id quis ea.
+                Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo eiusmod aliquip est
+                do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip exercitation ullamco
+                adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation officia nisi
+                adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat. </p>
+            <h4 id="list-item-2">Versões</h4>
+            <p>Cillum nisi deserunt magna eACillum nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum
+                sunt enim. Irure laboris mollit consequat incididunt sint et culpa culpa incididunt adipisicing magna magna
+                occaecat. Nulla ipsum cillum eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident
+                ullamco ipsum esse elit ut Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit
+                incididunt.met tempor mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit
+                qui et. Aliquip labore ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure
+                consequat id quis ea. Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo
+                eiusmod aliquip est do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip
+                exercitation ullamco adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation
+                officia nisi adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat.ACillum
+                nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum sunt enim. Irure laboris mollit
+                consequat incididunt sint et culpa culpa incididunt adipisicing magna magna occaecat. Nulla ipsum cillum
+                eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident ullamco ipsum esse elit ut
+                Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit incididunt.met tempor
+                mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit qui et. Aliquip labore
+                ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure consequat id quis ea.
+                Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo eiusmod aliquip est
+                do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip exercitation ullamco
+                adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation officia nisi
+                adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat.iusmod qui
+                eiusmod velit voluptate pariatur laborum sunt enim. Irure laboris mollit consequat incididunt sint et culpa
+                culpa incididunt adipisicing magna magna occaecat. Nulla ipsum cillum eiusmod sint elit excepteur ea labore
+                enim consectetur in labore anim. Proident ullamco ipsum esse elit ut Lorem eiusmod dolor et eiusmod. Anim
+                occaecat nulla in non consequat eiusmod velit incididunt.</p>
+            <h4 id="list-item-3">Opiniões</h4>
+            <p>Quis magna Lorem anim amet ipsum do mollit sit cillum voluptate ex nulla tempor. Laborum consequat non elit enim
+                exercitation cillum aliqua consequat id aliqua. Esse ex consectetur mollit voluptate est in duis laboris
+                ad sit ipsum anim Lorem. Incididunt veniam velit elit elit veniam Lorem aliqua quis ullamco deserunt sit
+                enim elit aliqua esse irure. Laborum nisi sit est tempor laborum mollit labore officia laborum excepteur
+                commodo non commodo dolor excepteur commodo. Ipsum fugiat ex est consectetur ipsum commodo tempor sunt in
+                proident.
+            </p>
+            <h4 id="list-item-4">Links</h4>
+            <p>Quis anim sit do amet fugiat dolor velit sit ea ea do reprehenderit culpa duis. Nostrud aliqua ipsum fugiat minim
+                proident occaecat excepteur aliquip culpa aute tempor reprehenderit. Deserunt tempor mollit elit ex pariatur
+                dolore velit fugiat mollit culpa irure ullamco est ex ullamco Cillum nisi deserunt magna eiusmod qui eiusmod
+                velit voluptate pariatur laborum sunt enim. Irure laboris mollit consequat incididunt sint et culpa culpa
+                incididunt adipisicing magna magna occaecat. Nulla ipsum cillum eiusmod sint elit excepteur ea labore enim
+                consectetur in labore anim. Proident ullamco ipsum esse elit ut Lorem eiusmod dolor et eiusmod. Anim occaecat
+                nulla in non consequat eiusmod velit incididunt.ACillum nisi deserunt magna eiusmod qui eiusmod velit voluptate
+                pariatur laborum sunt enim. Irure laboris mollit consequat incididunt sint et culpa culpa incididunt adipisicing
+                magna magna occaecat. Nulla ipsum cillum eiusmod sint elit excepteur ea labore enim consectetur in labore
+                anim. Proident ullamco ipsum esse elit ut Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat
+                eiusmod velit incididunt.met tempor mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem
+                et occaecat elit qui et. Aliquip labore ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum
+                excepteur irure consequat id quis ea. Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit
+                aliqua commodo eiusmod aliquip est do duis amet proident magna consectetur consequat eu commodo fugiat non
+                quis. Enim aliquip exercitation ullamco adipisicing voluptate excepteur minim exercitation minim minim commodo
+                adipisicing exercitation officia nisi adipisicing. Anim id duis qui consequat labore adipisicing sint dolor
+                elit cillum anim et fugiat.ACillum nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum
+                sunt enim. Irure laboris mollit consequat incididunt sint et culpa culpa incididunt adipisicing magna magna
+                occaecat. Nulla ipsum cillum eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident
+                ullamco ipsum esse elit ut Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit
+                incididunt.met tempor mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit
+                qui et. Aliquip labore ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure
+                consequat id quis ea. Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo
+                eiusmod aliquip est do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip
+                exercitation ullamco adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation
+                officia nisi adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat.ACillum
+                nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum sunt enim. Irure laboris mollit
+                consequat incididunt sint et culpa culpa incididunt adipisicing magna magna occaecat. Nulla ipsum cillum
+                eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident ullamco ipsum esse elit ut
+                Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit incididunt.met tempor
+                mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit qui et. Aliquip labore
+                ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure consequat id quis ea.
+                Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo eiusmod aliquip est
+                do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip exercitation ullamco
+                adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation officia nisi
+                adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat.excepteur.</p>
         </div>
     </div>
 </div>
-{% endblock %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edição do Hello World</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <textarea class="form-control" rows="50">
+              ACillum nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum sunt enim. Irure laboris mollit
+              consequat incididunt sint et culpa culpa incididunt adipisicing magna magna occaecat. Nulla ipsum cillum
+              eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident ullamco ipsum esse elit ut
+              Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit incididunt.met tempor
+              mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit qui et. Aliquip labore
+              ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure consequat id quis ea.
+              Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo eiusmod aliquip est
+              do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip exercitation ullamco
+              adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation officia nisi
+              adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat. ACillum
+              nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum sunt enim. Irure laboris mollit
+              consequat incididunt sint et culpa culpa incididunt adipisicing magna magna occaecat. Nulla ipsum cillum
+              eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident ullamco ipsum esse elit ut
+              Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit incididunt.met tempor
+              mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit qui et. Aliquip labore
+              ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure consequat id quis ea.
+              Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo eiusmod aliquip est
+              do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip exercitation ullamco
+              adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation officia nisi
+              adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat.ACillum
+              nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum sunt enim. Irure laboris mollit
+              consequat incididunt sint et culpa culpa incididunt adipisicing magna magna occaecat. Nulla ipsum cillum
+              eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident ullamco ipsum esse elit ut
+              Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit incididunt.met tempor
+              mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit qui et. Aliquip labore
+              ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure consequat id quis ea.
+              Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo eiusmod aliquip est
+              do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip exercitation ullamco
+              adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation officia nisi
+              adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat.ACillum
+              nisi deserunt magna eiusmod qui eiusmod velit voluptate pariatur laborum sunt enim. Irure laboris mollit
+              consequat incididunt sint et culpa culpa incididunt adipisicing magna magna occaecat. Nulla ipsum cillum
+              eiusmod sint elit excepteur ea labore enim consectetur in labore anim. Proident ullamco ipsum esse elit ut
+              Lorem eiusmod dolor et eiusmod. Anim occaecat nulla in non consequat eiusmod velit incididunt.met tempor
+              mollit aliquip pariatur excepteur commodo do ea cillum commodo Lorem et occaecat elit qui et. Aliquip labore
+              ex ex esse voluptate occaecat Lorem ullamco deserunt. Aliqua cillum excepteur irure consequat id quis ea.
+              Sit proident ullamco aute magna pariatur nostrud labore. Reprehenderit aliqua commodo eiusmod aliquip est
+              do duis amet proident magna consectetur consequat eu commodo fugiat non quis. Enim aliquip exercitation ullamco
+              adipisicing voluptate excepteur minim exercitation minim minim commodo adipisicing exercitation officia nisi
+              adipisicing. Anim id duis qui consequat labore adipisicing sint dolor elit cillum anim et fugiat.
+                        </textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br/> {% endblock %}
