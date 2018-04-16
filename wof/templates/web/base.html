@@ -20,7 +20,7 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<a class="navbar-brand ml-1" href="/">
-			<i class="fa fa-cog" aria-hidden="true"></i>
+			<i class="fa fa-desktop" aria-hidden="true"></i>
 		</a>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
@@ -69,7 +69,7 @@
 							</small>
 						</div>
 						<div class="dropdown-item disabled">
-							<a class="btn btn-outline-warning btn-sm btn-block" role="button" href="/Pessoa/Register">Novo Usuário</a>
+							<a class="btn btn-outline-warning btn-sm btn-block" role="button" href="">Favoritos</a>
 						</div>
 						<div class="dropdown-item disabled">
 							<a class="btn btn-outline-primary btn-sm btn-block" role="button" href="/Pessoa/AtualizarUsuario">Atualizar Dados</a>
@@ -90,7 +90,7 @@
 			<ul class="navbar-nav mr-5">
 				<li class="nav-item dropdown">
 					<div class="btn-group my-2 my-lg-0 ml-2">
-						<button type="button" class="btn btn-sm btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							Login
 						</button>
 						<div class="dropdown-menu dropdown-menu-right">
@@ -109,11 +109,11 @@
 										Lembre-me
 									</label>
 								</div>
-								<button type="submit" class="btn btn-primary">Entrar</button>
+								<a class="btn btn-primary" href="/admin">Entrar</a>
 							</form>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Novo por aqui? Registre-se</a>
-							<a class="dropdown-item" href="{% url 'web:register' %}">Esqueceu a senha?</a>
+							<a class="dropdown-item" href="{% url 'web:register' %}">Novo por aqui? Registre-se</a>
+							<a class="dropdown-item" href="#">Esqueceu a senha?</a>
 						</div>
 					</div>
 				</li>
