@@ -33,26 +33,31 @@ class Perfil(models.Model):
         return self.nome
 
 class Usuario(PermissionsMixin, AbstractBaseUser):
-    cpf = models.CharField(max_length=30)
+    cpf = models.CharField(
+        max_length=30,
+        blank=False,
+        help_text=_('O campo CPF é obriagatório.'),
+        unique = True,)
+    email = models.EmailField(
+        verbose_name=_('Email'),
+        max_length = 100,
+        unique=True,
+    help_text=_('O campo Email é obrigatório.'),)
+    first_name = models.CharField(
+        verbose_name=_('Nome'),
+        max_length=50,
+        blank=False,
+        help_text=_('O campo Nome é obrigatório.'),)
+    last_name = models.CharField(
+        verbose_name=_('Sobrenome'),
+        max_length=50,
+        blank=False,
+        help_text=_('O campo Sobrenome é obrigatório.'),)
     is_activeUser = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     conta_publica = models.BooleanField(default=False)
     formacao = models.CharField(max_length=80,null = True)
     profissao = models.CharField(max_length=80,null = True)
-    email = models.EmailField(
-        verbose_name=_('Email'),
-        max_length = 100,
-        unique=True,)
-    first_name = models.CharField(
-        verbose_name=_('Nome'),
-        max_length=50,
-        blank=False,
-        help_text=_('Informe seu nome'),)
-    last_name = models.CharField(
-        verbose_name=_('Sobrenome'),
-        max_length=50,
-        blank=False,
-        help_text=_('Informe seu sobrenome'),)
     perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, null = False,default = 1)
     data_cadastro = models.DateField(auto_now=True)
 

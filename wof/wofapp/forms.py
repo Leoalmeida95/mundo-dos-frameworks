@@ -6,8 +6,15 @@ from .models import Usuario
 
 
 class CustomUserCreationForm(UserCreationForm):
-    password1 = forms.CharField(label='password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='password_confirm', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='password', widget=forms.PasswordInput(attrs={'id': 'password'}))
+    password2 = forms.CharField(label='password_confirm', widget=forms.PasswordInput(attrs={'id': 'password_confirm'}))
+    first_name = forms.CharField(label='first_name', widget=forms.TextInput(attrs={'id': 'first_name'}))
+    last_name = forms.CharField(label='last_name', widget=forms.TextInput(attrs={'id': 'last_name'}))
+    cpf = forms.CharField(label='cpf', widget=forms.TextInput(attrs={'id': 'cpf'}))
+    conta_publica = forms.CharField(label='conta_publica', widget=forms.BooleanField)
+    formacao = forms.CharField(label='formacao', widget=forms.TextInput(attrs={'id': 'formacao'}))
+    profissao = forms.CharField(label='profissao', widget=forms.TextInput(attrs={'id': 'profissao'}))
+    email = forms.CharField(label='email', widget=forms.TextInput(attrs={'id': 'email'}))
     class Meta:
         model = Usuario
         fields = ['first_name','last_name','cpf','conta_publica','formacao','profissao', 'email']
