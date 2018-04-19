@@ -54,6 +54,7 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
         blank=False,
         help_text=_('Informe seu sobrenome'),)
     perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, null = False,default = 1)
+    data_cadastro = models.DateField(auto_now=True)
 
     objects = EmailUserManager()
     USERNAME_FIELD = 'email'

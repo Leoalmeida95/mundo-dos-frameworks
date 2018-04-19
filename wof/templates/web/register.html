@@ -9,211 +9,224 @@
 </style>
 <form role="form" class="form" method="POST">
     {% csrf_token %}
-    <div class="container">
+    {{ form.non_field_errors }}
+    <div class="card text-white bg-dark mx-auto mt-4" style="width: 50rem;">
         <form class="form-inline" role="form" method="POST" action="/register">
-            <div class="row mt-3">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <h3>Registrar novo Usuário</h3>
-                    <hr>
-                </div>
+            <div class="card-header text-center">
+                <h4>Registrar novo Usuário</h4>
             </div>
-            <div class="row">
-                <div class="col-md-3 field-label-responsive">
-                    <label for="name">Nome</label>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="mt-2" style="width: 2.6rem">
-                                <i class="fa fa-user"></i>
+            <div class="card-body">
+                <div class="row mt-3">
+                    <div class="col-md-3 field-label-responsive">
+                        <span style="color:red">*</span>
+                        <label for="name">Nome</label>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="mt-2" style="width: 2.6rem">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input type="text" value="{{ first_name }}" name="name" class="form-control" id="name" placeholder="Leonardo" required>
                             </div>
-                            <input type="text" name="name" class="form-control" id="name" placeholder="Leonardo" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-control-feedback">
+                            <span class="text-danger align-middle">
+                                    {{ form.first_name.errors }}
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            <!-- Put name validation error messages here -->
-                        </span>
+                <div class="row">
+                    <div class="col-md-3 field-label-responsive">
+                        <span style="color:red">*</span>
+                        <label for="sobrenome">Sobrenome</label>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 field-label-responsive">
-                    <label for="sobrenome">Sobrenome</label>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="mt-2" style="width: 2.6rem">
-                                <i class="fa fa-user-o" aria-hidden="true"></i>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="mt-2" style="width: 2.6rem">
+                                    <i class="fa fa-user-o" aria-hidden="true"></i>
+                                </div>
+                                <input type="text" value="{{ last_name }}" name="sobrenome" class="form-control" id="sobrenome" placeholder="Almeida" required>
                             </div>
-                            <input type="text" name="sobrenome" class="form-control" id="sobrenome" placeholder="Almeida" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-control-feedback">
+                            <span class="text-danger align-middle">
+                                    {{ form.last_name.errors }}
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            <!-- Put name validation error messages here -->
-                        </span>
+                <div class="row">
+                    <div class="col-md-3 field-label-responsive">
+                        <span style="color:red">*</span>
+                        <label for="cpf">CPF</label>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 field-label-responsive">
-                    <label for="cpf">CPF</label>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="mt-2" style="width: 2.6rem">
-                                <i class="fa fa-id-card-o" aria-hidden="true"></i>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="mt-2" style="width: 2.6rem">
+                                    <i class="fa fa-id-card-o" aria-hidden="true"></i>
+                                </div>
+                                <input type="text" value="{{ cpf }}" name="cpf" class="form-control" id="cpf" placeholder="xxx.xxx.xxx-xx" required>
                             </div>
-                            <input type="text" name="cpf" class="form-control" id="cpf" placeholder="xxx.xxx.xxx-xx" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-control-feedback">
+                            <span class="text-danger align-middle">
+                                    {{ form.cpf.errors }}
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            <!-- Put name validation error messages here -->
-                        </span>
+                <div class="row">
+                    <div class="col-md-3 field-label-responsive">
+                        <label for="profissao">Profissão</label>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 field-label-responsive">
-                    <label for="profissao">Profissão</label>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="mt-2" style="width: 2.6rem">
-                                <i class="fa fa-briefcase" aria-hidden="true"></i>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="mt-2" style="width: 2.6rem">
+                                    <i class="fa fa-briefcase" aria-hidden="true"></i>
+                                </div>
+                                <input type="text" value="{{ profissao }}" name="profissao" class="form-control" id="profissao" placeholder="Estudante">
                             </div>
-                            <input type="text" name="profissao" class="form-control" id="profissao" placeholder="Estudante" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-control-feedback">
+                            <span class="text-danger align-middle">
+                                    {{ form.profissao.errors }}
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            <!-- Put name validation error messages here -->
-                        </span>
+                <div class="row">
+                    <div class="col-md-3 field-label-responsive">
+                        <label for="formacao">Formação</label>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 field-label-responsive">
-                    <label for="formacao">Formação</label>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="mt-2" style="width: 2.6rem">
-                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="mt-2" style="width: 2.6rem">
+                                    <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                </div>
+                                <input type="text" value="{{ formacao }}" name="formacao" class="form-control" id="formacao" placeholder="Ciência da Computação">
                             </div>
-                            <input type="text" name="formacao" class="form-control" id="formacao" placeholder="Ciência da Computação" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-control-feedback">
+                            <span class="text-danger align-middle">
+                                    {{ form.formacao.errors }}
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            <!-- Put name validation error messages here -->
-                        </span>
+                <div class="row">
+                    <div class="col-md-3 field-label-responsive">
+                        <span style="color:red">*</span>
+                        <label for="email">E-mail
+                        </label>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 field-label-responsive">
-                    <label for="email">E-mail
-                    </label>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="mt-2" style="width: 2.6rem">
-                                <i class="fa fa-at"></i>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="mt-2" style="width: 2.6rem">
+                                    <i class="fa fa-at"></i>
+                                </div>
+                                <input type="text" value="{{ email }}" name="email" class="form-control" id="email" placeholder="voce@exemplo.com" required>
                             </div>
-                            <input type="text" name="email" class="form-control" id="email" placeholder="voce@exemplo.com" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-control-feedback">
+                            <span class="text-danger align-middle">
+                                    {{ form.email.errors }}
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            <!-- Put e-mail validation error messages here -->
-                        </span>
+                <div class="row">
+                    <div class="col-md-3 field-label-responsive">
+                        <span style="color:red">*</span>
+                        <label for="password">Senha</label>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 field-label-responsive">
-                    <label for="password">Senha</label>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group has-danger">
-                        <div class="input-group">
-                            <div class="mt-2" style="width: 2.6rem">
-                                <i class="fa fa-key"></i>
+                    <div class="col-md-6">
+                        <div class="form-group has-danger">
+                            <div class="input-group">
+                                <div class="mt-2" style="width: 2.6rem">
+                                    <i class="fa fa-key"></i>
+                                </div>
+                                <input type="password" value="{{ password }}" name="password" class="form-control" id="password" placeholder="Senha" required>
                             </div>
-                            <input type="password" name="password" class="form-control" id="password" placeholder="Senha" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-control-feedback">
+                            <span class="text-danger align-middle">
+                                <!-- <i class="fa fa-close"> </i> -->{{ form.passoword.errors }}
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            <!-- <i class="fa fa-close"> </i> -->
-                        </span>
+                <div class="row">
+                    <div class="col-md-3 field-label-responsive">
+                        <span style="color:red">*</span>
+                        <label for="password">Confirmar Senha</label>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 field-label-responsive">
-                    <label for="password">Confirmar Senha</label>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="mt-2" style="width: 2.6rem">
-                                <i class="fa fa-repeat"></i>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="mt-2" style="width: 2.6rem">
+                                    <i class="fa fa-repeat"></i>
+                                </div>
+                                <input type="password" value="{{ password_confirm }}" name="password_confirm" class="form-control" id="password-confirm" placeholder="Senha" required>
                             </div>
-                            <input type="password" name="password-confirmation" class="form-control" id="password-confirm" placeholder="Senha" required>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3 field-label-responsive">
-                    <label for="password">Conta pública</label>
-                </div>
-                <div class="mt-2 ml-3" style="width: 2.6rem">
-                    <i class="fa fa-user-secret" aria-hidden="true"></i>
-                </div>
-                <div class="col-md-5 mt-2">
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input" checked>
-                        <label class="custom-control-label" for="customRadioInline1">Sim</label>
+                <div class="row">
+                    <div class="col-md-3 field-label-responsive">
+                        <span style="color:red">**</span>
+                        <label for="password">Conta pública</label>
                     </div>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
-                        <label class="custom-control-label" for="customRadioInline2">Não</label>
+                    <div class="mt-2 ml-3" style="width: 2.6rem">
+                        <i class="fa fa-user-secret" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-md-5 mt-2">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" value="{{conta_publica}}" id="customRadioInline1" name="customRadioInline1" class="custom-control-input" checked>
+                            <label class="custom-control-label" for="customRadioInline1">Sim</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" value="{{conta_publica}}" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline2">Não</label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-7"></div>
-                <div class="col-md-3 ml-5">
-                    <button type="submit" class="btn btn-success">
-                        <i class="fa fa-user-plus"></i> Registrar</button>
+                <div class="row">
+                    <div class="col-md-7"></div>
+                    <div class="col-md-3 ml-5">
+                        <button type="submit" class="btn btn-outline-primary">
+                            <i class="fa fa-user-plus"></i> Registrar</button>
+                    </div>
                 </div>
             </div>
         </form>
+    </div>
+    <div class="row mt-5">
+        <small class="mx-auto">
+            <span style="color:red">*</span> Campos obrigatórios
+            <br/>
+            <span style="color:red">**</span> A conta pública torna a autoria de suas alterações no site visíveis para outros usuários.
+        </small>
     </div>
 </form>
 {% endblock %}
