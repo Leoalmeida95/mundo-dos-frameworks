@@ -9,7 +9,7 @@
 </style>
 <div class="card text-white bg-dark mx-auto mt-4" style="width: 50rem;">
     <form class="form" role="form" method="POST" action="/register/">
-        {% csrf_token %} {{ form.non_field_errors }}
+        {% csrf_token %}
         <div class="card-header text-center">
             <h4>Registrar novo Usuário</h4>
         </div>
@@ -25,17 +25,16 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-user"></i>
                             </div>
-                            <input type="text" id="first_name" name="first_name" class="form-control" placeholder="Leonardo" required>
+                            <input type="text" id="first_name" value="{{ form.first_name.value }}" name="first_name" class="form-control" placeholder="Leonardo"
+                                required>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            {{ form.first_name.errors }}
-                        </span>
-                    </div>
-                </div>
+            </div>
+            <div class="form-control-feedback">
+                <small class="text-danger text-center">
+                    {{ form.first_name.errors }}
+                </small>
             </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
@@ -48,18 +47,17 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-user-o" aria-hidden="true"></i>
                             </div>
-                            <input type="text" name="last_name" class="form-control" id="last_name" placeholder="Almeida" required>
+                            <input type="text" value="{{ form.last_name.value }}" name="last_name" class="form-control" id="last_name" placeholder="Almeida"
+                                required>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            {{ form.last_name.errors }}
-                        </span>
-                    </div>
-                </div>
             </div>
+            <div class="form-control-feedback">
+                    <small class="text-danger text-center">
+                        {{ form.last_name.errors }}
+                    </small>
+                </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">*</span>
@@ -71,18 +69,17 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-id-card-o" aria-hidden="true"></i>
                             </div>
-                            <input type="text" name="cpf" class="form-control" id="cpf" placeholder="xxx.xxx.xxx-xx" required>
+                            <input type="text" value="{{ form.cpf.value }}" name="cpf" class="form-control" maxlength="11" id="cpf" placeholder="xxx.xxx.xxx-xx"
+                                required>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            {{ form.cpf.errors }}
-                        </span>
-                    </div>
-                </div>
             </div>
+            <div class="form-control-feedback">
+                    <small class="text-danger text-center">
+                        {{ form.cpf.errors }}
+                    </small>
+                </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <label for="profissao">Profissão</label>
@@ -93,18 +90,16 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-briefcase" aria-hidden="true"></i>
                             </div>
-                            <input type="text" name="profissao" class="form-control" id="profissao" placeholder="Estudante">
+                            <input type="text" value="{{ form.profissao.value }}" name="profissao" class="form-control" id="profissao" placeholder="Estudante">
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            {{ form.profissao.errors }}
-                        </span>
-                    </div>
-                </div>
             </div>
+            <div class="form-control-feedback">
+                    <small class="text-danger text-center">
+                        {{ form.profissao.errors }}
+                    </small>
+                </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <label for="formacao">Formação</label>
@@ -115,18 +110,16 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                             </div>
-                            <input type="text" name="formacao" class="form-control" id="formacao" placeholder="Ciência da Computação">
+                            <input type="text" value="{{ form.formacao.value }}" name="formacao" class="form-control" id="formacao" placeholder="Ciência da Computação">
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            {{ form.formacao.errors }}
-                        </span>
-                    </div>
-                </div>
             </div>
+            <div class="form-control-feedback">
+                    <small class="text-danger text-center">
+                        {{ form.formacao.errors }}
+                    </small>
+                </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">*</span>
@@ -139,22 +132,21 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-at"></i>
                             </div>
-                            <input type="text" name="email" class="form-control" id="email" placeholder="voce@exemplo.com" required>
+                            <input type="email" value="{{ form.email.value }}" name="email" class="form-control" id="email" placeholder="voce@exemplo.com"
+                                required>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            {{ form.email.errors }}
-                        </span>
-                    </div>
-                </div>
             </div>
+            <div class="form-control-feedback">
+                    <small class="text-danger text-center">
+                        {{ form.email.errors }}
+                    </small>
+                </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">*</span>
-                    <label for="password">Senha</label>
+                    <label for="password1">Senha</label>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group has-danger">
@@ -162,22 +154,20 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-key"></i>
                             </div>
-                            <input type="password" name="password" class="form-control" id="password" placeholder="Senha" required>
+                            <input type="password" name="password1" class="form-control" id="password1" placeholder="Senha" required>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            <!-- <i class="fa fa-close"> </i> -->{{ form.passoword.errors }}
-                        </span>
-                    </div>
-                </div>
             </div>
+            <div class="form-control-feedback">
+                    <small class="text-danger text-center">
+                        {{ form.password1.errors }}
+                    </small>
+                </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">*</span>
-                    <label for="password_confirm">Confirmar Senha</label>
+                    <label for="password2">Confirmar Senha</label>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
@@ -185,12 +175,16 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-repeat"></i>
                             </div>
-                            <input type="password" name="password_confirm" class="form-control" id="password_confirm"
-                                placeholder="Senha" required>
+                            <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirmar Senha" required>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="form-control-feedback">
+                    <small class="text-danger text-center">
+                        {{ form.password2.errors }}
+                    </small>
+                </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">**</span>
@@ -201,20 +195,19 @@
                 </div>
                 <div class="col-md-5 mt-2">
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="conta_publica" name="conta_publica" class="custom-control-input"
-                            checked>
-                        <label class="custom-control-label" for="conta_publica">Sim</label>
+                        <input type="radio" id="conta_publica1" name="conta_publica" class="custom-control-input" checked>
+                        <label class="custom-control-label" for="conta_publica1">Sim</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="conta_publica" name="conta_publica" class="custom-control-input">
-                        <label class="custom-control-label" for="conta_publica">Não</label>
+                        <input type="radio" id="conta_publica2" name="conta_publica" class="custom-control-input">
+                        <label class="custom-control-label" for="conta_publica2">Não</label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-7"></div>
                 <div class="col-md-3 ml-5">
-                    <button type="submit" class="btn btn-outline-primary">
+                    <button type="submit" class="btn btn-primary">
                         <i class="fa fa-user-plus"></i> Registrar</button>
                 </div>
             </div>

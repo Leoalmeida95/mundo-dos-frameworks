@@ -20,19 +20,24 @@ def get_frameworks(request,lg_id):
     linguagens = Linguagem.objects.all().order_by('nome')
     return render(request,'web/frameworks.html',{'frameworks':frameworks,'linguagem':linguagem,'linguagens':linguagens})
 
-def login_view(request, *args, **kwargs):
-    if request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('web:home'))
+def login(request, *args, **kwargs):
+    args = {}
+    if request.method == "POST":
+        form = AuthenticationForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect(reverse('web:home'))
+    else:
+        form = AuthenticationForm()
 
-    kwargs['extra_context'] = {'next': reverse('web:home')}
-    kwargs['template_name'] = 'web:login.html'
-    return login(request, *args, **kwargs)
+    args['form'] = form
+    return render(request,'web/home.html',args)
 
 def logout_view(request, *args, **kwargs):
     kwargs['next_page'] = reverse('web:home')
     return logout(request, *args, **kwargs)
 
 def register(request):
+    args = {}
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -41,10 +46,9 @@ def register(request):
     else:
         form = CustomUserCreationForm()
 
+    args['form'] = form
     linguagens = Linguagem.objects.all().order_by('nome')
-    return render(request,'web/register.html',{'form':form,'linguagens':linguagens})
+    return render(request,'web/register.html',args)
 
-# class RegistrationView(CreateView):
-#     form_class = CustomUserCreationForm
-#     success_url = reverse_lazy('web:login')
-#     template_name = "web/register.html"
+# @login_required
+# def altera_framework(request):
