@@ -3,11 +3,10 @@ from django.template import loader
 from django.views.generic import CreateView, ListView
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.contrib.auth.views import login
-from django.contrib.auth.views import logout
 from django.urls import reverse_lazy, reverse
+from django.contrib.auth import authenticate, login, logout
 
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm,AuthenticationForm
 from .models import Linguagem, Framework
 
 def home(request):
@@ -20,12 +19,21 @@ def get_frameworks(request,lg_id):
     linguagens = Linguagem.objects.all().order_by('nome')
     return render(request,'web/frameworks.html',{'frameworks':frameworks,'linguagem':linguagem,'linguagens':linguagens})
 
-def login(request, *args, **kwargs):
+def login_view(request, *args, **kwargs):
     args = {}
     if request.method == "POST":
-        form = AuthenticationForm(request.POST)
-        if form.is_valid():
+        # form = AuthenticationForm(request.POST)
+        # if form.is_valid():
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # Redirect to a success page.
             return HttpResponseRedirect(reverse('web:home'))
+        else:
+            # Return an 'invalid login' error message.
+            return HttpResponseRedirect(reverse('erro'))
     else:
         form = AuthenticationForm()
 
