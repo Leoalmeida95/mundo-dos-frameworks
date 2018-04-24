@@ -8,9 +8,9 @@ from .models import Usuario
 
 class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(label='password',required=True, 
-        widget=forms.PasswordInput(attrs={'id': 'password'}))
+        widget=forms.PasswordInput(attrs={'id': 'password1'}))
     password2 = forms.CharField(label='password_confirm',required=True, 
-        widget=forms.PasswordInput(attrs={'id': 'password_confirm'}))
+        widget=forms.PasswordInput(attrs={'id': 'password2'}))
     first_name = forms.CharField(label='first_name',required=True, 
         widget=forms.TextInput(attrs={'id': 'first_name'}))
     last_name = forms.CharField(label='last_name',required=True, 
@@ -74,23 +74,11 @@ class AuthenticationForm(forms.Form):
     Base class for authenticating users. Extend this to get a form that accepts
     username/password logins.
     """
-    username = forms.CharField(label='username',max_length=254)
-    password = forms.CharField(label='password', widget=forms.PasswordInput)
+    username = forms.CharField(required=True,
+                widget=forms.TextInput(attrs={'id': 'username'}))
+    password = forms.CharField(required=True,
+                widget=forms.PasswordInput(attrs={'id': 'password'}))
 
-    def __init__(self, request=None, *args, **kwargs):
-        """
-        The 'request' parameter is set for custom auth use by subclasses.
-        The form data comes in via the standard 'data' kwarg.
-        """
-        self.request = request
-        self.user_cache = None
-        super(AuthenticationForm, self).__init__(*args, **kwargs)
-
-        # Set the label for the "username" field.
-        Usuario = get_user_model()
-        self.username_field = Usuario._meta.get_field(Usuario.USERNAME_FIELD)
-        if self.fields['username'].label is None:
-            self.fields['username'].label = capfirst(self.username_field.verbose_name)
 
     def clean(self):
         username = self.cleaned_data.get('username')
@@ -101,10 +89,8 @@ class AuthenticationForm(forms.Form):
                                            password=password)
             if self.user_cache is None:
                 raise forms.ValidationError(
-                    self.error_messages['Login ou senha incorretos. Por favor verifique seus dados.'],
-                    code='Essa conta está inativa.',
-                    params={'username': self.username_field.verbose_name},
-                )
+                    'Login ou senha incorretos. Por favor verifique seus dados.',
+                    code='Essa conta está inativa.')
             else:
                 self.confirm_login_allowed(self.user_cache)
 
@@ -125,7 +111,6 @@ class AuthenticationForm(forms.Form):
             raise forms.ValidationError(
                 self.error_messages['Essa conta está inativa.'],
                 code='Essa conta está inativa.',
-
             )
 
     def get_user_id(self):
