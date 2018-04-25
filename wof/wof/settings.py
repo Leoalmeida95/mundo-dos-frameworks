@@ -136,6 +136,8 @@ COMPRESS_STORAGE = STATICFILES_STORAGE
 STATICFILES_DIRS = (
             os.path.join(BASE_DIR,"node_modules"),
             os.path.join(BASE_DIR,"imagens"),
+            os.path.join(BASE_DIR,"scripts"),
+            os.path.join(BASE_DIR,"content"),
 )
 
 STATICFILES_FINDERS = (

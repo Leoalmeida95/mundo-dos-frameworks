@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from .forms import CustomUserCreationForm,AuthenticationForm
 from .models import Linguagem, Framework
@@ -47,6 +48,7 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            messages.success(request, 'Parabéns, registro concluído com sucesso.')
             return HttpResponseRedirect(reverse('web:home'))
     else:
         form = CustomUserCreationForm()
@@ -55,5 +57,23 @@ def register(request):
     linguagens = Linguagem.objects.all().order_by('nome')
     return render(request,'web/register.html',args)
 
-# @login_required
-# def altera_framework(request):
+@login_required
+def altera_usuario_view(request):
+    return render(request,'atualizar_dados.html',{'linguagens':linguagens})
+
+@login_required
+def atualiza_usuario(request):
+    user = request.user
+    if request.method == 'POST':
+        form = UserChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'Usuario actualizado exitosamente.', extra_tags='html_dante')
+            return HttpResponseRedirect(reverse('home:listar_usuarios'))
+    else:
+        form = UserChangeForm(instance=user)
+        
+    context = {
+        'form': form,
+    }
+    return render(request, 'atualizar_dados.html', context)

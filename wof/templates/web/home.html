@@ -2,7 +2,15 @@
 <!-- CONTENT -->
 <span class="badge badge-primary mt-4 ml-3">Seja bem-vindo(a) {% if user.is_authenticated %}{{ user.first_name }} {% else %}usuário anônimo{% endif %}</span>
 <div class="container">
-	<div class="col-md-7 mx-auto">
+	{% if messages %}
+	<ul class="messages">
+		{% for message in messages %}
+		<div></div>
+		<li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+			{% endfor %}
+	</ul>
+	{% endif %}
+	<div class="col-md-7 mx-auto mt-3">
 		<div class="card border-dark mb-3">
 			<div class="col-md-6 mx-auto mt-4 mb-2">
 				<img class="card-img-top" src="{% static 'code.png' %}" alt="Card image cap">
@@ -12,7 +20,8 @@
 			</div>
 		</div>
 		<br/>
-		<br/>
 	</div>
 </div>
+
+<script src="{% static 'toastr.js' %}"></script> 
 {% endblock %}

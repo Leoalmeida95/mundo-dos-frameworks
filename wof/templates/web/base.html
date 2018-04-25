@@ -9,60 +9,11 @@
 
 	<link rel="icon" href="{% static 'favicon-16x16.png' %}"> {% compress css %}
 	<link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
-	<link href="{% static 'font-awesome/css/font-awesome.min.css' %} " rel="stylesheet"> {% endcompress %}
+	<link href="{% static 'font-awesome/css/font-awesome.min.css' %} " rel="stylesheet">
+	<link href="{% static 'toastr/build/toastr.min.css' %} " rel="stylesheet"> 
+	<link href="{% static 'drop_nav.css' %} " rel="stylesheet"> 
+	{% endcompress %}
 </head>
-<style>
-	#login-dp {
-		min-width: 250px;
-		padding: 14px 14px 0;
-		overflow: hidden;
-		background-color: rgba(255, 255, 255, .8);
-	}
-
-	#login-dp .help-block {
-		font-size: 12px
-	}
-
-	#login-dp .bottom {
-		background-color: rgba(255, 255, 255, .8);
-		border-top: 1px solid #ddd;
-		clear: both;
-		padding: 14px;
-	}
-
-	#login-dp .social-buttons {
-		margin: 12px 0
-	}
-
-	#login-dp .social-buttons a {
-		width: 49%;
-	}
-
-	#login-dp .form-group {
-		margin-bottom: 10px;
-	}
-
-	.btn-fb {
-		color: #fff;
-		background-color: #3b5998;
-	}
-
-	.btn-fb:hover {
-		color: #fff;
-		background-color: #496ebc
-	}
-
-	@media(max-width:768px) {
-		#login-dp {
-			background-color: inherit;
-			color: #fff;
-		}
-		#login-dp .bottom {
-			background-color: inherit;
-			border-top: 0 none;
-		}
-	}
-</style>
 
 <body>
 	<!-- HEADER -->
@@ -215,9 +166,11 @@
 		</small>
 	</footer>
 	{% compress js %}
-	<script src="{% static 'jquery/dist/jquery.slim.min.js' %}"></script>
+	<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
 	<script src="{% static 'popper.js/dist/umd/popper.min.js' %}"></script>
-	<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script> {% endcompress %}
+	<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'toastr/build/toastr.min.js' %}"></script> 
+	{% endcompress %}
 </body>
 
 </html>

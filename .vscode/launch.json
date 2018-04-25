@@ -10,7 +10,7 @@
             "request": "launch",
             "stopOnEntry": false,
             "pythonPath": "C:/Users/Leonardo/AppData/Local/Programs/Python/Python36-32/python.exe",
-            "program": "${workspaceRoot}/manage.py",
+            "program": "${workspaceRoot}/wof/manage.py",
             "args": [
                 "runserver",
                 "--noreload"

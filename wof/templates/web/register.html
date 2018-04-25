@@ -26,7 +26,7 @@
                                 <i class="fa fa-user"></i>
                             </div>
                             <input type="text" id="first_name" value="{{ form.first_name.value }}" name="first_name" class="form-control" placeholder="Leonardo"
-                                required>
+                                required onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false" maxlength="150">
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                                 <i class="fa fa-user-o" aria-hidden="true"></i>
                             </div>
                             <input type="text" value="{{ form.last_name.value }}" name="last_name" class="form-control" id="last_name" placeholder="Almeida"
-                                required>
+                                required onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false" maxlength="150">
                         </div>
                     </div>
                 </div>
@@ -69,8 +69,8 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-id-card-o" aria-hidden="true"></i>
                             </div>
-                            <input type="text" value="{{ form.cpf.value }}" name="cpf" class="form-control" maxlength="11" id="cpf" placeholder="xxx.xxx.xxx-xx"
-                                required>
+                            <input type="text" value="{{ form.cpf.value }}" name="cpf" class="form-control" maxlength="14" id="cpf" placeholder="xxx.xxx.xxx-xx"
+                                required onkeypress="return validaNumeros(event)" onpaste="return false" ondrop="return false">
                         </div>
                     </div>
                 </div>
@@ -90,7 +90,7 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-briefcase" aria-hidden="true"></i>
                             </div>
-                            <input type="text" value="{{ form.profissao.value }}" name="profissao" class="form-control" id="profissao" placeholder="Estudante">
+                            <input type="text" value="{{ form.profissao.value }}" name="profissao" class="form-control" id="profissao" placeholder="Estudante" maxlength="150">
                         </div>
                     </div>
                 </div>
@@ -110,7 +110,8 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                             </div>
-                            <input type="text" value="{{ form.formacao.value }}" name="formacao" class="form-control" id="formacao" placeholder="Ciência da Computação">
+                            <input type="text" value="{{ form.formacao.value }}" name="formacao" class="form-control" id="formacao" placeholder="Ciência da Computação"
+                            onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false" maxlength="150">
                         </div>
                     </div>
                 </div>
@@ -221,4 +222,6 @@
         <span style="color:red">**</span> A conta pública torna a autoria de suas alterações no site visíveis para outros usuários.
     </small>
 </div>
+
+<script src="{% static 'validacao.js' %}"></script> 
 {% endblock %}
