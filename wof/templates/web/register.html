@@ -70,7 +70,7 @@
                                 <i class="fa fa-id-card-o" aria-hidden="true"></i>
                             </div>
                             <input type="text" value="{{ form.cpf.value }}" name="cpf" class="form-control" maxlength="14" id="cpf" placeholder="xxx.xxx.xxx-xx"
-                                required onkeypress="return validaNumeros(event)" onpaste="return false" ondrop="return false">
+                                required onkeypress="formatar('###.###.###-##', this);return validaNumeros(event)" onpaste="return false" ondrop="return false">
                         </div>
                     </div>
                 </div>

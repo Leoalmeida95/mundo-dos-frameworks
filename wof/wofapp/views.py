@@ -11,11 +11,11 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm,AuthenticationForm
 from .models import Linguagem, Framework
 
-def home(request):
+def home_view(request):
     linguagens = Linguagem.objects.all().order_by('nome')
     return render(request,'web/home.html',{'linguagens':linguagens})
 
-def get_frameworks(request,lg_id):
+def frameworks_view(request,lg_id):
     linguagem = Linguagem.objects.get(id=lg_id)
     frameworks = Framework.objects.all().filter(linguagem_id=lg_id)
     linguagens = Linguagem.objects.all().order_by('nome')
@@ -42,10 +42,11 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('web:home'))
 
-def register(request):
+def register_view(request):
     args = {}
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
+        args['form'] = form
         if form.is_valid():
             user = form.save()
             messages.success(request, 'Parabéns, registro concluído com sucesso.')
@@ -53,16 +54,16 @@ def register(request):
     else:
         form = CustomUserCreationForm()
 
-    args['form'] = form
     linguagens = Linguagem.objects.all().order_by('nome')
     return render(request,'web/register.html',args)
 
 @login_required
-def altera_usuario_view(request):
+def atualizar_usuario_view(request):
+    form = CustomUserCreationForm(request.POST)
     return render(request,'atualizar_dados.html',{'linguagens':linguagens})
 
 @login_required
-def atualiza_usuario(request):
+def atualizar_usuario(request):
     user = request.user
     if request.method == 'POST':
         form = UserChangeForm(request.POST, instance=user)

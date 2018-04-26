@@ -10,9 +10,12 @@
 	<link rel="icon" href="{% static 'favicon-16x16.png' %}"> {% compress css %}
 	<link href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
 	<link href="{% static 'font-awesome/css/font-awesome.min.css' %} " rel="stylesheet">
-	<link href="{% static 'toastr/build/toastr.min.css' %} " rel="stylesheet"> 
-	<link href="{% static 'drop_nav.css' %} " rel="stylesheet"> 
-	{% endcompress %}
+	<link href="{% static 'toastr/build/toastr.min.css' %} " rel="stylesheet">
+	<link href="{% static 'drop_nav.css' %} " rel="stylesheet"> {% endcompress %} {% compress js %}
+	<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+	<script src="{% static 'popper.js/dist/umd/popper.min.js' %}"></script>
+	<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'toastr/build/toastr.min.js' %}"></script> {% endcompress %}
 </head>
 
 <body>
@@ -76,7 +79,7 @@
 								<a class="btn btn-outline-warning btn-sm btn-block" role="button" href="">Favoritos</a>
 							</div>
 							<div class="dropdown-item disabled">
-								<a class="btn btn-outline-primary btn-sm btn-block" role="button" href="/Pessoa/AtualizarUsuario">Atualizar Dados</a>
+								<a class="btn btn-outline-primary btn-sm btn-block" role="button" href="/atualizar_usuario/">Atualizar Dados</a>
 							</div>
 							<div class="bottom dropdown-item disabled">
 								<div class="row">
@@ -165,12 +168,6 @@
 			</p>
 		</small>
 	</footer>
-	{% compress js %}
-	<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
-	<script src="{% static 'popper.js/dist/umd/popper.min.js' %}"></script>
-	<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
-	<script src="{% static 'toastr/build/toastr.min.js' %}"></script> 
-	{% endcompress %}
 </body>
 
 </html>

@@ -3,9 +3,10 @@ from . import views
 
 app_name='web'
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.home_view, name='home'),
     path('login/', views.login_view, name="login"),
     path('logout/', views.logout_view, name="logout"),
-    path('register/', views.register, name="register"),
-    path('frameworks/<int:lg_id>', views.get_frameworks, name='frameworks'),
+    path('register/', views.register_view, name="register"),
+    path('atualizar_usuario/', views.atualizar_usuario_view, name="atualizar"),
+    path('frameworks/<int:lg_id>', views.frameworks_view, name='frameworks'),
 ]

@@ -1,11 +1,11 @@
 {% extends "web/base.html" %} {% block titulo %}Início{% endblock %} {% block conteudo %} {% load staticfiles %}
 <!-- CONTENT -->
-<span class="badge badge-primary mt-4 ml-3">Seja bem-vindo(a) {% if user.is_authenticated %}{{ user.first_name }} {% else %}usuário anônimo{% endif %}</span>
+<span class="badge badge-primary mt-4 ml-3">Olá {% if user.is_authenticated %}{{ user.first_name }} {% else %}usuário anônimo{% endif %}, já se atualizou sobre seus
+	frameworks preferidos hoje?</span>
 <div class="container">
 	{% if messages %}
 	<ul class="messages">
 		{% for message in messages %}
-		<div></div>
 		<li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
 			{% endfor %}
 	</ul>
@@ -22,6 +22,24 @@
 		<br/>
 	</div>
 </div>
-
-<script src="{% static 'toastr.js' %}"></script> 
-{% endblock %}
+<script type="text/javascript">
+	$(document).ready(function () {
+		toastr.info('Salvo com sucesso!', 'Informação', {
+			"closeButton": true,
+			"debug": false,
+			"newestOnTop": false,
+			"progressBar": true,
+			"positionClass": "toast-bottom-right",
+			"preventDuplicates": false,
+			"onclick": null,
+			"showDuration": "300",
+			"hideDuration": "1000",
+			"timeOut": "5000",
+			"extendedTimeOut": "1000",
+			"showEasing": "swing",
+			"hideEasing": "linear",
+			"showMethod": "fadeIn",
+			"hideMethod": "fadeOut"
+		});
+	});
+</script> {% endblock %}
