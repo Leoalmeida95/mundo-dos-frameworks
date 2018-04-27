@@ -4,7 +4,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import authenticate, get_user_model
 from django.utils.text import capfirst
 
-from .models import Usuario
+from .models import Usuario,Comentario,Framework
 
 class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(label='password',required=True, 
@@ -121,3 +121,19 @@ class AuthenticationForm(forms.Form):
     def get_user(self):
 
         return self.user_cache
+
+class ComentarioForm(forms.ModelForm):
+        class Meta:
+        model = Comentario
+        fields = ['texto','framework_id',]
+
+    def clean(self):
+        f_Id = self.cleaned_data.get('framework_id')
+        framework = Framework.objects.all().filter('framework_id')
+
+        if framework is None:
+            raise forms.ValidationError(
+                    'Erro ao realizar o comentário, por favor entre em contato com o suporte.',
+                    code='Framework inválido.')
+        
+        return self.cleaned_data

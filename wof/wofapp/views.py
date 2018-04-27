@@ -58,6 +58,16 @@ def register_view(request):
     return render(request,'web/register.html',args)
 
 @login_required
+def comentario_view(request):
+    user = request.user
+    if request.method == 'POST':
+        form = ComentarioForm(request.POST, instance=user)
+        if form.is_valid():
+        linguagens = Linguagem.objects.all().order_by('nome')
+        #retornar para o framework de origem do post
+        return render(request,'web/frameworks.html',{'frameworks':frameworks,'linguagem':linguagem,'linguagens':linguagens})
+
+@login_required
 def atualizar_usuario_view(request):
     form = CustomUserCreationForm(request.POST)
     return render(request,'atualizar_dados.html',{'linguagens':linguagens})

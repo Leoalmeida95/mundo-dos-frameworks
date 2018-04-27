@@ -21,7 +21,7 @@
             <a class="list-group-item list-group-item-action" href="#list-item-2">Versões</a>
             <a class="list-group-item list-group-item-action" href="#list-item-3">Opiniões</a>
             <a class="list-group-item list-group-item-action" href="#list-item-4">Links</a>
-            <a class="list-group-item list-group-item-action" href="#list-item-5">Comentários</a>
+            <!-- <a class="list-group-item list-group-item-action" href="#list-item-5">Comentários</a> -->
         </div>
     </div>
     <div class="col-md-10">
@@ -251,20 +251,23 @@
         </div>
     </div>
 </div>
+<!-- EndModal -->
 <br/>
-<div class="card mt-5 mx-5" id="list-item-5">
-    <div class="card-header">
-        Comentários <i class="fa fa-commenting-o" aria-hidden="true"></i>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-11">
-                <input type="text" class="form-control" placeholder="Seus comentários..." /> 
-            </div>
-            <div class="col-md-1">
-                <button type="submit" class="mr-4 btn btn-default" >Enviar <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+<div class="card mt-5 mx-5">
+    <form class="form" role="form" method="POST" action="/comentar/">
+        <div class="card-header">
+            Comentários <i class="fa fa-commenting-o" aria-hidden="true"></i>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-10">
+                    <input type="text" name="texto" id="texto" class="form-control" placeholder="Seus comentários..." /> 
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="mr-4 btn btn-default" >Enviar <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 {% endblock %}
