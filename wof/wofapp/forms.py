@@ -123,9 +123,10 @@ class AuthenticationForm(forms.Form):
         return self.user_cache
 
 class ComentarioForm(forms.ModelForm):
-        class Meta:
+
+    class Meta:
         model = Comentario
-        fields = ['texto','framework_id',]
+        fields = ['texto','framework',]
 
     def clean(self):
         f_Id = self.cleaned_data.get('framework_id')

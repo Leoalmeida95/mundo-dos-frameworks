@@ -12,14 +12,14 @@ from .forms import CustomUserCreationForm,AuthenticationForm
 from .models import Linguagem, Framework
 
 def home_view(request):
-    linguagens = Linguagem.objects.all().order_by('nome')
-    return render(request,'web/home.html',{'linguagens':linguagens})
+    linguagens_navbar = Linguagem.objects.all().order_by('nome')
+    return render(request,'web/home.html',{'linguagens':linguagens_navbar})
 
 def frameworks_view(request,lg_id):
-    linguagem = Linguagem.objects.get(id=lg_id)
+    linguagem_selecionada = Linguagem.objects.get(id=lg_id)
     frameworks = Framework.objects.all().filter(linguagem_id=lg_id)
-    linguagens = Linguagem.objects.all().order_by('nome')
-    return render(request,'web/frameworks.html',{'frameworks':frameworks,'linguagem':linguagem,'linguagens':linguagens})
+    linguagens_navbar = Linguagem.objects.all().order_by('nome')
+    return render(request,'web/frameworks.html',{'frameworks':frameworks,'linguagem':linguagem_selecionada,'linguagens':linguagens_navbar})
 
 def login_view(request, *args, **kwargs):
     args = {}
@@ -54,18 +54,19 @@ def register_view(request):
     else:
         form = CustomUserCreationForm()
 
-    linguagens = Linguagem.objects.all().order_by('nome')
     return render(request,'web/register.html',args)
 
 @login_required
 def comentario_view(request):
     user = request.user
+    linguagens_navbar = Linguagem.objects.all().order_by('nome')
     if request.method == 'POST':
         form = ComentarioForm(request.POST, instance=user)
         if form.is_valid():
-        linguagens = Linguagem.objects.all().order_by('nome')
-        #retornar para o framework de origem do post
-        return render(request,'web/frameworks.html',{'frameworks':frameworks,'linguagem':linguagem,'linguagens':linguagens})
+            x = request.POST['texto']
+
+    #retornar para o framework de origem do post
+    return render(request,'web/frameworks.html')
 
 @login_required
 def atualizar_usuario_view(request):
