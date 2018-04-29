@@ -61,16 +61,18 @@ def register_view(request):
     return render(request,'register.html',args)
 
 @login_required
-def comentario_view(request):
+def comentario_view(request,id):
+    args = {}
     user = request.user
-    linguagens_navbar = Linguagem.objects.all().order_by('nome')
     if request.method == 'POST':
-        form = ComentarioForm(request.POST, instance=user)
-        if form.is_valid():
+        framework = Framework.objects.all().get(id=id)
+        form = ComentarioForm(request.POST)
+        args['form'] = form
+        if framework is not None and form.is_valid():
             x = request.POST['texto']
 
     #retornar para o framework de origem do post
-    return render(request,'frameworks.html')
+    return render(request,'frameworks.html',args)
 
 @login_required
 def atualizar_usuario_view(request):

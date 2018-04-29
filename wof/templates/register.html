@@ -26,7 +26,8 @@
                                 <i class="fa fa-user"></i>
                             </div>
                             <input type="text" id="first_name" value="{{ form.first_name.value }}" name="first_name" class="form-control" placeholder="Leonardo"
-                                required onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false" maxlength="150">
+                                required onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false"
+                                maxlength="150">
                         </div>
                     </div>
                 </div>
@@ -48,16 +49,17 @@
                                 <i class="fa fa-user-o" aria-hidden="true"></i>
                             </div>
                             <input type="text" value="{{ form.last_name.value }}" name="last_name" class="form-control" id="last_name" placeholder="Almeida"
-                                required onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false" maxlength="150">
+                                required onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false"
+                                maxlength="150">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="form-control-feedback">
-                    <small class="text-danger text-center">
-                        {{ form.last_name.errors }}
-                    </small>
-                </div>
+                <small class="text-danger text-center">
+                    {{ form.last_name.errors }}
+                </small>
+            </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">*</span>
@@ -70,16 +72,17 @@
                                 <i class="fa fa-id-card-o" aria-hidden="true"></i>
                             </div>
                             <input type="text" value="{{ form.cpf.value }}" name="cpf" class="form-control" maxlength="14" id="cpf" placeholder="xxx.xxx.xxx-xx"
-                                required onkeypress="formatar('###.###.###-##', this);return validaNumeros(event)" onpaste="return false" ondrop="return false">
+                                required onkeypress="formatar('###.###.###-##', this);return validaNumeros(event)" onpaste="return false"
+                                ondrop="return false">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="form-control-feedback">
-                    <small class="text-danger text-center">
-                        {{ form.cpf.errors }}
-                    </small>
-                </div>
+                <small class="text-danger text-center">
+                    {{ form.cpf.errors }}
+                </small>
+            </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <label for="profissao">Profissão</label>
@@ -90,16 +93,17 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-briefcase" aria-hidden="true"></i>
                             </div>
-                            <input type="text" value="{{ form.profissao.value }}" name="profissao" class="form-control" id="profissao" placeholder="Estudante" maxlength="150">
+                            <input type="text" value="{{ form.profissao.value }}" name="profissao" class="form-control" id="profissao" placeholder="Estudante"
+                                maxlength="150">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="form-control-feedback">
-                    <small class="text-danger text-center">
-                        {{ form.profissao.errors }}
-                    </small>
-                </div>
+                <small class="text-danger text-center">
+                    {{ form.profissao.errors }}
+                </small>
+            </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <label for="formacao">Formação</label>
@@ -111,16 +115,16 @@
                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                             </div>
                             <input type="text" value="{{ form.formacao.value }}" name="formacao" class="form-control" id="formacao" placeholder="Ciência da Computação"
-                            onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false" maxlength="150">
+                                onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false" maxlength="150">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="form-control-feedback">
-                    <small class="text-danger text-center">
-                        {{ form.formacao.errors }}
-                    </small>
-                </div>
+                <small class="text-danger text-center">
+                    {{ form.formacao.errors }}
+                </small>
+            </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">*</span>
@@ -140,10 +144,10 @@
                 </div>
             </div>
             <div class="form-control-feedback">
-                    <small class="text-danger text-center">
-                        {{ form.email.errors }}
-                    </small>
-                </div>
+                <small class="text-danger text-center">
+                    {{ form.email.errors }}
+                </small>
+            </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">*</span>
@@ -161,10 +165,10 @@
                 </div>
             </div>
             <div class="form-control-feedback">
-                    <small class="text-danger text-center">
-                        {{ form.password1.errors }}
-                    </small>
-                </div>
+                <small class="text-danger text-center">
+                    {{ form.password1.errors }}
+                </small>
+            </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">*</span>
@@ -182,10 +186,10 @@
                 </div>
             </div>
             <div class="form-control-feedback">
-                    <small class="text-danger text-center">
-                        {{ form.password2.errors }}
-                    </small>
-                </div>
+                <small class="text-danger text-center">
+                    {{ form.password2.errors }}
+                </small>
+            </div>
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">**</span>
@@ -223,5 +227,4 @@
     </small>
 </div>
 
-<script src="{% static 'validacao.js' %}"></script> 
-{% endblock %}
+<script src="{% static 'validacao.js' %}"></script> {% endblock %}

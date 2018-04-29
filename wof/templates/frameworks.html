@@ -254,7 +254,7 @@
 <!-- EndModal -->
 <br/>
 <div class="card mt-5 mx-5">
-    <form class="form" role="form" method="POST" action="/comentario/">
+    <form class="form" role="form" method="POST" action="/comentario/{{linguagem.id}}">
         {% csrf_token %}
         <div class="card-header">
             Comentários <i class="fa fa-commenting-o" aria-hidden="true"></i>
@@ -262,7 +262,12 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-11">
-                    <input type="text" name="texto" id="texto" class="form-control" placeholder="Seus comentários..." /> 
+                    <input type="text" name="texto" value="{{ form.texto.value }}" id="texto" class="form-control" placeholder="Seus comentários..." /> 
+                    <div class="form-control-feedback">
+                        <small class="text-danger text-center">
+                            {{ form.texto.errors }}
+                        </small>
+                    </div>
                 </div>
                 <div class="col-md-1">
                     <button type="submit" class="btn btn-default" >Enviar <i class="fa fa-paper-plane" aria-hidden="true"></i></button>

@@ -126,15 +126,11 @@ class ComentarioForm(forms.ModelForm):
 
     class Meta:
         model = Comentario
-        fields = ['texto','framework',]
+        fields = ['texto']
 
-    def clean(self):
-        f_Id = self.cleaned_data.get('framework_id')
-        framework = Framework.objects.all().filter('framework_id')
-
-        if framework is None:
-            raise forms.ValidationError(
-                    'Erro ao realizar o comentário, por favor entre em contato com o suporte.',
-                    code='Framework inválido.')
+    def clean(self):        
+        texto = self.cleaned_data.get('texto')
+        if texto is None:
+            raise forms.ValidationError('Escreva alguma pergunta ou comentário.', code='texto')
         
         return self.cleaned_data
