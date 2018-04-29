@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block titulo %}Registro{% endblock %} {% block conteudo %} {% load staticfiles %}
+{% extends "base.html" %} {% block titulo %}{% if user.is_authenticated %}Atualizar {% else %}Registro{% endif %} {%endblock%}
+{% block conteudo %} {% load staticfiles %}
 <style>
     @media(min-width: 768px) {
         .field-label-responsive {
@@ -8,11 +9,17 @@
     }
 </style>
 <div class="card text-white bg-dark mx-auto mt-4" style="width: 50rem;">
-    <form class="form" role="form" method="POST" action="/register/">
-        {% csrf_token %}
+    <form class="form" role="form" method="POST" action="">
+        {% csrf_token %} {% if user.is_authenticated %}
         <div class="card-header text-center">
-            <h4>Registrar novo Usuário</h4>
+            <h4> <i class="fa fa-user-circle-o" aria-hidden="true"></i> Atualizar dados</h4>
         </div>
+        {% else %}
+        <div class="card-header text-center">
+            <h4>
+                <i class="fa fa-user-plus"></i> Registre-se!</h4>
+        </div>
+        {% endif %}
         <div class="card-body">
             <div class="row mt-3">
                 <div class="col-md-3 field-label-responsive">
@@ -159,7 +166,7 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-key"></i>
                             </div>
-                            <input type="password" name="password1" class="form-control" id="password1" placeholder="Senha" required>
+                            <input type="password" name="password1" class="form-control" id="password1" placeholder="Senha">
                         </div>
                     </div>
                 </div>
@@ -180,7 +187,7 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-repeat"></i>
                             </div>
-                            <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirmar Senha" required>
+                            <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirmar Senha">
                         </div>
                     </div>
                 </div>
@@ -212,8 +219,11 @@
             <div class="row">
                 <div class="col-md-7"></div>
                 <div class="col-md-3 ml-5">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-user-plus"></i> Registrar</button>
+                    {% if user.is_authenticated %}
+                    <button type="submit" class="btn btn-primary" value="/atualizar/">
+                        Atualizar</button>{% else %}
+                    <button type="submit" class="btn btn-primary" value="/registra/">
+                        Salvar</button>{% endif %}
                 </div>
             </div>
         </div>

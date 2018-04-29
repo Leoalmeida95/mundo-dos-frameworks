@@ -56,8 +56,6 @@ class UserChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     password hash display field.
     """
-    password = ReadOnlyPasswordHashField(label='password')
-
     class Meta:
         model = Usuario
         fields = ['first_name','last_name','cpf','conta_publica','formacao','profissao', 'email',]
@@ -66,6 +64,7 @@ class UserChangeForm(forms.ModelForm):
         # Regardless of what the user provides, return the initial value.
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
+        password = ReadOnlyPasswordHashField(label='password')
         return self.initial["password"]
 
 

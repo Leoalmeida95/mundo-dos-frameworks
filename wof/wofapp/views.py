@@ -44,7 +44,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('wofapp:home'))
 
-def register_view(request):
+def registrar_usuario_view(request):
     args = {}
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
@@ -58,7 +58,7 @@ def register_view(request):
 
     linguagens_navbar = Linguagem.objects.all().order_by('nome')
     args['linguagens'] =linguagens_navbar
-    return render(request,'register.html',args)
+    return render(request,'usuario.html',args)
 
 @login_required
 def comentario_view(request,id):
@@ -76,22 +76,17 @@ def comentario_view(request,id):
 
 @login_required
 def atualizar_usuario_view(request):
-    form = CustomUserCreationForm(request.POST)
-    return render(request,'atualizar_dados.html',{'linguagens':linguagens})
-
-@login_required
-def atualizar_usuario(request):
     user = request.user
     if request.method == 'POST':
-        form = UserChangeForm(request.POST, instance=user)
+        form = UserChangeForm(request.POST, instance=user,prefix='update')
         if form.is_valid():
             user = form.save()
             messages.success(request, 'Usuario actualizado exitosamente.', extra_tags='html_dante')
             return HttpResponseRedirect(reverse('wofapp:home'))
     else:
-        form = UserChangeForm(instance=user)
+        form = UserChangeForm(instance=user,prefix='update')
         
     context = {
         'form': form,
     }
-    return render(request, 'atualizar_dados.html', context)
+    return render(request, 'usuario.html', context)

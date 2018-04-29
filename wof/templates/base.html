@@ -79,12 +79,12 @@
 								<a class="btn btn-outline-warning btn-sm btn-block" role="button" href="">Favoritos</a>
 							</div>
 							<div class="dropdown-item disabled">
-								<a class="btn btn-outline-primary btn-sm btn-block" role="button" href="/atualizar_usuario/">Atualizar Dados</a>
+								<a class="btn btn-outline-primary btn-sm btn-block" role="button" href="{% url 'wofapp:atualizar' %}">Atualizar Dados</a>
 							</div>
 							<div class="bottom dropdown-item disabled">
 								<div class="row">
 									<div class="col-sm-11 mx-auto">
-										<a class="btn btn-outline-danger btn-sm btn-block" role="button" href="/logout/">
+										<a class="btn btn-outline-danger btn-sm btn-block" role="button" href="{% url 'wofapp:logout' %}">
 											<i class="fa fa-sign-out" aria-hidden="true"></i> Sair</a>
 									</div>
 								</div>
@@ -144,7 +144,7 @@
 						</div>
 						<div class="bottom text-left" style="font-size:92%">
 							Novo por aqui?
-							<a href="{% url 'wofapp:register' %}">
+							<a href="{% url 'wofapp:registrar' %}">
 								<b>Registre-se!</b>
 							</a>
 						</div>
