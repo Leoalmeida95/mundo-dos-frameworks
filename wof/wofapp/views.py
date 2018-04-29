@@ -1,25 +1,27 @@
 from django.shortcuts import render
 from django.template import loader
-from django.views.generic import CreateView, ListView
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .forms import CustomUserCreationForm,AuthenticationForm
+from .forms import *
 from .models import Linguagem, Framework
 
 def home_view(request):
     linguagens_navbar = Linguagem.objects.all().order_by('nome')
-    return render(request,'web/home.html',{'linguagens':linguagens_navbar})
+    return render(request,'home.html',{'linguagens':linguagens_navbar})
 
 def frameworks_view(request,lg_id):
+    args = {}
     linguagem_selecionada = Linguagem.objects.get(id=lg_id)
     frameworks = Framework.objects.all().filter(linguagem_id=lg_id)
     linguagens_navbar = Linguagem.objects.all().order_by('nome')
-    return render(request,'web/frameworks.html',{'frameworks':frameworks,'linguagem':linguagem_selecionada,'linguagens':linguagens_navbar})
+    args['frameworks'] = frameworks
+    args['linguagem'] = linguagem_selecionada
+    args['linguagens'] = linguagens_navbar
+    return render(request,'frameworks.html',args)
 
 def login_view(request, *args, **kwargs):
     args = {}
@@ -31,16 +33,16 @@ def login_view(request, *args, **kwargs):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse('web:home'))
+                return HttpResponseRedirect(reverse('wofapp:home'))
     else:
         form = AuthenticationForm()
 
     args['form'] = form
-    return render(request,'web/home.html',args)
+    return render(request,'home.html',args)
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse('web:home'))
+    return HttpResponseRedirect(reverse('wofapp:home'))
 
 def register_view(request):
     args = {}
@@ -50,11 +52,13 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             messages.success(request, 'Parabéns, registro concluído com sucesso.')
-            return HttpResponseRedirect(reverse('web:home'))
+            return HttpResponseRedirect(reverse('wofapp:home'))
     else:
         form = CustomUserCreationForm()
 
-    return render(request,'web/register.html',args)
+    linguagens_navbar = Linguagem.objects.all().order_by('nome')
+    args['linguagens'] =linguagens_navbar
+    return render(request,'register.html',args)
 
 @login_required
 def comentario_view(request):
@@ -66,7 +70,7 @@ def comentario_view(request):
             x = request.POST['texto']
 
     #retornar para o framework de origem do post
-    return render(request,'web/frameworks.html')
+    return render(request,'frameworks.html')
 
 @login_required
 def atualizar_usuario_view(request):
@@ -81,7 +85,7 @@ def atualizar_usuario(request):
         if form.is_valid():
             user = form.save()
             messages.success(request, 'Usuario actualizado exitosamente.', extra_tags='html_dante')
-            return HttpResponseRedirect(reverse('home:listar_usuarios'))
+            return HttpResponseRedirect(reverse('wofapp:home'))
     else:
         form = UserChangeForm(instance=user)
         

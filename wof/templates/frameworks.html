@@ -1,4 +1,4 @@
-{% extends "web/base.html" %} {% block titulo %}Frameworks{% endblock %} {% block conteudo %} {% load staticfiles %}
+{% extends "base.html" %} {% block titulo %}Frameworks{% endblock %} {% block conteudo %} {% load staticfiles %}
 <br/>
 <h4>
     <span class="badge badge-primary ml-2">Frameworks disponíveis do {{linguagem.nome}}</span>
@@ -254,17 +254,18 @@
 <!-- EndModal -->
 <br/>
 <div class="card mt-5 mx-5">
-    <form class="form" role="form" method="POST" action="/comentar/">
+    <form class="form" role="form" method="POST" action="/comentario/">
+        {% csrf_token %}
         <div class="card-header">
             Comentários <i class="fa fa-commenting-o" aria-hidden="true"></i>
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-11">
                     <input type="text" name="texto" id="texto" class="form-control" placeholder="Seus comentários..." /> 
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="mr-4 btn btn-default" >Enviar <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-default" >Enviar <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>

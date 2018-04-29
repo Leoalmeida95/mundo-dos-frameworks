@@ -1,4 +1,4 @@
-{% extends "web/base.html" %} {% block titulo %}Início{% endblock %} {% block conteudo %} {% load staticfiles %}
+{% extends "base.html" %} {% block titulo %}Início{% endblock %} {% block conteudo %} {% load staticfiles %}
 <!-- CONTENT -->
 <span class="badge badge-primary mt-4 ml-3">Olá {% if user.is_authenticated %}{{ user.first_name }} {% else %}usuário anônimo{% endif %}, já se atualizou sobre seus
 	frameworks preferidos hoje?</span>
