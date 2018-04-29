@@ -78,13 +78,13 @@ def comentario_view(request,id):
 def atualizar_usuario_view(request):
     user = request.user
     if request.method == 'POST':
-        form = UserChangeForm(request.POST, instance=user,prefix='update')
+        form = UserChangeForm(request.POST, instance=user)
         if form.is_valid():
             user = form.save()
-            messages.success(request, 'Usuario actualizado exitosamente.', extra_tags='html_dante')
+            messages.success(request, 'Usuario atualizado com sucesso!.')
             return HttpResponseRedirect(reverse('wofapp:home'))
     else:
-        form = UserChangeForm(instance=user,prefix='update')
+        form = UserChangeForm(instance=user)
         
     context = {
         'form': form,

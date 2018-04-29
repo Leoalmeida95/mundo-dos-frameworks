@@ -12,7 +12,8 @@
     <form class="form" role="form" method="POST" action="">
         {% csrf_token %} {% if user.is_authenticated %}
         <div class="card-header text-center">
-            <h4> <i class="fa fa-user-circle-o" aria-hidden="true"></i> Atualizar dados</h4>
+            <h4>
+                <i class="fa fa-user-circle-o" aria-hidden="true"></i> Atualizar dados</h4>
         </div>
         {% else %}
         <div class="card-header text-center">
@@ -155,6 +156,24 @@
                     {{ form.email.errors }}
                 </small>
             </div>
+            {% if user.is_authenticated %}
+            <div class="row">
+                <div class="col-md-3 field-label-responsive">
+                    <span style="color:red">*</span>
+                    <label for="password">Senha</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group">
+                            <div class="mt-2" style="width: 2.6rem">
+                                <i class="fa fa-key"></i>
+                            </div>
+                            <input type="text" name="password" class="form-control" id="password" value="{{ form.password.value }}" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">*</span>
@@ -166,7 +185,7 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-key"></i>
                             </div>
-                            <input type="password" name="password1" class="form-control" id="password1" placeholder="Senha">
+                            <input type="password" name="password1" class="form-control" id="password1" placeholder="Senha" required>
                         </div>
                     </div>
                 </div>
@@ -187,7 +206,7 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-repeat"></i>
                             </div>
-                            <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirmar Senha">
+                            <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirmar Senha" required>
                         </div>
                     </div>
                 </div>
@@ -197,6 +216,7 @@
                     {{ form.password2.errors }}
                 </small>
             </div>
+            {% endif %}
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">**</span>

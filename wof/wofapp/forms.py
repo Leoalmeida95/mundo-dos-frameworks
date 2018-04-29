@@ -7,9 +7,9 @@ from django.utils.text import capfirst
 from .models import Usuario,Comentario,Framework
 
 class CustomUserCreationForm(UserCreationForm):
-    password1 = forms.CharField(label='password',required=True, 
+    password1 = forms.CharField(label='password1',required=True, 
         widget=forms.PasswordInput(attrs={'id': 'password1'}))
-    password2 = forms.CharField(label='password_confirm',required=True, 
+    password2 = forms.CharField(label='password2',required=True, 
         widget=forms.PasswordInput(attrs={'id': 'password2'}))
     first_name = forms.CharField(label='first_name',required=True, 
         widget=forms.TextInput(attrs={'id': 'first_name'}))
@@ -56,15 +56,26 @@ class UserChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     password hash display field.
     """
+    password = ReadOnlyPasswordHashField(label='password')
+    first_name = forms.CharField(label='first_name',required=True, 
+        widget=forms.TextInput(attrs={'id': 'first_name'}))
+    last_name = forms.CharField(label='last_name',required=True, 
+        widget=forms.TextInput(attrs={'id': 'last_name'}))
+    cpf = forms.CharField(label='cpf',required=True, widget=forms.TextInput(attrs={'id': 'cpf'}))
+    conta_publica = forms.BooleanField(label='conta_publica',initial=True, required=True)
+    formacao = forms.CharField(label='formacao',required=False, 
+        widget=forms.TextInput(attrs={'id': 'formacao'}))
+    profissao = forms.CharField(label='profissao',required=False, 
+        widget=forms.TextInput(attrs={'id': 'profissao'}))
+    email = forms.CharField(label='email',required=True, widget=forms.TextInput(attrs={'id': 'email'}))
     class Meta:
         model = Usuario
-        fields = ['first_name','last_name','cpf','conta_publica','formacao','profissao', 'email',]
+        fields = ['first_name','last_name','cpf','conta_publica','formacao','profissao', 'email','password']
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
-        password = ReadOnlyPasswordHashField(label='password')
         return self.initial["password"]
 
 
