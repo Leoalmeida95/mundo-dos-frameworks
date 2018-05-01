@@ -6,8 +6,8 @@ from django.utils.text import capfirst
 
 from .models import Usuario,Comentario,Framework
 
-CHOICES=[('True','Sim'),
-         ('False','Não')]
+CHOICES=[(True,'Sim'),
+         (False,'Não')]
 
 class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(label='password1',required=True, 
@@ -19,7 +19,7 @@ class CustomUserCreationForm(UserCreationForm):
     last_name = forms.CharField(label='last_name',required=True, 
         widget=forms.TextInput(attrs={'id': 'last_name'}))
     cpf = forms.CharField(label='cpf',required=True, widget=forms.TextInput(attrs={'id': 'cpf'}))
-    conta_publica = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect())
+    conta_publica = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, initial = True)
     formacao = forms.CharField(label='formacao',required=False, 
         widget=forms.TextInput(attrs={'id': 'formacao'}))
     profissao = forms.CharField(label='profissao',required=False, 
@@ -65,7 +65,7 @@ class UserChangeForm(forms.ModelForm):
     last_name = forms.CharField(label='last_name',required=True, 
         widget=forms.TextInput(attrs={'id': 'last_name'}))
     cpf = forms.CharField(label='cpf',required=True, widget=forms.TextInput(attrs={'id': 'cpf'}))
-    conta_publica = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect())
+    conta_publica = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
     formacao = forms.CharField(label='formacao',required=False, 
         widget=forms.TextInput(attrs={'id': 'formacao'}))
     profissao = forms.CharField(label='profissao',required=False, 

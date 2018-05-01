@@ -56,6 +56,8 @@ def registrar_usuario_view(request):
     else:
         form = CustomUserCreationForm()
 
+    publica = form._bound_fields_cache['conta_publica']
+    args['publica'] = True if (publica.data is None or publica.data is 'True') else False 
     linguagens_navbar = Linguagem.objects.all().order_by('nome')
     args['linguagens'] =linguagens_navbar
     return render(request,'usuario.html',args)
@@ -81,7 +83,7 @@ def atualizar_usuario_view(request):
         form = UserChangeForm(request.POST, instance=user)
         if form.is_valid():
             user = form.save()
-            messages.success(request, 'Usuario atualizado com sucesso!.')
+            messages.success(request, 'Usuário atualizado com sucesso!')
             return HttpResponseRedirect(reverse('wofapp:home'))
     else:
         form = UserChangeForm(instance=user)
