@@ -48,6 +48,7 @@ def registrar_usuario_view(request):
     args = {}
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
+        publica = request.POST.get("conta_publica","")
         args['form'] = form
         if form.is_valid():
             user = form.save()
@@ -55,9 +56,9 @@ def registrar_usuario_view(request):
             return HttpResponseRedirect(reverse('wofapp:home'))
     else:
         form = CustomUserCreationForm()
+        publica = 'True'
 
-    publica = form._bound_fields_cache['conta_publica']
-    args['publica'] = True if (publica.data is None or publica.data is 'True') else False 
+    args['publica'] = True if publica is 'True' else False 
     linguagens_navbar = Linguagem.objects.all().order_by('nome')
     args['linguagens'] =linguagens_navbar
     return render(request,'usuario.html',args)
@@ -78,6 +79,7 @@ def comentario_view(request,id):
 
 @login_required
 def atualizar_usuario_view(request):
+    args = {}
     user = request.user
     if request.method == 'POST':
         form = UserChangeForm(request.POST, instance=user)
@@ -88,7 +90,6 @@ def atualizar_usuario_view(request):
     else:
         form = UserChangeForm(instance=user)
         
-    context = {
-        'form': form,
-    }
-    return render(request, 'usuario.html', context)
+    args['publica'] = user.conta_publica
+    args['form'] = form
+    return render(request, 'usuario.html', args)

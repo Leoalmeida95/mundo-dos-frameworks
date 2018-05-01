@@ -52,13 +52,13 @@
 			<ul class="navbar-nav mr-3">
 				<li class="nav-item dropdown">
 					<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<i class="fa fa-user-o" aria-hidden="true"></i>
-						<strong class="ml-1">Usuário</strong>
+						<i class="fa fa-user-circle-o" aria-hidden="true"></i>
+						<strong class="ml-1">{{ user.first_name }}</strong>
 					</a>
 					<div id="login-dp" class="dropdown-menu dropdown-menu-right">
 						<div class="row">
 							<div class="dropdown-item disabled">
-								<i class="fa fa-user-circle-o" aria-hidden="true"></i>
+								<i class=" ml-1 fa fa-user" aria-hidden="true"></i>
 								<small>
 									<strong class="ml-2 text-dark">{{user.first_name}} {{user.last_name}}</strong>
 								</small>
@@ -133,7 +133,8 @@
 									</small>
 									{% endif %}
 									<div class="form-group">
-										<button type="submit" class="btn btn-primary btn-block mt-4">Entrar</button>
+										<button type="submit" class="btn btn-primary btn-block mt-4">
+											<i class="fa fa-sign-in" aria-hidden="true"></i> Entrar</button>
 									</div>
 									<div class="custom-control custom-checkbox my-1 mr-sm-2">
 										<input type="checkbox" class="custom-control-input" id="customControlInline">
