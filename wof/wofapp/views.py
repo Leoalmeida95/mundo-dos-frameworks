@@ -24,7 +24,6 @@ def frameworks_view(request,lg_id):
     return render(request,'frameworks.html',args)
 
 def login_view(request, *args, **kwargs):
-    args = {}
     if request.method == "POST":
         form = AuthenticationForm(request.POST)
         if form.is_valid():
@@ -34,11 +33,14 @@ def login_view(request, *args, **kwargs):
             if user is not None:
                 login(request, user)
                 return HttpResponseRedirect(reverse('wofapp:home'))
+        else:
+            erroMsg = form.errors['__all__'].data[0].message
+            messages.error(request, erroMsg)
+
     else:
         form = AuthenticationForm()
 
-    args['form'] = form
-    return render(request,'home.html',args)
+    return render(request,'home.html')
 
 def logout_view(request):
     logout(request)
@@ -52,7 +54,7 @@ def registrar_usuario_view(request):
         args['form'] = form
         if form.is_valid():
             user = form.save()
-            messages.success(request, 'Parabéns, registro concluído com sucesso.')
+            messages.info(request, 'Parabéns, registro concluído com sucesso.')
             return HttpResponseRedirect(reverse('wofapp:home'))
     else:
         form = CustomUserCreationForm()
@@ -85,7 +87,7 @@ def atualizar_usuario_view(request):
         form = UserChangeForm(request.POST, instance=user)
         if form.is_valid():
             user = form.save()
-            messages.success(request, 'Usuário atualizado com sucesso!')
+            messages.info(request, 'Usuário atualizado com sucesso!')
             return HttpResponseRedirect(reverse('wofapp:home'))
     else:
         form = UserChangeForm(instance=user)

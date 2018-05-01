@@ -2,9 +2,7 @@
 
 <script src="{% static 'toastr.js' %}"></script>
 <!-- CONTENT -->
-<span class="badge badge-primary mt-4 ml-3">Olá {% if user.is_authenticated %}{{ user.first_name }} {% else %}usuário anônimo{% endif %}, já se atualizou sobre seus
-	frameworks preferidos hoje?</span>
-<div class="container">
+<div class="container mt-5">
 	<div class="col-md-7 mx-auto mt-3">
 		<div class="card border-dark mb-3">
 			<div class="col-md-6 mx-auto mt-4 mb-2">
@@ -17,10 +15,19 @@
 		<br/>
 	</div>
 </div>
+
+
 {% if messages %} {% for message in messages %}
+
 <p id='msg'>{{ message }}</p>
-{% endfor %}
+{% if message.tags == 'info'%}
+
 <script type="text/javascript">
 	var mensagem = document.getElementById("msg");
-	enviaWarning(mensagem);
-</script> {% endif %} {% endblock %}
+	enviarMensagem(mensagem, "info","Informação");
+</script> {% else %}
+
+<script type="text/javascript">
+	var mensagem = document.getElementById("msg");
+	enviarMensagem(mensagem, "error","Aviso");
+</script> {% endif %} {% endfor %} {% endif %} {% endblock %}
