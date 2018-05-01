@@ -55,31 +55,39 @@
 						<i class="fa fa-user-circle-o" aria-hidden="true"></i>
 						<strong class="ml-1">{{ user.first_name }}</strong>
 					</a>
-					<div id="login-dp" class="dropdown-menu dropdown-menu-right">
+					<div id="login-dp" class="col-12 dropdown-menu dropdown-menu-right">
 						<div class="row">
 							<div class="dropdown-item disabled">
-								<i class=" ml-1 fa fa-user" aria-hidden="true"></i>
-								<small>
-									<strong class="ml-2 text-dark">{{user.first_name}} {{user.last_name}}</strong>
-								</small>
+								<div class="font-weight-light">
+									<div class="text-truncate">
+										<i class="fa fa-user" aria-hidden="true"></i>
+										{{user.first_name}} {{user.last_name}}
+									</div>
+								</div>
 							</div>
 							<div class="dropdown-item disabled">
-								<i class="fa fa-address-card-o" aria-hidden="true"></i>
-								<small>
-									<strong class="ml-2 text-dark">{{ user.perfil }}</strong>
-								</small>
+								<div class="font-weight-light">
+									<div class="text-truncate">
+										<i class="fa fa-address-card-o" aria-hidden="true"></i>
+										{{ user.perfil }}
+									</div>
+								</div>
 							</div>
 							<div class="dropdown-item disabled">
-								<i class="fa fa-envelope-o" aria-hidden="true"></i>
-								<small>
-									<strong class="ml-2 text-dark">{{user.email}}</strong>
-								</small>
+								<div class="font-weight-light">
+									<div class="text-truncate">
+										<i class="fa fa-envelope-o" aria-hidden="true"></i>
+										{{user.email}}
+									</div>
+								</div>
 							</div>
 							<div class="dropdown-item disabled">
-								<a class="btn btn-outline-warning btn-sm btn-block" role="button" href="">Favoritos</a>
+								<a class="btn btn-outline-warning btn-sm btn-block" role="button" href="">
+									<i class="fa fa-star-o" aria-hidden="true"></i> Favoritos</a>
 							</div>
 							<div class="dropdown-item disabled">
-								<a class="btn btn-outline-primary btn-sm btn-block" role="button" href="{% url 'wofapp:atualizar' %}">Atualizar Dados</a>
+								<a class="btn btn-outline-primary btn-sm btn-block" role="button" href="{% url 'wofapp:atualizar' %}">
+									<i class="fa fa-pencil fa-fw"></i> Atualizar Dados</a>
 							</div>
 							<div class="bottom dropdown-item disabled">
 								<div class="row">

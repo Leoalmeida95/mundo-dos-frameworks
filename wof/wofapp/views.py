@@ -58,7 +58,7 @@ def registrar_usuario_view(request):
         form = CustomUserCreationForm()
         publica = 'True'
 
-    args['publica'] = True if publica is 'True' else False 
+    args['publica'] = True if publica == 'True' else False 
     linguagens_navbar = Linguagem.objects.all().order_by('nome')
     args['linguagens'] =linguagens_navbar
     return render(request,'usuario.html',args)
