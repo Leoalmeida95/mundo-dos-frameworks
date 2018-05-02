@@ -149,3 +149,5 @@ STATICFILES_FINDERS = (
 AUTH_USER_MODEL = "wofapp.Usuario"
 LOGIN_URL= '/'
 LOGIN_REDIRECT_URL = '/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

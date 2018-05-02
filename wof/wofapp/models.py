@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext as _
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
+from django.core.mail import send_mail
 
 class EmailUserManager(BaseUserManager):
     def create_user(self, *args, **kwargs):
@@ -34,13 +35,13 @@ class Perfil(models.Model):
 
 class Usuario(PermissionsMixin, AbstractBaseUser):
     cpf = models.CharField(
-        max_length=30,
+        max_length=14,
         blank=False,
         help_text=_('O campo CPF é obriagatório.'),
         unique = True,)
     email = models.EmailField(
         verbose_name=_('Email'),
-        max_length = 100,
+        max_length = 60,
         unique=True,
     help_text=_('O campo Email é obrigatório.'),)
     first_name = models.CharField(
@@ -65,6 +66,10 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name','last_name','cpf']
 
+    class Meta:
+        verbose_name = _('Usuario')
+        verbose_name_plural = _('Usuarios')
+
     def __str__(self):
         return self.email
 
@@ -80,6 +85,9 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
         "O usuário possui uma permissão específica?"
         # Simplest possible answer: Yes, always
         return True
+
+    def email_user(self, subject, message, from_email=None):
+        send_mail(subject, message, from_email, [self.email])
 
     @property
     def is_staff(self):

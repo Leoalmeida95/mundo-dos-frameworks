@@ -35,7 +35,7 @@
                             </div>
                             <input type="text" id="first_name" value="{{ form.first_name.value }}" name="first_name" class="form-control" placeholder="Leonardo"
                                 required onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false"
-                                maxlength="150">
+                                maxlength="50">
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                             </div>
                             <input type="text" value="{{ form.last_name.value }}" name="last_name" class="form-control" id="last_name" placeholder="Almeida"
                                 required onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false"
-                                maxlength="150">
+                                maxlength="50">
                         </div>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                                 <i class="fa fa-briefcase" aria-hidden="true"></i>
                             </div>
                             <input type="text" value="{{ form.profissao.value }}" name="profissao" class="form-control" id="profissao" placeholder="Estudante"
-                                maxlength="150">
+                                maxlength="80">
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                             </div>
                             <input type="text" value="{{ form.formacao.value }}" name="formacao" class="form-control" id="formacao" placeholder="Ciência da Computação"
-                                onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false" maxlength="150">
+                                onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false" maxlength="80">
                         </div>
                     </div>
                 </div>
@@ -146,7 +146,7 @@
                                 <i class="fa fa-at"></i>
                             </div>
                             <input type="email" value="{{ form.email.value }}" name="email" class="form-control" id="email" placeholder="voce@exemplo.com"
-                                required>
+                                required maxlength="60">
                         </div>
                     </div>
                 </div>
