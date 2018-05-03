@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from . import views
 
 app_name='wofapp'
@@ -11,6 +12,5 @@ urlpatterns = [
     path('senha_reset/', views.senha_reset_view, name="senha_reset"),
     path('comentario/<int:id>', views.comentario_view, name="comentario"),
     path('frameworks/<int:lg_id>', views.frameworks_view, name='frameworks'),
-    path('reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        views.confirmacao_reset_senha, name='confirmacao_reset_senha')
+    path('confirmacao_reset_senha/<slug:uidb64>/<slug:token>)/',auth_views.password_reset_confirm, name='confirmacao_reset_senha'),
 ]

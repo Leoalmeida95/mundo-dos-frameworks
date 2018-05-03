@@ -1,11 +1,38 @@
 <!-- templates/registration/password_reset_form.html -->
 {% extends "base.html" %} {% block titulo %}Esqueceu sua senha?{% endblock %} {% block conteudo %} {% load staticfiles %}
-<h1>Forgot your password?</h1>
-<p>Enter your email address below, and we'll email instructions for setting a new one.</p>
 
-<form class="form" role="form" method="POST" action="/senha_reset/">
-    {% csrf_token %} {{ form.as_p }}
-    <input type="submit" value="Send me instructions!">
-</form>
-</div>
+<body>
+    <div class="card border-dark mb-3 mx-auto text-center mt-5" style="max-width: 22rem;">
+        <div class="card-header">
+            <h4>Entre com seu E-mail</h4>
+            <small>Enviaremos as instruções de como obter uma nova senha.</small>
+            <br>
+            <i class="fa fa-envelope fa-4x" aria-hidden="true"></i>
+        </div>
+        <div class="card-body text-dark">
+            <form class="form" role="form" method="POST" action="/senha_reset/">
+                {% csrf_token %}
+                <div class="row mt-1">
+                    <div class="col-2">
+                        <label class="mt-2" for="email">Email:
+                        </label>
+                    </div>
+                    <div class="col-10">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="email" name="email" class="form-control" id="email" placeholder="voce@exemplo.com" required maxlength="60">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-control-feedback">
+                    <small class="text-danger text-center">
+                        {{ form.email.errors }}
+                    </small>
+                </div>
+                <button class="btn btn-dark btn-block mt-3" type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+</body>
 {% endblock %}

@@ -8,6 +8,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.html import format_html, format_html_join
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+from .tokens import account_activation_token
 from django.template import loader
 
 from .models import Usuario,Comentario,Framework
@@ -155,13 +156,11 @@ class ComentarioForm(forms.ModelForm):
         return self.cleaned_data
 
 class PasswordResetForm(forms.Form):
-    email = forms.EmailField(label='Email', max_length=60)
+    email = forms.EmailField(label='email', max_length=60)
 
     def send_mail(self, subject_template_name, email_template_name,
                   context, from_email, to_email, html_email_template_name=None):
-        """
-        Sends a django.core.mail.EmailMultiAlternatives to `to_email`.
-        """
+
         subject = subject_template_name
         # Email subject *must not* contain newlines
         body = loader.render_to_string(email_template_name, context)
@@ -174,41 +173,30 @@ class PasswordResetForm(forms.Form):
         email_message.send()
 
     def get_users(self, email):
-        """Given an email, return matching user(s) who should receive a reset.
 
-        This allows subclasses to more easily customize the default policies
-        that prevent inactive users and users with unusable passwords from
-        resetting their password.
-
-        """
         active_users = get_user_model()._default_manager.filter(
             email=email, is_activeUser=True)
         return (u for u in active_users if u.has_usable_password())
 
     def save(self, domain_override=None,
-             subject_template_name='TestSite password reset',
+             subject_template_name='WOF - nova senha',
              email_template_name='corpo_email.html',
              use_https=False, token_generator=default_token_generator,
              from_email=None, request=None, html_email_template_name=None):
-        """
-        Generates a one-use only link for resetting password and sends to the
-        user.
-        """
+
         email = self.cleaned_data["email"]
         for user in self.get_users(email):
             if not domain_override:
                 current_site = get_current_site(request)
-                site_name = current_site.name
-                domain = current_site.domain
             else:
                 site_name = domain = domain_override
             context = {
                 'email': user.email,
-                'domain': domain,
-                'site_name': site_name,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'domain': current_site.domain,
+                'site_name': current_site.name,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                 'user': user,
-                'token': token_generator.make_token(user),
+                'token': account_activation_token.make_token(user),
                 'protocol': 'https' if use_https else 'http',
             }
 
