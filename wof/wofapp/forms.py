@@ -8,7 +8,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.html import format_html, format_html_join
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-from .tokens import account_activation_token
+# from .tokens import account_activation_token
 from django.template import loader
 
 from .models import Usuario,Comentario,Framework
