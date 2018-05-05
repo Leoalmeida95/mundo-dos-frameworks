@@ -172,6 +172,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="mt-2">
+                        <a href="/trocar_senha/" style="font-size: 18px">alterar senha</a>
+                    </div>
+                </div>
             </div>
             {% else %}
             <div class="row">
@@ -227,11 +232,12 @@
                 </div>
                 <div class="col-md-5 mt-2">
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="id_conta_publica_0" value="True" name="conta_publica" class="custom-control-input" {% if publica %} checked {% endif %}>
+                        <input type="radio" id="id_conta_publica_0" value="True" name="conta_publica" class="custom-control-input" {%if publica%}
+                            checked {%endif%}>
                         <label class="custom-control-label" for="id_conta_publica_0">Sim</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="id_conta_publica_1" value="False" name="conta_publica" class="custom-control-input" {% if not publica %} checked {% endif %}>
+                        <input type="radio" id="id_conta_publica_1" value="False" name="conta_publica" class="custom-control-input" {% if not publica%}checked{%endif%}>
                         <label class="custom-control-label" for="id_conta_publica_1">Não</label>
                     </div>
                 </div>

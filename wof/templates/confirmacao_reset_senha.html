@@ -1,17 +1,58 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block titulo %}Trocar senha{% endblock %}{% block conteudo %} {% load staticfiles %}
+<div class="container">
+  {% if authorized %}
 
-{% block content %}
-  {% if validlink %}
-    <h3>Change password</h3>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Change password</button>
-    </form>
+  <body>
+    <div class="card border-dark mb-3 mx-auto text-center mt-5" style="max-width: 28rem;">
+      <div class="card-header">
+        <h4>Nova senha</h4>
+        <small>Digite sua nova senha.</small>
+      </div>
+      <div class="card-body text-dark">
+        <i class="fa fa-unlock-alt fa-4x mb-3" aria-hidden="true"></i>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="row mt-3">
+            <div class="col-5">
+              <label class="mt-2" for="password1">Senha:
+              </label>
+            </div>
+            <div class="col-7">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="password" name="password1" class="form-control" id="password1" placeholder="senha" required>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-1">
+            <div class="col-5">
+              <label class="mt-2" for="password2">Confirmar senha:
+              </label>
+            </div>
+            <div class="col-7">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="password" name="password2" class="form-control" id="password2" placeholder="confirmar senha" required>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-control-feedback">
+              <small class="text-danger text-center">
+                 {{ form.password2.errors }}
+              </small>
+          </div>
+          <button class="btn btn-dark btn-block mt-3" type="submit">Alterar</button>
+        </form>
+      </div>
+    </div>
+  </body>
   {% else %}
-    <p>
-      The password reset link was invalid, possibly because it has already been used.
-      Please request a new password reset.
-    </p>
+  <p>
+    O link de redefinição de senha era inválido, possivelmente porque já foi usado. Por favor, solicite uma nova redefinição
+    de senha.
+  </p>
   {% endif %}
+</div>
 {% endblock %}

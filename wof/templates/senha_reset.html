@@ -2,14 +2,13 @@
 {% extends "base.html" %} {% block titulo %}Esqueceu sua senha?{% endblock %} {% block conteudo %} {% load staticfiles %}
 
 <body>
-    <div class="card border-dark mb-3 mx-auto text-center mt-5" style="max-width: 22rem;">
+    <div class="card border-dark mb-3 mx-auto text-center mt-5" style="max-width: 24rem;">
         <div class="card-header">
             <h4>Entre com seu E-mail</h4>
             <small>Enviaremos as instruções de como obter uma nova senha.</small>
-            <br>
-            <i class="fa fa-envelope fa-4x" aria-hidden="true"></i>
         </div>
         <div class="card-body text-dark">
+            <i class="fa fa-envelope fa-4x mb-3" aria-hidden="true"></i>
             <form class="form" role="form" method="POST" action="/senha_reset/">
                 {% csrf_token %}
                 <div class="row mt-1">
@@ -27,7 +26,7 @@
                 </div>
                 <div class="form-control-feedback">
                     <small class="text-danger text-center">
-                        {{ form.email.errors }}
+                        {{form.non_field_errors}}
                     </small>
                 </div>
                 <button class="btn btn-dark btn-block mt-3" type="submit">Enviar</button>

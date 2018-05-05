@@ -6,6 +6,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode
+from .tokens import account_activation_token
 
 from .forms import *
 from .models import Linguagem, Framework
@@ -13,20 +16,6 @@ from .models import Linguagem, Framework
 def home_view(request):
     linguagens_navbar = Linguagem.objects.all().order_by('nome')
     return render(request,'home.html',{'linguagens':linguagens_navbar})
-
-def senha_reset_view(request):
-    args = {}
-    if request.method == 'POST':
-        form = PasswordResetForm(request.POST)
-        if form.is_valid():
-            form.save(from_email = 'admin@thedomain.com', email_template_name= 'corpo_email.html', 
-            use_https = False, token_generator = default_token_generator, request=request, html_email_template_name=None)
-    else:
-        form = PasswordResetForm()
-
-    args['form'] = form
-    args['linguagens'] = Linguagem.objects.all().order_by('nome')
-    return render(request,'senha_reset.html',args)
 
 def login_view(request, *args, **kwargs):
     if request.method == "POST":
@@ -83,6 +72,68 @@ def atualizar_usuario_view(request):
     args['publica'] = user.conta_publica
     args['form'] = form
     return render(request, 'usuario.html', args)
+
+def senha_reset_view(request):
+    args = {}
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            form.save(from_email = 'admin@thedomain.com', email_template_name= 'corpo_email.html', 
+            use_https = False, token_generator = default_token_generator, request=request, html_email_template_name=None)
+            messages.info(request, 'As instruções para troca de senha foram enviadas para seu email.')
+            return HttpResponseRedirect(reverse('wofapp:home'))
+    else:
+        form = PasswordResetForm()
+
+    args['form'] = form
+    args['linguagens'] = Linguagem.objects.all().order_by('nome')
+    return render(request,'senha_reset.html',args)
+
+def confirmacao_reset_senha_view(request, uidb64=None, token=None):
+    assert uidb64 is not None and token is not None
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = Usuario.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+        user = None
+
+    args = {}
+    if user is not None and account_activation_token.check_token(user, token):
+        authorized = True
+        if request.method == 'POST':
+            form = SetPasswordForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.info(request, 'Senha alterada com sucesso!')
+                return HttpResponseRedirect(reverse('wofapp:home'))
+        else:
+            form = SetPasswordForm(user)
+    else:
+        authorized = False
+        form = None
+    
+    args['form'] = form
+    args['authorized'] = authorized
+    args['linguagens'] = Linguagem.objects.all().order_by('nome')
+    return render(request, 'confirmacao_reset_senha.html', args)
+
+@login_required
+def trocar_senha_view(request):
+    args = {}
+    user = request.user
+    if request.method == 'POST':
+        form = SetPasswordForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Senha alterada com sucesso! Por favor, faça o login novamente.')
+            return HttpResponseRedirect(reverse('wofapp:home'))
+    else:
+        form = SetPasswordForm(user)
+    
+    args['authorized'] = True
+    args['form'] = form
+    args['linguagens'] = Linguagem.objects.all().order_by('nome')
+    return render(request, 'confirmacao_reset_senha.html', args)
 
 def frameworks_view(request,lg_id):
     args = {}

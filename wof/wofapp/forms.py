@@ -8,7 +8,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.html import format_html, format_html_join
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-# from .tokens import account_activation_token
+from .tokens import account_activation_token
 from django.template import loader
 
 from .models import Usuario,Comentario,Framework
@@ -62,10 +62,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class UserChangeForm(forms.ModelForm):
-    """A form for updating users. Includes all the fields on
-    the user, but replaces the password field with admin's
-    password hash display field.
-    """
+
     password = ReadOnlyPasswordHashField(label='password')
     first_name = forms.CharField(label='first_name',required=True, 
         widget=forms.TextInput(attrs={'id': 'first_name'}))
@@ -90,10 +87,7 @@ class UserChangeForm(forms.ModelForm):
 
 
 class AuthenticationForm(forms.Form):
-    """
-    Base class for authenticating users. Extend this to get a form that accepts
-    username/password logins.
-    """
+    
     username = forms.CharField(required=True,
                 widget=forms.TextInput(attrs={'id': 'username'}))
     password = forms.CharField(required=True,
@@ -117,16 +111,6 @@ class AuthenticationForm(forms.Form):
         return self.cleaned_data
 
     def confirm_login_allowed(self, user):
-        """
-        Controls whether the given User may log in. This is a policy setting,
-        independent of end-user authentication. This default behavior is to
-        allow login by active users, and reject login by inactive users.
-
-        If the given user cannot log in, this method should raise a
-        ``forms.ValidationError``.
-
-        If the given user may log in, this method should return None.
-        """
         if not user.is_activeUser:
             raise forms.ValidationError(
                 self.error_messages['Essa conta está inativa.'],
@@ -158,6 +142,18 @@ class ComentarioForm(forms.ModelForm):
 class PasswordResetForm(forms.Form):
     email = forms.EmailField(label='email', max_length=60)
 
+    def clean(self):
+        email = self.cleaned_data["email"]
+        active_users = get_user_model()._default_manager.filter(
+            email=email, is_activeUser=True)
+
+        if active_users:
+            self.user_cache = active_users
+        else:
+            raise forms.ValidationError('Esse email não está registrado.')
+
+        return self.cleaned_data
+
     def send_mail(self, subject_template_name, email_template_name,
                   context, from_email, to_email, html_email_template_name=None):
 
@@ -172,11 +168,8 @@ class PasswordResetForm(forms.Form):
 
         email_message.send()
 
-    def get_users(self, email):
-
-        active_users = get_user_model()._default_manager.filter(
-            email=email, is_activeUser=True)
-        return (u for u in active_users if u.has_usable_password())
+    def get_users(self):
+        return (u for u in self.user_cache if u.has_usable_password())
 
     def save(self, domain_override=None,
              subject_template_name='WOF - nova senha',
@@ -185,17 +178,18 @@ class PasswordResetForm(forms.Form):
              from_email=None, request=None, html_email_template_name=None):
 
         email = self.cleaned_data["email"]
-        for user in self.get_users(email):
+        for user in self.get_users():
             if not domain_override:
                 current_site = get_current_site(request)
             else:
                 site_name = domain = domain_override
+
             context = {
+                'user': user,
                 'email': user.email,
                 'domain': current_site.domain,
                 'site_name': current_site.name,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                'user': user,
                 'token': account_activation_token.make_token(user),
                 'protocol': 'https' if use_https else 'http',
             }
@@ -203,3 +197,32 @@ class PasswordResetForm(forms.Form):
             self.send_mail(subject_template_name, email_template_name,
                            context, from_email, user.email,
                            html_email_template_name=html_email_template_name)
+
+class SetPasswordForm(UserCreationForm):
+    
+    password1 = forms.CharField(label='password1',required=True, 
+        widget=forms.PasswordInput(attrs={'id': 'password1'}))
+    password2 = forms.CharField(label='password2',required=True, 
+        widget=forms.PasswordInput(attrs={'id': 'password2'}))
+    class Meta:
+        model = Usuario
+        fields = ['password1','password2']
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(SetPasswordForm, self).__init__(*args, **kwargs)
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("As senhas não são iguais.")
+
+        return self.cleaned_data
+
+    def save(self, commit=True):
+        self.user.set_password(self.cleaned_data['password1'])
+        if commit:
+            self.user.save()
+
+        return self.user

@@ -3,4 +3,4 @@ node_modules
 static_files
 .vs
 settings.json
-package-lock.json
+launch.json
