@@ -2,10 +2,9 @@
 
 {{ user.get_full_name }}, para iniciar o processo de redefinição de senha para sua conta do WOF, clique no link abaixo:
 
-{{ protocol }}://{{ domain }}{% url 'wofapp:confirmacao_reset_senha' uidb64=uid token=token %}
+{{ protocol }}://{{ domain }}{% url 'wofapp:reset_senha_confirmacao' uidb64=uid token=token %}
 
-Se clicar no link acima não funcionar, copie e cole o URL em um novo navegador
-janela em vez disso.
+Se clicar no link acima não funcionar, copie e cole o URL em um novo navegador em vez disso.
 
 Atenciosamente,
 Equipe World of Frameworks.

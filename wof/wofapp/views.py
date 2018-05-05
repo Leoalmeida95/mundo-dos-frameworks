@@ -44,8 +44,11 @@ def registrar_usuario_view(request):
         publica = request.POST.get("conta_publica","")
         args['form'] = form
         if form.is_valid():
-            user = form.save()
-            messages.info(request, 'Parabéns, registro concluído com sucesso.')
+            user = form.save(commit=False)
+            user.is_activeUser = False
+            user.save()
+            form.enviar_email(user,request=request)
+            messages.info(request, 'Muito bem! Agora para concluir seu registro, por favor confirme sua conta no email que enviamos pra você.')
             return HttpResponseRedirect(reverse('wofapp:home'))
     else:
         form = CustomUserCreationForm()
@@ -56,30 +59,29 @@ def registrar_usuario_view(request):
     args['linguagens'] =linguagens_navbar
     return render(request,'usuario.html',args)
 
-@login_required
-def atualizar_usuario_view(request):
-    args = {}
-    user = request.user
-    if request.method == 'POST':
-        form = UserChangeForm(request.POST, instance=user)
-        if form.is_valid():
-            user = form.save()
-            messages.info(request, 'Usuário atualizado com sucesso!')
-            return HttpResponseRedirect(reverse('wofapp:home'))
-    else:
-        form = UserChangeForm(instance=user)
-        
-    args['publica'] = user.conta_publica
-    args['form'] = form
-    return render(request, 'usuario.html', args)
+def ativar_conta_view(request, uidb64=None, token=None):
+    assert uidb64 is not None and token is not None
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = Usuario.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
 
-def senha_reset_view(request):
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_activeUser = True
+        user.save()
+        login(request, user)
+        messages.info(request, 'Parabéns, registro concluído com sucesso.')
+        return HttpResponseRedirect(reverse('wofapp:home'))
+    else:
+        return HttpResponse('Link de ativação da conta inválido.')
+
+def reset_senha_view(request):
     args = {}
     if request.method == 'POST':
         form = PasswordResetForm(request.POST)
         if form.is_valid():
-            form.save(from_email = 'admin@thedomain.com', email_template_name= 'corpo_email.html', 
-            use_https = False, token_generator = default_token_generator, request=request, html_email_template_name=None)
+            form.save(request=request)
             messages.info(request, 'As instruções para troca de senha foram enviadas para seu email.')
             return HttpResponseRedirect(reverse('wofapp:home'))
     else:
@@ -87,9 +89,9 @@ def senha_reset_view(request):
 
     args['form'] = form
     args['linguagens'] = Linguagem.objects.all().order_by('nome')
-    return render(request,'senha_reset.html',args)
+    return render(request,'reset_senha.html',args)
 
-def confirmacao_reset_senha_view(request, uidb64=None, token=None):
+def reset_senha_confirmacao_view(request, uidb64=None, token=None):
     assert uidb64 is not None and token is not None
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -115,7 +117,24 @@ def confirmacao_reset_senha_view(request, uidb64=None, token=None):
     args['form'] = form
     args['authorized'] = authorized
     args['linguagens'] = Linguagem.objects.all().order_by('nome')
-    return render(request, 'confirmacao_reset_senha.html', args)
+    return render(request, 'reset_senha_confirmacao.html', args)
+
+@login_required
+def atualizar_usuario_view(request):
+    args = {}
+    user = request.user
+    if request.method == 'POST':
+        form = UserChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            user = form.save()
+            messages.info(request, 'Seus dados foram atualizados com sucesso!')
+            return HttpResponseRedirect(reverse('wofapp:home'))
+    else:
+        form = UserChangeForm(instance=user)
+        
+    args['publica'] = user.conta_publica
+    args['form'] = form
+    return render(request, 'usuario.html', args)
 
 @login_required
 def trocar_senha_view(request):
@@ -133,7 +152,7 @@ def trocar_senha_view(request):
     args['authorized'] = True
     args['form'] = form
     args['linguagens'] = Linguagem.objects.all().order_by('nome')
-    return render(request, 'confirmacao_reset_senha.html', args)
+    return render(request, 'reset_senha_confirmacao.html', args)
 
 def frameworks_view(request,lg_id):
     args = {}

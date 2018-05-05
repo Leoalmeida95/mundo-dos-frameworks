@@ -1,0 +1,13 @@
+{% autoescape off %}
+
+Olá {{ user.get_full_name }},
+
+Por favor, clique no link abaixo para confirmar seu email:
+
+{{ protocol }}://{{ domain }}{% url 'wofapp:ativar_conta' uidb64=uid token=token %}
+
+Se clicar no link acima não funcionar, copie e cole o URL em um novo navegador em vez disso.
+
+Atenciosamente,
+Equipe World of Frameworks.
+{% endautoescape %}
