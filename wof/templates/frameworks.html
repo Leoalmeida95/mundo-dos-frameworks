@@ -1,9 +1,14 @@
-{% extends "base.html" %} {% block titulo %}Frameworks{% endblock %} {% block conteudo %} {% load staticfiles %}
+{% extends "base.html" %} {% block titulo %}Frameworks{% endblock %} {% block conteudo %} {% load staticfiles %} {%load filters %}
 <br/>
 <h3>
     <span class="badge badge-info ml-2">{{linguagem.nome}}</span>
 </h3>
 <p class="font-weight-light ml-2 mt-2 mb-4">Escolha um dos Frameworks disponíveis abaixo</p>
+
+<div class="container">
+    {{result|pygmentize|safe|linebreaks}}
+</div>
+
 <nav>
     <div class="nav nav-tabs ml-2" id="nav-tab" role="tablist">
         {%for frm in frameworks %} {% with frameworks|first as first %} {% if frm == first%}

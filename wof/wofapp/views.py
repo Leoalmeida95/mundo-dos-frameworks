@@ -8,8 +8,8 @@ from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
-from .tokens import account_activation_token
 
+from .tokens import account_activation_token
 from .forms import *
 from .models import Linguagem, Framework
 
@@ -159,6 +159,8 @@ def frameworks_view(request,lg_id):
     linguagem_selecionada = Linguagem.objects.get(id=lg_id)
     frameworks = Framework.objects.all().filter(linguagem_id=lg_id)
     linguagens_navbar = Linguagem.objects.all().order_by('nome')
+    
+    args['result'] = '<code class="c#">public int Teste(){var x=10;}</code>'
     args['frameworks'] = frameworks
     args['linguagem'] = linguagem_selecionada
     args['linguagens'] = linguagens_navbar
