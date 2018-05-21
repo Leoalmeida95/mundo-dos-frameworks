@@ -1,11 +1,11 @@
-{% extends "base.html" %} {% block titulo %}{{linguagem}}{%endblock%} {%block conteudo%} {%load staticfiles%} {%load filters%}
+{% extends "base.html" %} {% block titulo %}{{linguagem_nome}}{%endblock%} {%block conteudo%} {%load staticfiles%} {%load filters%}
 <h3>
-    <span class="badge badge-info ml-2 mt-3">{{linguagem}}</span>
+    <span class="badge badge-info ml-2 mt-3">{{linguagem_nome}}</span>
 </h3>
 <p class="font-weight-light ml-2 mt-2 mb-4">Escolha um dos Frameworks disponíveis abaixo</p>
 <nav>
     <div class="nav nav-tabs ml-2" id="nav-tab" role="tablist">
-        {%for frm in frameworks %} {% with frameworks|first as first %} {% if frm == first%}
+        {%for frm in lista_frameworks %} {% with lista_frameworks|first as first %} {% if frm == first%}
         <a style="color:black" class="nav-item nav-link active" data-toggle="tab" href="#nav-home" role="tab" aria-selected="true">{{frm}}</a>
         {%else%}
         <a style="color:black" class="nav-item nav-link" data-toggle="tab" href="#nav-home" role="tab" aria-selected="false">{{frm}}</a>
@@ -34,7 +34,7 @@
             <h4 class="mt-3" id="list-item-1">Versões
             </h4>
             <div class="btn-group">
-                <button class="btn btn-primary btn-sm" type="button">
+                <button class="btn btn-primary btn-sm" type="button" disabled>
                     Escolha uma das versões do Framework
                 </button>
                 <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true"
@@ -42,26 +42,35 @@
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <div class="dropdown-menu">
-                    {%if versoes%} {%for versao in versoes%}
-                    <a class="dropdown-item" href="#" data-toggle="collapse" data-target={{versao}} aria-expanded="false" aria-controls={{versao}}>{{versao.numero}}</a>
-                    {%endfor%} {%else%} {% if user.is_authenticated %} O {{framework.nome}} ainda não possui versões cadastradas. Clique no 'Adicionar'
-                    e seja o primeiro a fazer! {%else%} O {{framework.nome}} ainda não possui versões cadastradas. Cadastre-se
-                    e seja o primeiro a fazer! {%endif%} {%endif%} {%if user.is_authenticated%}
+                    {%for versao in versoes%}
+                    <a class="dropdown-item" href="#">{{versao.numero}}</a>
+                    {%endfor%} {%if user.is_authenticated%}
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Adicionar nova versão
+                    <a class="dropdown-item text-center" href="#">Adicionar nova versão
                         <i class="fa fa-plus-circle" style="color: #17a2b8" aria-hidden="true" title="Adicioanr nova versão"></i>
                     </a>
                     {% endif %}
                 </div>
             </div>
-            <div class="collapse mt-4" id={{versao}}>
-                <div class="card card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica,
-                    craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                </div>
-            </div>
 
-            <div class="card border-secondary mb-3 mt-3 mr-1" id="list-item-2">
+            {%if versoes%} {%for versao in versoes%} {% if versao == versao_atual%}
+            <div class="col-12 mt-2">
+                <p class="font-weight-light">
+                    <b>Versão selecionada:</b> {{versao.numero}}</p>
+            </div>
+            <div class="col-12 mt-2">
+                <p class="font-weight-light">
+                    <b>Descrição da versão:</b> {{versao.descricao}}</p>
+            </div>
+            {% endif %} {%endfor%} {%else%}
+            <div class="col-12 mt-2"> {% if user.is_authenticated %}
+                <p class="font-weight-light"> O {{framework.nome}} ainda não possui versões cadastradas. Clique no 'Adicionar' e seja o primeiro a fazer!</p>
+                {%else%}
+                <p class="font-weight-light">O {{framework.nome}} ainda não possui versões cadastradas. Cadastre-se e seja o primeiro a fazer! </p>{%endif%}
+            </div>
+            {%endif%}
+
+            <div class="card border-secondary mb-3 mt-5 mr-1" id="list-item-2">
                 <!--HELLO WORLD-->
                 <h4 class="mt-2 ml-2">Hello World {% if user.is_authenticated %}
                     <span class="badge badge-light">
@@ -72,12 +81,11 @@
                 </h4>
                 <div class="card card-body ml-2 mr-2 mb-2">
                     {%if helloword%}
-                    <div class="col-md-12 ml-0 mr-0">
+                    <div class="col-md-12">
                         {{helloword.descricao}}
                     </div>
-                    <div class="col-md-12 ml-2 mr-2">
-                        {% with "
-                        <code class="|add:linguagem|add:">"|add:helloword.codigo_exemplo|add:"</code>" as code %} {{code|pygmentize|safe}} {%endwith%}
+                    <div class="col-md-10 ml-5 mt-3">
+                        {%with "<pre id="|add:linguagem_nome|add:">"|add:helloword.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%}
                     </div>
                     {%else%} {% if user.is_authenticated %} O {{framework.nome}} ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
                     e seja o primeiro a fazer! {%else%} O {{framework.nome}} ainda não possui nenhum exemplo de Hello World.
@@ -85,7 +93,7 @@
                 </div>
             </div>
 
-            <div class="card border-secondary mb-3 mt-3 mr-1" id="list-item-3">
+            <div class="card border-secondary mb-3 mt-5 mr-1" id="list-item-3">
                 <!--OPINIÕES-->
                 <h4 class="mt-2 ml-2">Opiniões</h4>
                 <small class="ml-2">Prós e contras dos usuários sobre o Framework:</small>
@@ -102,27 +110,44 @@
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-pros" role="tabpanel" aria-labelledby="pills-pros-tab">
                         <div class="card card-body ml-2 mr-2 mb-3">
-                            {%if opinioes%} {% for opiniao in opinioes %} {{opiniao.pros}} {%endfor%} {%else%} {% if user.is_authenticated %} Ninguém
-                            adicionou um pró sobre o {{framework.nome}}. Clique no 'Adicionar' e seja o primeiro a fazer!
-                            {%else%} Ninguém adicionou um pró sobre o {{framework.nome}}. Cadastre-se e seja o primeiro a
-                            fazer! {%endif%} {%endif%} {% if user.is_authenticated %}
-                            <button type="button" class="col-md-2 btn btn-outline-info btn-sm">Adicionar</button>
+                            {%if opinioes%}
+                            <ul>
+                                {% for opiniao in opinioes %}
+                                <li>
+                                    {{opiniao.pro}}
+                                </li>
+                                {%endfor%}
+                            </ul>
+                            {%else%} {% if user.is_authenticated %} Ninguém adicionou um pró sobre o {{framework.nome}}. Clique no 'Adicionar' e seja
+                            o primeiro a fazer! {%else%} Ninguém adicionou um pró sobre o {{framework.nome}}. Cadastre-se
+                            e seja o primeiro a fazer! {%endif%} {%endif%} {% if user.is_authenticated %}
+                            <div>
+                                <button type="button" class="col-md-2 btn btn-outline-info btn-sm">Adicionar</button>
+                            </div>
                             {%endif%}
                         </div>
                     </div>
                     <div class="tab-pane fade" id="pills-contras" role="tabpanel" aria-labelledby="pills-contras-tab">
                         <div class="card card-body ml-2 mr-2 mb-3">
-                            {%if opinioes%} {% for opiniao in opinioes %} {{opiniao.contra}} {%endfor%} {%else%} {% if user.is_authenticated %} Ninguém
-                            adicionou um contra sobre o {{framework.nome}}. Clique no 'Adicionar' e seja o primeiro a fazer!
-                            {%else%} Ninguém adicionou um contra sobre o {{framework.nome}}. Cadastre-se e seja o primeiro
-                            a fazer! {%endif%} {%endif%} {% if user.is_authenticated %}
+                            {%if opinioes%}
+                            <ul>
+                                {% for opiniao in opinioes %}
+                                <li>
+                                    {{opiniao.contra}}
+                                </li>
+                                {%endfor%}
+                            </ul>
+                            {%else%} {% if user.is_authenticated %} Ninguém adicionou um contra sobre o {{framework.nome}}. Clique no 'Adicionar' e seja
+                            o primeiro a fazer! {%else%} Ninguém adicionou um contra sobre o {{framework.nome}}. Cadastre-se
+                            e seja o primeiro a fazer! {%endif%} {%endif%} {% if user.is_authenticated %}
                             <button type="button" class="col-md-2 btn btn-outline-info btn-sm">Adicionar</button>
                             {%endif%}
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card border-secondary mb-3 mr-1" id="list-item-4">
+
+            <div class="card border-secondary mt-5 mb-5 mr-1" id="list-item-4">
                 <!--LINKS-->
                 <h4 class="mt-3 ml-2">Links</h4>
                 <label class="ml-2">Os melhores sites eleitos pelos usuários para tutorias e conhecimentos sobre o framework:</label>
@@ -131,14 +156,17 @@
                     <br> {%if links%} {% for link in links %}
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <a href={{link.path}}>{{link.path}}</a>
+                            <div class="col-10 text-truncate">
+                                <a href={{link.path}}>{{link.path}}</a>
+                            </div>
                             <span class="badge badge-primary">
                                 <i class="fa fa-thumbs-up" aria-hidden="true"></i> 14</i>
                             </span>
                         </li>
                         {%endfor%} {%else%}{% if user.is_authenticated %}
-                        <li> Ninguém adicionou um link sobre o {{framework.nome}}. Clique no mais e seja o primeiro a fazer! </li>{%else%}
-                        <li> Ninguém adicionou um link sobre o {{framework.nome}}. Cadastre-se e seja o primeiro a fazer! {%endif%}</li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center"> Ninguém adicionou um link sobre o {{framework.nome}}. Clique no 'mais' e seja o primeiro a fazer!
+                        </li>{%else%}
+                        <li class="list-group-item d-flex justify-content-between align-items-center"> Ninguém adicionou um link sobre o {{framework.nome}}. Cadastre-se e seja o primeiro a fazer! {%endif%}</li>
                         {%endif%} {% if user.is_authenticated %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Adicionar novo link
@@ -212,6 +240,10 @@
             <i class="fa fa-commenting-o" aria-hidden="true"></i>
         </div>
         <div class="card-body">
+            <div class="row mt-2">
+                <div class="col-md-12">
+                </div>
+            </div>
             <div class="row mr-1">
                 <div class="col-md-11">
                     <input type="text" name="texto" value="{{ form.texto.value }}" id="texto" class="form-control" placeholder="Seus comentários..."

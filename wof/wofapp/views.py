@@ -156,20 +156,19 @@ def trocar_senha_view(request):
 
 def frameworks_view(request,lg_id):
     args = {}
-    linguagem_selecionada = Linguagem.objects.get(id=lg_id)
     frameworks = Framework.objects.all().filter(linguagem_id=lg_id)
-    linguagens_navbar = Linguagem.objects.all().order_by('nome')
-
     framework = frameworks.first()
+    versoes = Versao.objects.all().filter(framework=framework)
+
     args['helloword'] = Helloworld.objects.all().filter(framework=framework).first()
-    args['versoes'] = Versao.objects.all().filter(framework=framework)
+    args['versoes'] = versoes
     args['opinioes'] = Opiniao.objects.all().filter(framework=framework)
     args['links'] = Link.objects.all().filter(framework=framework)
-
-    
-    args['frameworks'] = frameworks
-    args['linguagem'] = linguagem_selecionada.nome
-    args['linguagens'] = linguagens_navbar
+    args['framework'] = framework
+    args['versao_atual'] = versoes.first()
+    args['lista_frameworks'] = frameworks
+    args['linguagem_nome'] = Linguagem.objects.get(id=lg_id).nome
+    args['linguagens'] = Linguagem.objects.all().order_by('nome')
     return render(request,'frameworks.html',args)
 
 @login_required
@@ -192,13 +191,13 @@ def helloworld_view(request,id):
     user = request.user
     if request.method == 'POST':
         framework = Framework.objects.all().get(id=id)
+        args['framework'] = framework
         form = HelloWorldForm(request.POST)
         args['form'] = form
         if framework is not None and form.is_valid():
             x = request.POST['descricao']
             x2 = request.POST['codigo_exemplo']
             args['helloword'] = framework
-            # args['codigo_exemplo'] = '<code class="'+framework.linguagem.nome+'">'+x2+'</code>'
 
     #retornar para o framework de origem do post
     return render(request,'frameworks.html',args)

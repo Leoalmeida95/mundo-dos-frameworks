@@ -116,8 +116,8 @@ class Framework(models.Model):
         return self.nome
 
 class Opiniao(models.Model):
-    pros = models.CharField(max_length=400)
-    contras = models.CharField(max_length=400)
+    pro = models.CharField(max_length=400)
+    contra = models.CharField(max_length=400)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 

@@ -11,9 +11,9 @@ def pygmentize(value):
     try:
         formatter = HtmlFormatter(style='paraiso-light')
         tree = BeautifulSoup(unescape_html(value))
-        code = tree.find('code')
-        if not code['class']: code['class'] = 'text'
-        ling = code['class']
+        code = tree.find('pre')
+        if not code['id']: code['id'] = 'text'
+        ling = code['id']
 
         try:
             lexer = get_lexer_by_name(ling[0], stripall=True)
