@@ -137,6 +137,7 @@ class Comentario(models.Model):
     texto = models.CharField(max_length=1000)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
+    data = models.DateField(auto_now=True)
 
     def __str__(self):
         return self.texto

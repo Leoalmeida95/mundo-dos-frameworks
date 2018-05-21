@@ -1,6 +1,7 @@
-{% extends "base.html" %} {% block titulo %}{{linguagem_nome}}{%endblock%} {%block conteudo%} {%load staticfiles%} {%load filters%}
+{% extends "base.html" %} {% block titulo %}{{framework.linguagem.nome}}{%endblock%} {%block conteudo%} {%load staticfiles%}
+{%load filters%}
 <h3>
-    <span class="badge badge-info ml-2 mt-3">{{linguagem_nome}}</span>
+    <span class="badge badge-info ml-2 mt-3">{{framework.linguagem.nome}}</span>
 </h3>
 <p class="font-weight-light ml-2 mt-2 mb-4">Escolha um dos Frameworks disponíveis abaixo</p>
 <nav>
@@ -15,7 +16,7 @@
 
 <div class="row mt-4">
     <div class="col-md-2">
-        <div id="list-example" class="list-group mt-2 ml-2">
+        <div id="list-example" class="list-group mt-2 ml-2 mt-5">
             <a class="list-group-item list-group-item-action active" href="#list-item-1">
                 <i class="fa fa-shield" aria-hidden="true"></i> Versões</a>
             <a class="list-group-item list-group-item-action" href="#list-item-2">
@@ -28,7 +29,7 @@
     </div>
 
     <div class="col-md-10 mb-2">
-        <div class="mr-3" data-spy="scroll" data-target="#list-example" data-offset="0" class="scrollspy-example" style="overflow: auto; max-height: 400px;">
+        <div class="mr-3" data-spy="scroll" data-target="#list-example" data-offset="0" class="scrollspy-example" style="overflow: auto; max-height: 600px;">
 
             <!--VERSÕES-->
             <h4 class="mt-3" id="list-item-1">Versões
@@ -43,10 +44,10 @@
                 </button>
                 <div class="dropdown-menu">
                     {%for versao in versoes%}
-                    <a class="dropdown-item" href="#">{{versao.numero}}</a>
+                    <a class="dropdown-item" href="#">{{versao.numero|floatformat:3}}</a>
                     {%endfor%} {%if user.is_authenticated%}
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-center" href="#">Adicionar nova versão
+                    <a class="dropdown-item text-center" href="#">Nova versão
                         <i class="fa fa-plus-circle" style="color: #17a2b8" aria-hidden="true" title="Adicioanr nova versão"></i>
                     </a>
                     {% endif %}
@@ -56,7 +57,7 @@
             {%if versoes%} {%for versao in versoes%} {% if versao == versao_atual%}
             <div class="col-12 mt-2">
                 <p class="font-weight-light">
-                    <b>Versão selecionada:</b> {{versao.numero}}</p>
+                    <b>Versão selecionada:</b> {{versao.numero|floatformat:3}}</p>
             </div>
             <div class="col-12 mt-2">
                 <p class="font-weight-light">
@@ -85,7 +86,7 @@
                         {{helloword.descricao}}
                     </div>
                     <div class="col-md-6 mt-3 mx-auto ">
-                        {%with "<pre id="|add:linguagem_nome|add:">"|add:helloword.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%}
+                        {%with "<pre id="|add:framework.linguagem.nome|add:">"|add:helloword.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%}
                     </div>
                     {%else%} {% if user.is_authenticated %} O {{framework.nome}} ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
                     e seja o primeiro a fazer! {%else%} O {{framework.nome}} ainda não possui nenhum exemplo de Hello World.
@@ -152,7 +153,7 @@
                 <h4 class="mt-3 ml-2">Links</h4>
                 <label class="ml-2">Os melhores sites eleitos pelos usuários para tutorias e conhecimentos sobre o framework:</label>
                 <div class="col-md-8 mx-auto mt-2 mb-3">
-                        <p class="font-weight-light">Ranking:</p>
+                    <p class="font-weight-light">Ranking:</p>
                     {%if links%} {% for link in links %}
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -240,16 +241,38 @@
             <i class="fa fa-commenting-o" aria-hidden="true"></i>
         </div>
         <div class="card-body">
-            <div class="row mt-2">
-                <div class="col-md-12">
-                    {% for comentario in comentarios %}
-                    <ul>
-                        <li>
-                            {{comentario.texto}}
-                        </li>
+            {% for comentario in comentarios %}
+            <div class="media comment-box">
+                <div class="media-left">
+                    <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
+                </div>
+                <div class="media-body">
+                    <div class="media-heading form-inline">
+                        <h5>{{comentario.usuario.get_full_name}}</h5>
+                        <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
+                    </div>
+                    <p>{{comentario.texto}}</p>
+                    {%if comentario.id is 1 %}
+                    <div class="col-md-5">
+                        {% for comentario in comentarios %}
+                        <div class="media comment-box">
+                            <div class="media-left">
+                                <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
+                            </div>
+                            <div class="media-body">
+                                <div class="media-heading form-inline">
+                                    <h5>{{comentario.usuario.get_full_name}}</h5>
+                                    <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
+                                </div>
+                                <p>{{comentario.texto}}</p>
+                            </div>
+                        </div>
                         {%endfor%}
+                    </div>
+                    {%endif%}
                 </div>
             </div>
+            {%endfor%}
             <div class="row mt-5 mr-1">
                 <div class="col-md-11">
                     <input type="text" name="texto" value="{{ form.texto.value }}" id="texto" class="form-control" placeholder="Seus comentários..."

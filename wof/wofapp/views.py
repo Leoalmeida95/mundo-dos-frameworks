@@ -55,8 +55,7 @@ def registrar_usuario_view(request):
         publica = 'True'
 
     args['publica'] = True if publica == 'True' else False 
-    linguagens_navbar = Linguagem.objects.all().order_by('nome')
-    args['linguagens'] =linguagens_navbar
+    args['linguagens'] =Linguagem.objects.all().order_by('nome')
     return render(request,'usuario.html',args)
 
 def ativar_conta_view(request, uidb64=None, token=None):
@@ -158,17 +157,15 @@ def frameworks_view(request,lg_id):
     args = {}
     frameworks = Framework.objects.all().filter(linguagem_id=lg_id)
     framework = frameworks.first()
-    versoes = Versao.objects.all().filter(framework=framework)
 
-    args['helloword'] = Helloworld.objects.all().filter(framework=framework).first()
-    args['versoes'] = versoes
-    args['opinioes'] = Opiniao.objects.all().filter(framework=framework)
-    args['links'] = Link.objects.all().filter(framework=framework)
-    args['comentarios'] = Comentario.objects.all().filter(framework=framework)
+    args['helloword'] = framework.helloworld_set.first()
+    args['versoes'] = framework.versao_set.all()
+    args['opinioes'] = framework.opiniao_set.all()
+    args['links'] = framework.link_set.all()
+    args['comentarios'] = framework.comentario_set.all()
+    args['versao_atual'] = framework.versao_set.first()
     args['framework'] = framework
-    args['versao_atual'] = versoes.first()
     args['lista_frameworks'] = frameworks
-    args['linguagem_nome'] = Linguagem.objects.get(id=lg_id).nome
     args['linguagens'] = Linguagem.objects.all().order_by('nome')
     return render(request,'frameworks.html',args)
 

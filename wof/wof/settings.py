@@ -152,3 +152,8 @@ EMAIL_PORT = 587
 
 #permite validação de usuário ativo na autenticação
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
+
+#altera configurações default do django
+USE_L10N = False
+DATE_FORMAT = 'd.m.Y.'
+DECIMAL_SEPARATOR = '.'
