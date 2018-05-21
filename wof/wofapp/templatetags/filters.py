@@ -9,7 +9,7 @@ register = template.Library()
 @register.filter(is_safe=True)
 def pygmentize(value):
     try:
-        formatter = HtmlFormatter(style='paraiso-light')
+        formatter = HtmlFormatter(linenos=True, noclasses=True,style='monokai')
         tree = BeautifulSoup(unescape_html(value))
         code = tree.find('pre')
         if not code['id']: code['id'] = 'text'

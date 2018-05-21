@@ -116,8 +116,8 @@ class Framework(models.Model):
         return self.nome
 
 class Opiniao(models.Model):
-    pro = models.CharField(max_length=400)
-    contra = models.CharField(max_length=400)
+    pro = models.CharField(max_length=800)
+    contra = models.CharField(max_length=800)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
@@ -125,7 +125,7 @@ class Opiniao(models.Model):
         return self.nome    
 
 class Helloworld(models.Model):
-    codigo_exemplo = models.CharField(max_length=1000)
+    codigo_exemplo = models.CharField(max_length=5000)
     descricao = models.CharField(max_length=5000)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
@@ -142,7 +142,7 @@ class Comentario(models.Model):
         return self.texto
 
 class Link(models.Model):
-    path = models.CharField(max_length=500)
+    path = models.CharField(max_length=800)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
 
     def __str__(self):

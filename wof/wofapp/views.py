@@ -11,7 +11,7 @@ from django.utils.http import urlsafe_base64_decode
 
 from .tokens import account_activation_token
 from .forms import *
-from .models import Linguagem, Framework,Versao,Helloworld,Opiniao,Link
+from .models import Linguagem, Framework,Versao,Helloworld,Opiniao,Link,Comentario
 
 def home_view(request):
     linguagens_navbar = Linguagem.objects.all().order_by('nome')
@@ -164,6 +164,7 @@ def frameworks_view(request,lg_id):
     args['versoes'] = versoes
     args['opinioes'] = Opiniao.objects.all().filter(framework=framework)
     args['links'] = Link.objects.all().filter(framework=framework)
+    args['comentarios'] = Comentario.objects.all().filter(framework=framework)
     args['framework'] = framework
     args['versao_atual'] = versoes.first()
     args['lista_frameworks'] = frameworks
@@ -190,14 +191,20 @@ def helloworld_view(request,id):
     args = {}
     user = request.user
     if request.method == 'POST':
-        framework = Framework.objects.all().get(id=id)
-        args['framework'] = framework
+        hello = Helloworld.objects.all().filter(framework_id=id).first()
+        # args['framework'] = framework
         form = HelloWorldForm(request.POST)
         args['form'] = form
-        if framework is not None and form.is_valid():
-            x = request.POST['descricao']
-            x2 = request.POST['codigo_exemplo']
-            args['helloword'] = framework
+        if form.is_valid():
+            if hello is None:
+                hello = Helloworld() 
+            hello.descricao = request.POST['descricao']
+            hello.codigo_exemplo =codigo_exemplo=request.POST['codigo_exemplo']
+            hello.framework_id = id
+            user = request.user
+            hello.usuario_id = user.id
+            hello.save()
+            args['helloword'] = hello
 
     #retornar para o framework de origem do post
     return render(request,'frameworks.html',args)
