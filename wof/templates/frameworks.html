@@ -252,19 +252,19 @@
                         <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
                     </div>
                     <p>{{comentario.texto}}</p>
-                    {%if comentario.id is 1 %}
+                    {%if comentario.respostas %}
                     <div class="col-md-5">
-                        {% for comentario in comentarios %}
+                        {% for resposta in comentario.respostas.all %}
                         <div class="media comment-box">
                             <div class="media-left">
                                 <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
                             </div>
                             <div class="media-body">
                                 <div class="media-heading form-inline">
-                                    <h5>{{comentario.usuario.get_full_name}}</h5>
-                                    <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
+                                    <h5>{{resposta.usuario.get_full_name}}</h5>
+                                    <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
                                 </div>
-                                <p>{{comentario.texto}}</p>
+                                <p>{{resposta.texto}}</p>
                             </div>
                         </div>
                         {%endfor%}
