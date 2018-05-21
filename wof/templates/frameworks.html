@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block titulo %}Frameworks{%endblock%} {%block conteudo%} {%load staticfiles%} {%load filters%}
+{% extends "base.html" %} {% block titulo %}{{linguagem}}{%endblock%} {%block conteudo%} {%load staticfiles%} {%load filters%}
 <h3>
     <span class="badge badge-info ml-2 mt-3">{{linguagem}}</span>
 </h3>
@@ -42,10 +42,11 @@
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">1.0</a>
-                    <a class="dropdown-item" href="#" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">2.0</a>
-                    <a class="dropdown-item" href="#" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">3.0</a>
-                    {% if user.is_authenticated %}
+                    {%if versoes%} {%for versao in versoes%}
+                    <a class="dropdown-item" href="#" data-toggle="collapse" data-target={{versao}} aria-expanded="false" aria-controls={{versao}}>{{versao.numero}}</a>
+                    {%endfor%} {%else%} {% if user.is_authenticated %} O {{framework.nome}} ainda não possui versões cadastradas. Clique no 'Adicionar'
+                    e seja o primeiro a fazer! {%else%} O {{framework.nome}} ainda não possui versões cadastradas. Cadastre-se
+                    e seja o primeiro a fazer! {%endif%} {%endif%} {%if user.is_authenticated%}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Adicionar nova versão
                         <i class="fa fa-plus-circle" style="color: #17a2b8" aria-hidden="true" title="Adicioanr nova versão"></i>
@@ -53,7 +54,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="collapse mt-4" id="collapseExample">
+            <div class="collapse mt-4" id={{versao}}>
                 <div class="card card-body">
                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica,
                     craft beer labore wes anderson cred nesciunt sapiente ea proident.
@@ -71,12 +72,16 @@
                 </h4>
                 <div class="card card-body ml-2 mr-2 mb-2">
                     {%if helloword%}
-                    <div class="col-md-12 ml-2 mr-2">
-                        {% with "<code class="|add:linguagem|add:">"|add:helloword.codigo_exemplo|add:"</code>" as code %} {{code|pygmentize|safe}} {%endwith%}
+                    <div class="col-md-12 ml-0 mr-0">
+                        {{helloword.descricao}}
                     </div>
-                    {%else%} {% if user.is_authenticated %} O {{linguagem}} ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
-                    e seja o primeiro a fazer! {%else%} O {{linguagem}} ainda não possui nenhum exemplo de Hello World. Cadastre-se
-                    e seja o primeiro a fazer! {%endif%} {%endif%}
+                    <div class="col-md-12 ml-2 mr-2">
+                        {% with "
+                        <code class="|add:linguagem|add:">"|add:helloword.codigo_exemplo|add:"</code>" as code %} {{code|pygmentize|safe}} {%endwith%}
+                    </div>
+                    {%else%} {% if user.is_authenticated %} O {{framework.nome}} ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
+                    e seja o primeiro a fazer! {%else%} O {{framework.nome}} ainda não possui nenhum exemplo de Hello World.
+                    Cadastre-se e seja o primeiro a fazer! {%endif%} {%endif%}
                 </div>
             </div>
 
@@ -86,25 +91,31 @@
                 <small class="ml-2">Prós e contras dos usuários sobre o Framework:</small>
                 <ul class="nav nav-pills mb-3 mt-3 ml-2" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home"
+                        <a class="nav-link active" id="pills-pros-tab" data-toggle="pill" href="#pills-pros" role="tab" aria-controls="pills-pros"
                             aria-selected="true">Prós</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile"
+                        <a class="nav-link" id="pills-contras-tab" data-toggle="pill" href="#pills-contras" role="tab" aria-controls="pills-contras"
                             aria-selected="false">Contras</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <div class="tab-pane fade show active" id="pills-pros" role="tabpanel" aria-labelledby="pills-pros-tab">
                         <div class="card card-body ml-2 mr-2 mb-3">
-                            {% if user.is_authenticated %}
+                            {%if opinioes%} {% for opiniao in opinioes %} {{opiniao.pros}} {%endfor%} {%else%} {% if user.is_authenticated %} Ninguém
+                            adicionou um pró sobre o {{framework.nome}}. Clique no 'Adicionar' e seja o primeiro a fazer!
+                            {%else%} Ninguém adicionou um pró sobre o {{framework.nome}}. Cadastre-se e seja o primeiro a
+                            fazer! {%endif%} {%endif%} {% if user.is_authenticated %}
                             <button type="button" class="col-md-2 btn btn-outline-info btn-sm">Adicionar</button>
                             {%endif%}
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    <div class="tab-pane fade" id="pills-contras" role="tabpanel" aria-labelledby="pills-contras-tab">
                         <div class="card card-body ml-2 mr-2 mb-3">
-                            {% if user.is_authenticated %}
+                            {%if opinioes%} {% for opiniao in opinioes %} {{opiniao.contra}} {%endfor%} {%else%} {% if user.is_authenticated %} Ninguém
+                            adicionou um contra sobre o {{framework.nome}}. Clique no 'Adicionar' e seja o primeiro a fazer!
+                            {%else%} Ninguém adicionou um contra sobre o {{framework.nome}}. Cadastre-se e seja o primeiro
+                            a fazer! {%endif%} {%endif%} {% if user.is_authenticated %}
                             <button type="button" class="col-md-2 btn btn-outline-info btn-sm">Adicionar</button>
                             {%endif%}
                         </div>
@@ -114,29 +125,21 @@
             <div class="card border-secondary mb-3 mr-1" id="list-item-4">
                 <!--LINKS-->
                 <h4 class="mt-3 ml-2">Links</h4>
-                <labe class="ml-2">Os melhores sites eleitos pelos usuários para tutorias e conhecimentos sobre o framework:</labe>
+                <label class="ml-2">Os melhores sites eleitos pelos usuários para tutorias e conhecimentos sobre o framework:</label>
                 <div class="col-md-8 mx-auto mt-2 mb-3">
                     ranking:
+                    <br> {%if links%} {% for link in links %}
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <a href="https://www.djangoproject.com/">https://www.djangoproject.com/</a>
+                            <a href={{link.path}}>{{link.path}}</a>
                             <span class="badge badge-primary">
                                 <i class="fa fa-thumbs-up" aria-hidden="true"></i> 14</i>
                             </span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <a href="https://angular.io/">https://angular.io/</a>
-                            <span class="badge badge-primary">
-                                <i class="fa fa-thumbs-up" aria-hidden="true"></i> 5</i>
-                            </span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <a href="https://nodejs.org/en/">https://nodejs.org/en/</a>
-                            <span class="badge badge-primary">
-                                <i class="fa fa-thumbs-up" aria-hidden="true"></i> 2</i>
-                            </span>
-                        </li>
-                        {% if user.is_authenticated %}
+                        {%endfor%} {%else%}{% if user.is_authenticated %}
+                        <li> Ninguém adicionou um link sobre o {{framework.nome}}. Clique no mais e seja o primeiro a fazer! </li>{%else%}
+                        <li> Ninguém adicionou um link sobre o {{framework.nome}}. Cadastre-se e seja o primeiro a fazer! {%endif%}</li>
+                        {%endif%} {% if user.is_authenticated %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Adicionar novo link
                             <span class="badge badge-light">
@@ -144,14 +147,11 @@
                             </span>
                         </li>
                         {%endif%}
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 
 <!-- Modal -->
 <form class="form" role="form" method="POST" action="/helloworld/{{framework.id}}">
@@ -203,6 +203,7 @@
 </form>
 <!-- EndModal -->
 
+<!--Comentário-->
 <div class="card mt-5 mx-5">
     <form class="form" role="form" method="POST" action="/comentario/{{framework.id}}">
         {% csrf_token %}
