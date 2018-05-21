@@ -1,14 +1,8 @@
-{% extends "base.html" %} {% block titulo %}Frameworks{% endblock %} {% block conteudo %} {% load staticfiles %} {%load filters %}
-<br/>
+{% extends "base.html" %} {% block titulo %}Frameworks{%endblock%} {%block conteudo%} {%load staticfiles%} {%load filters%}
 <h3>
-    <span class="badge badge-info ml-2">{{linguagem.nome}}</span>
+    <span class="badge badge-info ml-2 mt-3">{{linguagem}}</span>
 </h3>
 <p class="font-weight-light ml-2 mt-2 mb-4">Escolha um dos Frameworks disponíveis abaixo</p>
-
-<div class="container">
-    {{result|pygmentize|safe|linebreaks}}
-</div>
-
 <nav>
     <div class="nav nav-tabs ml-2" id="nav-tab" role="tablist">
         {%for frm in frameworks %} {% with frameworks|first as first %} {% if frm == first%}
@@ -18,9 +12,8 @@
         {% endif %} {% endwith %} {%endfor%}
     </div>
 </nav>
-<br/>
 
-<div class="row mt-2">
+<div class="row mt-4">
     <div class="col-md-2">
         <div id="list-example" class="list-group mt-2 ml-2">
             <a class="list-group-item list-group-item-action active" href="#list-item-1">
@@ -34,7 +27,7 @@
         </div>
     </div>
 
-    <div class="col-md-10">
+    <div class="col-md-10 mb-2">
         <div class="mr-3" data-spy="scroll" data-target="#list-example" data-offset="0" class="scrollspy-example" style="overflow: auto; max-height: 400px;">
 
             <!--VERSÕES-->
@@ -71,13 +64,20 @@
                 <!--HELLO WORLD-->
                 <h4 class="mt-2 ml-2">Hello World {% if user.is_authenticated %}
                     <span class="badge badge-light">
-                        <i class="fa fa-pencil-square-o" style="cursor:pointer;color:#17a2b8" aria-hidden="true" data-toggle="modal" data-target="#exampleModalLong"
+                        <i class="fa fa-pencil-square-o" style="cursor:pointer;color:#17a2b8" data-toggle="modal" data-target=".bd-example-modal-lg"
                             title="Editar Hello World"></i>
                     </span>
                     {% endif %}
                 </h4>
-                <p class="card card-body ml-2 mr-2">
-                </p>
+                <div class="card card-body ml-2 mr-2 mb-2">
+                    {%if helloword%}
+                    <div class="col-md-12 ml-2 mr-2">
+                        {% with "<code class="|add:linguagem|add:">"|add:helloword.codigo_exemplo|add:"</code>" as code %} {{code|pygmentize|safe}} {%endwith%}
+                    </div>
+                    {%else%} {% if user.is_authenticated %} O {{linguagem}} ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
+                    e seja o primeiro a fazer! {%else%} O {{linguagem}} ainda não possui nenhum exemplo de Hello World. Cadastre-se
+                    e seja o primeiro a fazer! {%endif%} {%endif%}
+                </div>
             </div>
 
             <div class="card border-secondary mb-3 mt-3 mr-1" id="list-item-3">
@@ -154,35 +154,57 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Edição do Hello World</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <textarea class="form-control" rows="50">
-
-                        </textarea>
+<form class="form" role="form" method="POST" action="/helloworld/{{framework.id}}">
+    {% csrf_token %}
+    <div class="modal fade bd-example-modal-lg" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">
+                        <i class="fa fa-globe" aria-hidden="true"></i> Edição do Hello World</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Salvar Alterações</button>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="descricao" class="col-form-label">Descrição:</label>
+                        <div class="col-12">
+                            <textarea rows="7" class="form-control" value="{{ form.descricao.value }}" name="descricao" id="descricao" placeholder="Entre com uma descrição sobre o Hello World."
+                                required>
+                                    </textarea>
+                            <div class="form-control-feedback">
+                                <small class="text-danger text-center">
+                                    {{ form.descricao.errors }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <label for="codigo_exemplo" class="col-form-label">Código:</label>
+                    <div class="col-12">
+                        <textarea rows="7" class="form-control" value="{{ form.codigo_exemplo.value }}" name="codigo_exemplo" id="codigo_exemplo"
+                            placeholder="Entre com um código de exemplo do Hello World." required>
+                                    </textarea>
+                        <div class="form-control-feedback">
+                            <small class="text-danger text-center">
+                                {{ form.codigo_exemplo.errors }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-info">Salvar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 <!-- EndModal -->
 
-
-<br/>
 <div class="card mt-5 mx-5">
-    <form class="form" role="form" method="POST" action="/comentario/{{linguagem.id}}">
+    <form class="form" role="form" method="POST" action="/comentario/{{framework.id}}">
         {% csrf_token %}
         <div class="card-header">
             Comentários
@@ -192,7 +214,7 @@
             <div class="row mr-1">
                 <div class="col-md-11">
                     <input type="text" name="texto" value="{{ form.texto.value }}" id="texto" class="form-control" placeholder="Seus comentários..."
-                    />
+                        required />
                     <div class="form-control-feedback">
                         <small class="text-danger text-center">
                             {{ form.texto.errors }}

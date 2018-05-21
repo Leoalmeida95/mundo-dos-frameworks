@@ -1,17 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.template import loader
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib import messages
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 
 from .tokens import account_activation_token
 from .forms import *
-from .models import Linguagem, Framework
+from .models import Linguagem, Framework,Versao,Helloworld,Opiniao,Link
 
 def home_view(request):
     linguagens_navbar = Linguagem.objects.all().order_by('nome')
@@ -159,10 +159,16 @@ def frameworks_view(request,lg_id):
     linguagem_selecionada = Linguagem.objects.get(id=lg_id)
     frameworks = Framework.objects.all().filter(linguagem_id=lg_id)
     linguagens_navbar = Linguagem.objects.all().order_by('nome')
+
+    framework = frameworks.first()
+    args['helloword'] = Helloworld.objects.all().filter(framework=framework).first()
+    args['versoes'] = Versao.objects.all().filter(framework=framework)
+    args['opinioes'] = Opiniao.objects.all().filter(framework=framework)
+    args['links'] = Link.objects.all().filter(framework=framework)
+
     
-    args['result'] = '<code class="c#">public int Teste(){var x=10;}</code>'
     args['frameworks'] = frameworks
-    args['linguagem'] = linguagem_selecionada
+    args['linguagem'] = linguagem_selecionada.nome
     args['linguagens'] = linguagens_navbar
     return render(request,'frameworks.html',args)
 
@@ -176,6 +182,23 @@ def comentario_view(request,id):
         args['form'] = form
         if framework is not None and form.is_valid():
             x = request.POST['texto']
+
+    #retornar para o framework de origem do post
+    return render(request,'frameworks.html',args)
+
+@login_required
+def helloworld_view(request,id):
+    args = {}
+    user = request.user
+    if request.method == 'POST':
+        framework = Framework.objects.all().get(id=id)
+        form = HelloWorldForm(request.POST)
+        args['form'] = form
+        if framework is not None and form.is_valid():
+            x = request.POST['descricao']
+            x2 = request.POST['codigo_exemplo']
+            args['helloword'] = framework
+            # args['codigo_exemplo'] = '<code class="'+framework.linguagem.nome+'">'+x2+'</code>'
 
     #retornar para o framework de origem do post
     return render(request,'frameworks.html',args)

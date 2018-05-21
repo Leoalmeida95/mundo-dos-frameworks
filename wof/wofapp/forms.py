@@ -12,11 +12,12 @@ from django.template import loader
 from django.template.loader import render_to_string
 
 from .tokens import account_activation_token
-from .models import Usuario,Comentario,Framework
+from .models import Usuario,Comentario,Framework,Helloworld
 
 CHOICES=[(True,'Sim'),
          (False,'Não')]
 
+# Formulários para Usuário       
 class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(label='password1',required=True, 
         widget=forms.PasswordInput(attrs={'id': 'password1'}))
@@ -52,6 +53,14 @@ class CustomUserCreationForm(UserCreationForm):
         if email and Usuario.objects.filter(email=email).exclude(first_name=username).count():
             raise forms.ValidationError("Este email já está em uso, por favor escolha outro.")
         return email
+    
+    def clean_cpf(self):
+        cpf = self.cleaned_data.get('cpf')
+        username = self.cleaned_data.get('first_name')
+
+        if cpf and Usuario.objects.filter(cpf=cpf).exclude(first_name=username).count():
+            raise forms.ValidationError("Este CPF já está em uso, por favor verifique se foi digitado corretamente.")
+        return cpf
 
     def save(self, commit=True):
         # Save the provided password in hashed format
@@ -72,7 +81,6 @@ class CustomUserCreationForm(UserCreationForm):
             'protocol': 'https' if use_https else 'http',
         })
         user.email_user('Ative sua conta no WOF System',message,from_email = 'wofsystem@gmail.com')
-
 
 class UserChangeForm(forms.ModelForm):
 
@@ -97,7 +105,6 @@ class UserChangeForm(forms.ModelForm):
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
         return self.initial["password"]
-
 
 class AuthenticationForm(forms.Form):
     
@@ -126,19 +133,6 @@ class AuthenticationForm(forms.Form):
             raise forms.ValidationError(
                 'Sua conta não está ativa. Por favor, verifique seu email para completar seu registro.',
                 code='Essa conta está inativa.') 
-
-class ComentarioForm(forms.ModelForm):
-
-    class Meta:
-        model = Comentario
-        fields = ['texto']
-
-    def clean(self):        
-        texto = self.cleaned_data.get('texto')
-        if texto is None:
-            raise forms.ValidationError('Escreva alguma pergunta ou comentário.', code='texto')
-        
-        return self.cleaned_data
 
 class PasswordResetForm(forms.Form):
     email = forms.EmailField(label='email', max_length=60)
@@ -227,3 +221,37 @@ class SetPasswordForm(UserCreationForm):
             self.user.save()
 
         return self.user
+
+# Formulários para Framework       
+class ComentarioForm(forms.ModelForm):
+    
+    class Meta:
+        model = Comentario
+        fields = ['texto']
+
+    def clean(self):        
+        texto = self.cleaned_data.get('texto')
+        if texto is None:
+            raise forms.ValidationError('Escreva alguma pergunta ou comentário.', code='texto')
+        
+        return self.cleaned_data
+
+class HelloWorldForm(forms.ModelForm):
+    
+    class Meta:
+        model = Helloworld
+        fields = ['descricao','codigo_exemplo']
+
+    def clean_descricao(self):        
+        descricao = self.cleaned_data.get('descricao')
+
+        if descricao is None:
+            raise forms.ValidationError('Faça um explicação sobre o código que você irá inserir.', code='texto')
+        return self.cleaned_data
+
+    def clean_codigo_exemplo(self):        
+        codigo_exemplo = self.cleaned_data.get('codigo_exemplo')
+
+        if codigo_exemplo is None:
+            raise forms.ValidationError('Entre com um código de exemplo para o Hello World.', code='codigo_exemplo')
+        return self.cleaned_data
