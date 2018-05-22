@@ -158,14 +158,28 @@ def frameworks_view(request,lg_id):
     frameworks = Framework.objects.all().filter(linguagem_id=lg_id)
     framework = frameworks.first()
 
-    args['helloword'] = framework.helloworld_set.first()
-    args['versoes'] = framework.versao_set.all()
-    args['opinioes'] = framework.opiniao_set.all()
-    args['links'] = framework.link_set.all()
-    args['comentarios'] = framework.comentario_set.all()
-    args['versao_atual'] = framework.versao_set.first()
-    args['framework'] = framework
+    # from django.db import connection
+    # for comentario in framework.comentarios.all():
+    #     print (comentario.texto)
+    
+    # print (len(connection.queries)) # realiza 3 queries
+
+    testes = Framework.objects.prefetch_related('comentarios').all()
+    teste = testes.filter(linguagem_id=lg_id)
+    t = teste.first()
+    from django.db import connection
+    for comentario in t.comentarios.all():
+        print (comentario.texto)
+    
+    print (len(connection.queries))
+
+    args['versoes'] = Framework.objects.prefetch_related('versoes').filter(framework_id=framework.id)
+    args['opinioes'] = Framework.objects.prefetch_related('opinioes').filter(framework_id=framework.id)
+    args['links'] = Framework.objects.prefetch_related('links').filter(framework_id=framework.id)
+    args['helloword'] = Framework.objects.prefetch_related('helloworlds').filter(framework_id=framework.id).first()
+
     args['lista_frameworks'] = frameworks
+    args['framework'] = framework
     args['linguagens'] = Linguagem.objects.all().order_by('nome')
     return render(request,'frameworks.html',args)
 
@@ -174,7 +188,7 @@ def comentario_view(request,id):
     args = {}
     user = request.user
     if request.method == 'POST':
-        framework = Framework.objects.all().get(id=id)
+        framework = Framework.objects.get(id=id)
         form = ComentarioForm(request.POST)
         args['form'] = form
         if framework is not None and form.is_valid():
@@ -188,7 +202,7 @@ def helloworld_view(request,id):
     args = {}
     user = request.user
     if request.method == 'POST':
-        hello = Helloworld.objects.all().filter(framework_id=id).first()
+        hello = Helloworld.objects.all().get(framework_id=id).first()
         # args['framework'] = framework
         form = HelloWorldForm(request.POST)
         args['form'] = form

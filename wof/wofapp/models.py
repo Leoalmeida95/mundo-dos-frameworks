@@ -110,7 +110,7 @@ class Linguagem(models.Model):
 
 class Framework(models.Model):
     nome = models.CharField(max_length=30)
-    linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, null = False)
+    linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, null = False,related_name='frameworks')
 
     def __str__(self):
         return self.nome
@@ -118,7 +118,7 @@ class Framework(models.Model):
 class Opiniao(models.Model):
     pro = models.CharField(max_length=800)
     contra = models.CharField(max_length=800)
-    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
+    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False, related_name='opinioes')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
     def __str__(self):
@@ -127,7 +127,7 @@ class Opiniao(models.Model):
 class Helloworld(models.Model):
     codigo_exemplo = models.CharField(max_length=5000)
     descricao = models.CharField(max_length=5000)
-    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
+    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='helloworlds')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
     def __str__(self):
@@ -135,7 +135,7 @@ class Helloworld(models.Model):
 
 class Comentario(models.Model):
     texto = models.CharField(max_length=1000)
-    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
+    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='comentarios')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     data = models.DateField(auto_now=True)
     respostas = models.ManyToManyField("self")
@@ -145,7 +145,7 @@ class Comentario(models.Model):
 
 class Link(models.Model):
     path = models.CharField(max_length=800)
-    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
+    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='links')
 
     def __str__(self):
         return self.path
@@ -153,7 +153,7 @@ class Link(models.Model):
 class Versao(models.Model):
     numero = models.DecimalField(default=0, max_digits=10, decimal_places=5)
     descricao = models.CharField(max_length=4000)
-    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
+    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='versoes')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
     def __str__(self):

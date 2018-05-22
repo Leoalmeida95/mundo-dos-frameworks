@@ -43,7 +43,7 @@
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <div class="dropdown-menu">
-                    {%for versao in versoes%}
+                    {%for versao in framework.versao_set.all%}
                     <a class="dropdown-item" href="#">{{versao.numero|floatformat:3}}</a>
                     {%endfor%} {%if user.is_authenticated%}
                     <div class="dropdown-divider"></div>
@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            {%if versoes%} {%for versao in versoes%} {% if versao == versao_atual%}
+            {%if framework.versao_set%} {%for versao in framework.versao_set.all%} {% if versao == framework.versao_set.first%}
             <div class="col-12 mt-2">
                 <p class="font-weight-light">
                     <b>Versão selecionada:</b> {{versao.numero|floatformat:3}}</p>
@@ -81,12 +81,12 @@
                     {% endif %}
                 </h4>
                 <div class="card card-body ml-2 mr-2 mb-2">
-                    {%if helloword%}
+                    {%if framework.helloworld_set%}
                     <div class="col-md-12">
-                        {{helloword.descricao}}
+                        {{framework.helloworld_set.first.descricao}}
                     </div>
-                    <div class="col-md-6 mt-3 mx-auto ">
-                        {%with "<pre id="|add:framework.linguagem.nome|add:">"|add:helloword.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%}
+                    <div class="col-md-12 mt-3 mx-auto ">
+                        {%with "<pre id="|add:framework.linguagem.nome|add:">"|add:framework.helloworld_set.first.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%}
                     </div>
                     {%else%} {% if user.is_authenticated %} O {{framework.nome}} ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
                     e seja o primeiro a fazer! {%else%} O {{framework.nome}} ainda não possui nenhum exemplo de Hello World.
@@ -111,9 +111,9 @@
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-pros" role="tabpanel" aria-labelledby="pills-pros-tab">
                         <div class="card card-body ml-2 mr-2 mb-3">
-                            {%if opinioes%}
+                            {%if framework.opiniao_set%}
                             <ul>
-                                {% for opiniao in opinioes %}
+                                {% for opiniao in framework.opiniao_set.all %}
                                 <li>
                                     {{opiniao.pro}}
                                 </li>
@@ -130,9 +130,9 @@
                     </div>
                     <div class="tab-pane fade" id="pills-contras" role="tabpanel" aria-labelledby="pills-contras-tab">
                         <div class="card card-body ml-2 mr-2 mb-3">
-                            {%if opinioes%}
+                            {%if framework.opiniao_set%}
                             <ul>
-                                {% for opiniao in opinioes %}
+                                {% for opiniao in framework.opiniao_set.all %}
                                 <li>
                                     {{opiniao.contra}}
                                 </li>
@@ -154,7 +154,7 @@
                 <label class="ml-2">Os melhores sites eleitos pelos usuários para tutorias e conhecimentos sobre o framework:</label>
                 <div class="col-md-8 mx-auto mt-2 mb-3">
                     <p class="font-weight-light">Ranking:</p>
-                    {%if links%} {% for link in links %}
+                    {%if framework.link_set%} {% for link in framework.link_set.all %}
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div class="col-10 text-truncate">
@@ -241,14 +241,16 @@
             <i class="fa fa-commenting-o" aria-hidden="true"></i>
         </div>
         <div class="card-body">
-            {% for comentario in comentarios %}
+            {% for comentario in framework.comentario_set.all %}
             <div class="media comment-box">
                 <div class="media-left">
                     <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
                 </div>
                 <div class="media-body">
                     <div class="media-heading form-inline">
-                        <h5>{{comentario.usuario.get_full_name}}</h5>
+                        <a href="#">
+                            <h5>{{comentario.usuario.get_full_name}}</h5>
+                        </a>
                         <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
                     </div>
                     <p>{{comentario.texto}}</p>
@@ -261,7 +263,9 @@
                             </div>
                             <div class="media-body">
                                 <div class="media-heading form-inline">
-                                    <h5>{{resposta.usuario.get_full_name}}</h5>
+                                    <a href="#">
+                                        <h5>{{resposta.usuario.get_full_name}}</h5>
+                                    </a>
                                     <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
                                 </div>
                                 <p>{{resposta.texto}}</p>
@@ -269,10 +273,9 @@
                         </div>
                         {%endfor%}
                     </div>
-                    {%endif%}
                 </div>
             </div>
-            {%endfor%}
+            {%endif%} {%endfor%}
             <div class="row mt-5 mr-1">
                 <div class="col-md-11">
                     <input type="text" name="texto" value="{{ form.texto.value }}" id="texto" class="form-control" placeholder="Seus comentários..."
