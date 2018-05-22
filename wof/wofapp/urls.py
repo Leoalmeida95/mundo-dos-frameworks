@@ -3,7 +3,7 @@ from . import views
 
 app_name='wofapp'
 urlpatterns = [
-    path('', views.home_view, name="home"),
+    path('', views.chart_view, name="home"),
     path('login/', views.login_view, name="login"),
     path('logout/', views.logout_view, name="logout"),
     path('registrar_usuario/', views.registrar_usuario_view, name="registrar"),

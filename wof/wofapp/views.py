@@ -9,13 +9,10 @@ from django.contrib import messages
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 
+from .fusioncharts import FusionCharts
 from .tokens import account_activation_token
 from .forms import *
 from .models import Linguagem, Framework,Versao,Helloworld,Opiniao,Link,Comentario
-
-def home_view(request):
-    linguagens_navbar = Linguagem.objects.all().order_by('nome')
-    return render(request,'home.html',{'linguagens':linguagens_navbar})
 
 def login_view(request, *args, **kwargs):
     if request.method == "POST":
@@ -164,19 +161,14 @@ def frameworks_view(request,lg_id):
     
     # print (len(connection.queries)) # realiza 3 queries
 
-    testes = Framework.objects.prefetch_related('comentarios').all()
-    teste = testes.filter(linguagem_id=lg_id)
-    t = teste.first()
-    from django.db import connection
-    for comentario in t.comentarios.all():
-        print (comentario.texto)
-    
-    print (len(connection.queries))
+    # testes = Framework.objects.prefetch_related('comentarios').all().filter(linguagem_id=lg_id)
+    # teste = testes.first()
 
-    args['versoes'] = Framework.objects.prefetch_related('versoes').filter(framework_id=framework.id)
-    args['opinioes'] = Framework.objects.prefetch_related('opinioes').filter(framework_id=framework.id)
-    args['links'] = Framework.objects.prefetch_related('links').filter(framework_id=framework.id)
-    args['helloword'] = Framework.objects.prefetch_related('helloworlds').filter(framework_id=framework.id).first()
+    # from django.db import connection
+    # for comentario in teste.comentarios.all():
+    #     print (comentario.texto)
+    
+    # print (len(connection.queries))
 
     args['lista_frameworks'] = frameworks
     args['framework'] = framework
@@ -219,3 +211,35 @@ def helloworld_view(request,id):
 
     #retornar para o framework de origem do post
     return render(request,'frameworks.html',args)
+
+def chart_view(request):
+    parametro = """{ 
+                "chart": {
+                "caption": "Age profile of website visitors",
+                "subcaption": "Last Year",
+                "startingangle": "120",
+                "showlabels": "0",
+                "showlegend": "1",
+                "enablemultislicing": "0",
+                "slicingdistance": "15",
+                "showpercentvalues": "1",
+                "showpercentintooltip": "0",
+                "plottooltext": "Age group : $label Total visit : $datavalue",
+                "theme": "ocean"
+                },
+                "data": ["""
+    
+    for i in range(0,3):
+        parametro = parametro + """ {"label": "linguagem""" + str(i) +  """", "value":" """   +  str(i*100) + """"},"""
+
+    parametro = parametro[:-1] 
+    
+    parametro = parametro + """         ]
+        }"""
+
+
+
+    pie3d = FusionCharts("pie3d", "ex2" , "100%", "400", "chart-1", "json",parametro)
+    linguagens = Linguagem.objects.all().order_by('nome')
+    # returning complete JavaScript and HTML code, which is used to generate chart in the browsers. 
+    return  render(request, 'home.html', {'output' : pie3d.render(),'linguagens':linguagens})

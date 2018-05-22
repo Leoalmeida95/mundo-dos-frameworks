@@ -152,12 +152,12 @@ class Link(models.Model):
 
 class Versao(models.Model):
     numero = models.DecimalField(default=0, max_digits=10, decimal_places=5)
-    descricao = models.CharField(max_length=4000)
+    funcionalidades = models.CharField(max_length=4000)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='versoes')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
     def __str__(self):
-        return self.descricao
+        return self.funcionalidades
 
 
 class Denuncia(models.Model):
