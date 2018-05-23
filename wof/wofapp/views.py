@@ -215,57 +215,58 @@ def helloworld_view(request,id):
     return render(request,'frameworks.html',args)
 
 def chart_view(request):
-    parametro = """{ 
+    chart1 = """{ 
                 "chart": {
-                "caption": "Age profile of website visitors",
-                "subcaption": "Last Year",
+                "caption": "Top 5 linguagens mais acessadas",
+                "subcaption": "Mensal",
                 "startingangle": "120",
-                "showlabels": "0",
+                "showlabels": "1",
                 "showlegend": "1",
                 "enablemultislicing": "0",
                 "slicingdistance": "15",
                 "showpercentvalues": "1",
-                "showpercentintooltip": "0",
-                "plottooltext": "Age group : $label Total visit : $datavalue",
+                "showpercentintooltip": "1",
+                "plottooltext": "Linguagem: $label, Acessos : $datavalue",
                 "theme": "ocean"
                 },
                 "data": ["""
     
     for i in range(0,3):
-        parametro = parametro + """ {"label": "linguagem""" + str(i) +  """", "value":" """   +  str(i*100) + """"},"""
+        chart1 = chart1 + """ {"label": "linguagem""" + str(i) +  """", "value":" """   +  str(i*100) + """"},"""
 
-    parametro = parametro[:-1] 
+    chart1 = chart1[:-1] 
     
-    parametro = parametro + """         ]
+    chart1 = chart1 + """         ]
         }"""
 
-    parametro2 = """{ 
+
+    chart2 = """{ 
                 "chart": {
-                "caption": "Age profile of website visitors",
-                "subcaption": "Last Year",
+                "caption": "Frameworks com mais contribuintes",
+                "subcaption": "Total",
                 "startingangle": "120",
-                "showlabels": "0",
+                "showlabels": "1",
                 "showlegend": "1",
                 "enablemultislicing": "0",
                 "slicingdistance": "15",
                 "showpercentvalues": "1",
                 "showpercentintooltip": "0",
-                "plottooltext": "Age group : $label Total visit : $datavalue",
+                "plottooltext": "Framework: $label, Contribuintes : $datavalue",
                 "theme": "ocean"
                 },
                 "data": ["""
     
-    for i in range(0,3):
-        parametro2 = parametro2 + """ {"label": "linguagem""" + str(i) +  """", "value":" """   +  str(i*100) + """"},"""
+    for i in range(3,8):
+        chart2 = chart2 + """ {"label": "framework""" + str(i) +  """", "value":" """   +  str(i*100) + """"},"""
 
-    parametro2 = parametro2[:-1] 
+    chart2 = chart2[:-1] 
     
-    parametro2 = parametro2 + """         ]
+    chart2 = chart2 + """         ]
         }"""
 
-    pie3d = FusionCharts("pie3d", "ex2" , "100%", "400", "chart-1", "json",parametro)
-    pie3d2 = FusionCharts("pie3d", "ex2" , "100%", "400", "chart-2", "json",parametro2)
+    p1 = FusionCharts("pie3d", "ex1" , "100%", "400", "chart-1", "json", chart1)
+    p2 = FusionCharts("pie3d", "ex2" , "100%", "400", "chart-2", "json", chart2)
 
     linguagens = Linguagem.objects.all().order_by('nome')
 
-    return  render(request, 'home.html', {'output' : pie3d.render(),'output2' : pie3d2.render(),'linguagens':linguagens})
+    return  render(request, 'home.html', {'output1' : p1.render(),'output2' : p2.render(),'linguagens':linguagens})
