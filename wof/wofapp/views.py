@@ -152,19 +152,21 @@ def trocar_senha_view(request):
 
 def frameworks_view(request,lg_id):
     args = {}
+    # from django.db import connection
+    # print (len(connection.queries))
     frameworks = Framework.objects.all().filter(linguagem_id=lg_id)
     framework = frameworks.first()
+    # print (len(connection.queries))
 
-    # from django.db import connection
     # for comentario in framework.comentarios.all():
     #     print (comentario.texto)
     
     # print (len(connection.queries)) # realiza 3 queries
 
-    # testes = Framework.objects.prefetch_related('comentarios').all().filter(linguagem_id=lg_id)
+    # testes = Framework.objects.all().filter(linguagem_id=lg_id).prefetch_related('comentarios')
     # teste = testes.first()
 
-    # from django.db import connection
+    # print (len(connection.queries))
     # for comentario in teste.comentarios.all():
     #     print (comentario.texto)
     
@@ -237,9 +239,33 @@ def chart_view(request):
     parametro = parametro + """         ]
         }"""
 
+    parametro2 = """{ 
+                "chart": {
+                "caption": "Age profile of website visitors",
+                "subcaption": "Last Year",
+                "startingangle": "120",
+                "showlabels": "0",
+                "showlegend": "1",
+                "enablemultislicing": "0",
+                "slicingdistance": "15",
+                "showpercentvalues": "1",
+                "showpercentintooltip": "0",
+                "plottooltext": "Age group : $label Total visit : $datavalue",
+                "theme": "ocean"
+                },
+                "data": ["""
+    
+    for i in range(0,3):
+        parametro2 = parametro2 + """ {"label": "linguagem""" + str(i) +  """", "value":" """   +  str(i*100) + """"},"""
 
+    parametro2 = parametro2[:-1] 
+    
+    parametro2 = parametro2 + """         ]
+        }"""
 
     pie3d = FusionCharts("pie3d", "ex2" , "100%", "400", "chart-1", "json",parametro)
+    pie3d2 = FusionCharts("pie3d", "ex2" , "100%", "400", "chart-2", "json",parametro2)
+
     linguagens = Linguagem.objects.all().order_by('nome')
-    # returning complete JavaScript and HTML code, which is used to generate chart in the browsers. 
-    return  render(request, 'home.html', {'output' : pie3d.render(),'linguagens':linguagens})
+
+    return  render(request, 'home.html', {'output' : pie3d.render(),'output2' : pie3d2.render(),'linguagens':linguagens})
