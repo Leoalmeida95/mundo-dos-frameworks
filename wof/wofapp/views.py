@@ -215,6 +215,10 @@ def helloworld_view(request,id):
     return render(request,'frameworks.html',args)
 
 def chart_view(request):
+
+    linguagens = Linguagem.objects.all().order_by('nome')
+    frameworks = Framework.objects.all().order_by('nome')
+
     chart1 = """{ 
                 "chart": {
                 "caption": "Top 5 linguagens mais acessadas",
@@ -227,12 +231,14 @@ def chart_view(request):
                 "showpercentvalues": "1",
                 "showpercentintooltip": "1",
                 "plottooltext": "Linguagem: $label, Acessos : $datavalue",
-                "theme": "ocean"
+                "theme": "zune"
                 },
                 "data": ["""
     
-    for i in range(0,3):
-        chart1 = chart1 + """ {"label": "linguagem""" + str(i) +  """", "value":" """   +  str(i*100) + """"},"""
+    i = 1
+    for linguagem in linguagens:
+        chart1 = chart1 + """ {"label": " """ + linguagem.nome +  """", "value":" """   +  str(i*100) + """"},"""
+        i = i+1
 
     chart1 = chart1[:-1] 
     
@@ -252,12 +258,13 @@ def chart_view(request):
                 "showpercentvalues": "1",
                 "showpercentintooltip": "0",
                 "plottooltext": "Framework: $label, Contribuintes : $datavalue",
-                "theme": "ocean"
+                "theme": "carbon"
                 },
                 "data": ["""
     
-    for i in range(3,8):
-        chart2 = chart2 + """ {"label": "framework""" + str(i) +  """", "value":" """   +  str(i*100) + """"},"""
+    for framework in frameworks:
+        chart2 = chart2 + """ {"label": " """ + framework.nome +  """", "value":" """   +  str(i*100) + """"},"""
+        i = i+1
 
     chart2 = chart2[:-1] 
     
@@ -266,7 +273,5 @@ def chart_view(request):
 
     p1 = FusionCharts("pie3d", "ex1" , "100%", "400", "chart-1", "json", chart1)
     p2 = FusionCharts("pie3d", "ex2" , "100%", "400", "chart-2", "json", chart2)
-
-    linguagens = Linguagem.objects.all().order_by('nome')
 
     return  render(request, 'home.html', {'output1' : p1.render(),'output2' : p2.render(),'linguagens':linguagens})
