@@ -13,6 +13,7 @@ from django.template.loader import render_to_string
 
 from .tokens import account_activation_token
 from .models import Usuario,Comentario,Framework,Helloworld
+from .util import CpfValido
 
 CHOICES=[(True,'Sim'),
          (False,'Não')]
@@ -49,7 +50,7 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         username = self.cleaned_data.get('first_name')
-
+ 
         if email and Usuario.objects.filter(email=email).exclude(first_name=username).count():
             raise forms.ValidationError("Este email já está em uso, por favor escolha outro.")
         return email
@@ -60,6 +61,8 @@ class CustomUserCreationForm(UserCreationForm):
 
         if cpf and Usuario.objects.filter(cpf=cpf).exclude(first_name=username).count():
             raise forms.ValidationError("Este CPF já está em uso, por favor verifique se foi digitado corretamente.")
+        elif CpfValido().validate(self.cleaned_data.get('cpf')):
+            raise forms.ValidationError("Número de CPF inválido.")
         return cpf
 
     def save(self, commit=True):

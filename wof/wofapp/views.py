@@ -81,7 +81,7 @@ def reset_senha_view(request):
     else:
         form = PasswordResetForm()
 
-    return render(request,'reset_senha.html',{'form':form,'linguagens':Linguagem.objects.all().order_by('nome')})
+    return render(request,'nova_senha.html',{'form':form,'linguagens':Linguagem.objects.all().order_by('nome')})
 
 def reset_senha_confirmacao_view(request, uidb64=None, token=None):
     assert uidb64 is not None and token is not None

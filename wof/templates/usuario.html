@@ -81,7 +81,7 @@
                             </div>
                             <input type="text" value="{{ form.cpf.value }}" name="cpf" class="form-control" maxlength="14" id="cpf" placeholder="xxx.xxx.xxx-xx"
                                 required onkeypress="formatar('###.###.###-##', this);return validaNumeros(event)" onpaste="return false"
-                                ondrop="return false">
+                                ondrop="return false" {%if user.is_authenticated%}disabled{%endif%}>
                         </div>
                     </div>
                 </div>
@@ -156,29 +156,7 @@
                     {{ form.email.errors }}
                 </small>
             </div>
-            {% if user.is_authenticated %}
-            <div class="row">
-                <div class="col-md-3 field-label-responsive">
-                    <span style="color:red">*</span>
-                    <label for="password">Senha</label>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group has-danger">
-                        <div class="input-group">
-                            <div class="mt-2" style="width: 2.6rem">
-                                <i class="fa fa-key"></i>
-                            </div>
-                            <input type="text" name="password" class="form-control" id="password" value="{{ form.password.value }}" disabled>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="mt-2">
-                        <a href="/trocar_senha/" style="font-size: 18px">alterar senha</a>
-                    </div>
-                </div>
-            </div>
-            {% else %}
+            {% if not user.is_authenticated %}
             <div class="row">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">*</span>
