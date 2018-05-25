@@ -12,7 +12,7 @@ from django.utils.http import urlsafe_base64_decode
 from .fusioncharts import FusionCharts
 from .tokens import account_activation_token
 from .forms import *
-from .models import Linguagem, Framework,Versao,Helloworld,Opiniao,Link,Comentario
+from .models import *
 
 def login_view(request, *args, **kwargs):
     if request.method == "POST":
@@ -51,9 +51,7 @@ def registrar_usuario_view(request):
         publica = 'True'
 
     args['publica'] = True if publica == 'True' else False 
-    linguagens = Linguagem.objects.all().order_by('nome')
-    args['linguagens'] = linguagens
-    args['metade_linguagens'] = (linguagens.count())/2
+    args['linguagens'] = Linguagem.objects.all().order_by('nome')
     return render(request,'usuario.html',args)
 
 def ativar_conta_view(request, uidb64=None, token=None):
@@ -74,7 +72,6 @@ def ativar_conta_view(request, uidb64=None, token=None):
         return HttpResponse('Link de ativação da conta inválido.')
 
 def reset_senha_view(request):
-    args = {}
     if request.method == 'POST':
         form = PasswordResetForm(request.POST)
         if form.is_valid():
@@ -84,11 +81,7 @@ def reset_senha_view(request):
     else:
         form = PasswordResetForm()
 
-    args['form'] = form
-    linguagens = Linguagem.objects.all().order_by('nome')
-    args['linguagens'] = linguagens
-    args['metade_linguagens'] = (linguagens.count())/2
-    return render(request,'reset_senha.html',args)
+    return render(request,'reset_senha.html',{'form':form,'linguagens':Linguagem.objects.all().order_by('nome')})
 
 def reset_senha_confirmacao_view(request, uidb64=None, token=None):
     assert uidb64 is not None and token is not None
@@ -98,7 +91,6 @@ def reset_senha_confirmacao_view(request, uidb64=None, token=None):
     except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
         user = None
 
-    args = {}
     if user is not None and account_activation_token.check_token(user, token):
         authorized = True
         if request.method == 'POST':
@@ -113,16 +105,12 @@ def reset_senha_confirmacao_view(request, uidb64=None, token=None):
         authorized = False
         form = None
     
-    args['form'] = form
-    args['authorized'] = authorized
-    linguagens = Linguagem.objects.all().order_by('nome')
-    args['linguagens'] = linguagens
-    args['metade_linguagens'] = (linguagens.count())/2
-    return render(request, 'reset_senha_confirmacao.html', args)
+
+    return render(request, 'reset_senha_confirmacao.html', {'form':form,'authorized':authorized,
+    'linguagens':Linguagem.objects.all().order_by('nome')})
 
 @login_required
 def atualizar_usuario_view(request):
-    args = {}
     user = request.user
     if request.method == 'POST':
         form = UserChangeForm(request.POST, instance=user)
@@ -133,16 +121,11 @@ def atualizar_usuario_view(request):
     else:
         form = UserChangeForm(instance=user)
 
-    linguagens = Linguagem.objects.all().order_by('nome')
-    args['linguagens'] = linguagens
-    args['metade_linguagens'] = (linguagens.count())/2    
-    args['publica'] = user.conta_publica
-    args['form'] = form
-    return render(request, 'usuario.html', args)
+    return render(request, 'usuario.html', {'linguagens':Linguagem.objects.all().order_by('nome'),'form':form,
+    'publica':user.conta_publica})
 
 @login_required
 def trocar_senha_view(request):
-    args = {}
     user = request.user
     if request.method == 'POST':
         form = SetPasswordForm(user, request.POST)
@@ -153,19 +136,14 @@ def trocar_senha_view(request):
     else:
         form = SetPasswordForm(user)
     
-    args['authorized'] = True
-    args['form'] = form
-    linguagens = Linguagem.objects.all().order_by('nome')
-    args['linguagens'] = linguagens
-    args['metade_linguagens'] = (linguagens.count())/2
-    return render(request, 'reset_senha_confirmacao.html', args)
+    return render(request, 'reset_senha_confirmacao.html', {'authorized':True,'form':form,
+    'linguagens':Linguagem.objects.all().order_by('nome')})
 
-def frameworks_view(request,lg_id):
-    args = {}
+def frameworks_view(request,id):
     # from django.db import connection
     # print (len(connection.queries))
-    frameworks = Framework.objects.all().filter(linguagem_id=lg_id)
-    framework = frameworks.first()
+    framework = Framework.objects.get(id=id)
+    frameworks = framework.linguagem.frameworks.all()
     # print (len(connection.queries))
 
     # for comentario in framework.comentarios.all():
@@ -173,7 +151,7 @@ def frameworks_view(request,lg_id):
     
     # print (len(connection.queries)) # realiza 3 queries
 
-    # testes = Framework.objects.all().filter(linguagem_id=lg_id).prefetch_related('comentarios')
+    # testes = Framework.objects.all().filter(id=id).prefetch_related('comentarios')
     # teste = testes.first()
 
     # print (len(connection.queries))
@@ -182,36 +160,29 @@ def frameworks_view(request,lg_id):
     
     # print (len(connection.queries))
 
-    args['lista_frameworks'] = frameworks
-    args['framework'] = framework
-    linguagens = Linguagem.objects.all().order_by('nome')
-    args['linguagens'] = linguagens
-    args['metade_linguagens'] = (linguagens.count())/2
-    return render(request,'frameworks.html',args)
+    return render(request,'frameworks.html', {'lista_frameworks':frameworks,'framework':framework,
+    'linguagens':Linguagem.objects.all().order_by('nome')})
 
 @login_required
 def comentario_view(request,id):
-    args = {}
     user = request.user
     if request.method == 'POST':
         framework = Framework.objects.get(id=id)
         form = ComentarioForm(request.POST)
-        args['form'] = form
         if framework is not None and form.is_valid():
             x = request.POST['texto']
 
     #retornar para o framework de origem do post
-    return render(request,'frameworks.html',args)
+    return render(request,'frameworks.html',{'form':form})
 
 @login_required
 def helloworld_view(request,id):
-    args = {}
     user = request.user
     if request.method == 'POST':
-        hello = Helloworld.objects.all().get(framework_id=id).first()
+        #salvar ou alterar?
+        hello = Helloworld.objects.get(framework_id=id).first()
         # args['framework'] = framework
         form = HelloWorldForm(request.POST)
-        args['form'] = form
         if form.is_valid():
             if hello is None:
                 hello = Helloworld() 
@@ -221,15 +192,12 @@ def helloworld_view(request,id):
             user = request.user
             hello.usuario_id = user.id
             hello.save()
-            args['helloword'] = hello
 
     #retornar para o framework de origem do post
-    return render(request,'frameworks.html',args)
+    return render(request,'frameworks.html',{'form':form, 'helloword': hello})
 
 def chart_view(request):
-
     linguagens = Linguagem.objects.all().order_by('nome')
-    metade = (linguagens.count())/2
     top_linguagens = linguagens[:5]
     frameworks = Framework.objects.all().order_by('nome')[:10]
 
@@ -253,9 +221,7 @@ def chart_view(request):
     for linguagem in top_linguagens:
         chart1 = chart1 + """ {"label": " """ + linguagem.nome +  """", "value":" """   +  str(i*100) + """"},"""
         i = i+1
-
-    chart1 = chart1[:-1] 
-    
+    chart1 = chart1[:-1]    
     chart1 = chart1 + """         ]
         }"""
 
@@ -279,14 +245,11 @@ def chart_view(request):
     for framework in frameworks:
         chart2 = chart2 + """ {"label": " """ + framework.nome +  """", "value":" """   +  str(i*100) + """"},"""
         i = i+1
-
-    chart2 = chart2[:-1] 
-    
+    chart2 = chart2[:-1]    
     chart2 = chart2 + """         ]
         }"""
 
     p1 = FusionCharts("pie3d", "ex1" , "100%", "400", "chart-1", "json", chart1)
     p2 = FusionCharts("pie3d", "ex2" , "100%", "430", "chart-2", "json", chart2)
 
-    return  render(request, 'home.html', {'output1' : p1.render(),'output2' : p2.render(),
-    'linguagens':linguagens,'metade_linguagens':metade})
+    return  render(request, 'home.html', {'output1' : p1.render(),'output2' : p2.render(),'linguagens':linguagens})

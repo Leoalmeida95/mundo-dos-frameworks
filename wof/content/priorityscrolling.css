@@ -65,7 +65,6 @@ html.can-touch #priorityscroll ul {
 
 #priorityscroll li a:hover,
 #priorityscroll li a:active {
-    border-top: 8px solid white;
     background: #007bff;
     color:white;
     /*background of UI links for hover state  */

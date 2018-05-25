@@ -40,18 +40,15 @@
 					<div class="dropdown-menu dropdown-menu-left">
 						<div class="px-0 container container-sm">
 							<div class="row">
-								{%for lg in linguagens %}
-								{% if forloop.counter < metade_linguagens %}
+								{%for lg in linguagens %} {% if lg.id|divisibleby:"2" %}
 								<div class="col-sm-6 col-md-x">
-									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.id %}">{{lg.nome}}</a>
+									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.frameworks.first.id %}">{{lg.nome}}</a>
 								</div>
-								{% endif %}
-								{% endfor %}
-								{%for lg in linguagens %}
-								{% if forloop.counter >= metade_linguagens %}
+								{% else %}
 								<div class="col-sm-6 col-md-x">
-									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.id %}">{{lg.nome}}</a>
-								</div>{% endif %}
+									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.frameworks.first.id %}">{{lg.nome}}</a>
+								</div>
+								{%endif%}
 								{% endfor %}
 							</div>
 						</div>

@@ -15,7 +15,7 @@
         <ul>
             {%for frm in lista_frameworks %}
             <li>
-                <a href="#">{{frm}}</a>
+                <a href="{% url 'wofapp:frameworks' frm.id %}" >{{frm}}</a>
             </li> {%endfor%}
         </ul>
     </div>
