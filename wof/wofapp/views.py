@@ -8,6 +8,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
+import logging
 
 from .fusioncharts import FusionCharts
 from .tokens import account_activation_token
@@ -20,13 +21,18 @@ def login_view(request, *args, **kwargs):
         if form.is_valid():
             username = request.POST['username']
             password = request.POST['password']
-            user = authenticate(request, username=username, password=password)
+            try:
+                user = authenticate(request, username=username, password=password)
+            except Exception:
+                logger.exception("Erro de autenticação no login.")
+                user = None
+
             if user is not None:
                 login(request, user)
         else:
             erroMsg = form.errors['__all__'].data[0].message
             messages.error(request, erroMsg)
-
+     
     return HttpResponseRedirect(reverse('wofapp:home'))
 
 def logout_view(request):
@@ -40,12 +46,16 @@ def registrar_usuario_view(request):
         publica = request.POST.get("conta_publica","")
         args['form'] = form
         if form.is_valid():
-            user = form.save(commit=False)
-            user.is_activeUser = False
-            user.save()
-            form.enviar_email(user,request=request)
-            messages.info(request, 'Muito bem! Agora para concluir seu registro, por favor confirme sua conta no email que enviamos pra você.')
-            return HttpResponseRedirect(reverse('wofapp:home'))
+            try:
+                user = form.save(commit=False)
+                user.is_activeUser = False
+                user.save()
+                form.enviar_email(user,request=request)
+                messages.info(request, 'Muito bem! Agora para concluir seu registro, por favor confirme sua conta no email que enviamos pra você.')
+                return HttpResponseRedirect(reverse('wofapp:home'))
+            except Exception:
+                logger.exception("Erro no registro de usuário.")
+                messages.info(request, 'Erro ao registrar usuário. Tente novamente mais tarde.')
     else:
         form = CustomUserCreationForm()
         publica = 'True'
@@ -113,11 +123,17 @@ def reset_senha_confirmacao_view(request, uidb64=None, token=None):
 def atualizar_usuario_view(request):
     user = request.user
     if request.method == 'POST':
-        form = UserChangeForm(request.POST, instance=user)
+        POST = request.POST.copy()
+        POST['cpf'] = user.cpf
+        form = UserChangeForm(POST, instance=user)
         if form.is_valid():
-            user = form.save()
-            messages.info(request, 'Seus dados foram atualizados com sucesso!')
-            return HttpResponseRedirect(reverse('wofapp:home'))
+            try:
+                user = form.save()
+                messages.info(request, 'Seus dados foram atualizados com sucesso!')
+                return HttpResponseRedirect(reverse('wofapp:home'))
+            except Exception:
+                logger.exception("Erro ao atualizar usuário.")
+                messages.info(request, 'Erro ao atualizar dados. Tente novamente mais tarde.')
     else:
         form = UserChangeForm(instance=user)
 
@@ -170,7 +186,11 @@ def comentario_view(request,id):
         framework = Framework.objects.get(id=id)
         form = ComentarioForm(request.POST)
         if framework is not None and form.is_valid():
-            x = request.POST['texto']
+            try:
+                x = request.POST['texto']
+            except Exception:
+                logger.exception("Erro ao criar comentário.")
+                messages.info(request, 'Erro ao realizar comentário. Tente novamente mais tarde.')
 
     #retornar para o framework de origem do post
     return render(request,'frameworks.html',{'form':form})
@@ -184,14 +204,17 @@ def helloworld_view(request,id):
         # args['framework'] = framework
         form = HelloWorldForm(request.POST)
         if form.is_valid():
-            if hello is None:
-                hello = Helloworld() 
-            hello.descricao = request.POST['descricao']
-            hello.codigo_exemplo =codigo_exemplo=request.POST['codigo_exemplo']
-            hello.framework_id = id
-            user = request.user
-            hello.usuario_id = user.id
-            hello.save()
+            try:
+                if hello is None:
+                    hello = Helloworld() 
+                hello.descricao = request.POST['descricao']
+                hello.codigo_exemplo =codigo_exemplo=request.POST['codigo_exemplo']
+                hello.framework_id = id
+                hello.usuario_id = user.id
+                hello.save()
+            except Exception:
+                logger.exception("Erro ao criar Hello World.")
+                messages.info(request, 'Erro ao editar hello world. Tente novamente mais tarde.')
 
     #retornar para o framework de origem do post
     return render(request,'frameworks.html',{'form':form, 'helloword': hello})

@@ -18,18 +18,4 @@
 		</div>
 	</div>
 </div>
-
-{% if messages %} {% for message in messages %}
-
-<label id='msg'>{{ message }}</label>
-{% if message.tags == 'info'%}
-
-<script type="text/javascript">
-	var mensagem = document.getElementById("msg");
-	enviarMensagem(mensagem, "info", "Informação");
-</script> {% else %}
-
-<script type="text/javascript">
-	var mensagem = document.getElementById("msg");
-	enviarMensagem(mensagem, "error", "Aviso");
-</script> {% endif %} {% endfor %} {% endif %} {% endblock %}
+{% endblock %}

@@ -48,8 +48,7 @@
 								<div class="col-sm-6 col-md-x">
 									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.frameworks.first.id %}">{{lg.nome}}</a>
 								</div>
-								{%endif%}
-								{% endfor %}
+								{%endif%} {% endfor %}
 							</div>
 						</div>
 				</li>
@@ -99,9 +98,9 @@
 									<i class="fa fa-pencil fa-fw"></i> Atualizar Dados</a>
 							</div>
 							<div class="dropdown-item disabled">
-									<a class="btn btn-outline-info btn-sm btn-block" role="button" href="{% url 'wofapp:trocar_senha' %}">
-										<i class="fa fa-key" aria-hidden="true"></i> Alterar Senha</a>
-								</div>
+								<a class="btn btn-outline-info btn-sm btn-block" role="button" href="{% url 'wofapp:trocar_senha' %}">
+									<i class="fa fa-key" aria-hidden="true"></i> Alterar Senha</a>
+							</div>
 							<div class="bottom dropdown-item disabled">
 								<div class="row">
 									<div class="col-sm-11 mx-auto">
@@ -185,6 +184,13 @@
 			</p>
 		</small>
 	</footer>
+
+	{% if messages %}{% for message in messages %}
+	<script type="text/javascript">
+		var mensagem = "{{message}}";
+		var tag = "{{message.tags}}";
+		enviarMensagem(mensagem, tag, tag == 'error' ? "Aviso" : "Informação");
+	</script>{% endfor %}{% endif %}
 </body>
 
 </html>

@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block titulo %}{% if user.is_authenticated %}Atualizar {% else %}Registro{% endif %} {%endblock%}
+{% extends "base.html" %} {% block titulo %}{% if user.is_authenticated %}Atualizar Dados{% else %}Registrar Usuário{% endif %} {%endblock%}
 {% block conteudo %} {% load staticfiles %}
 <style>
     @media(min-width: 768px) {
@@ -122,8 +122,7 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                             </div>
-                            <input type="text" value="{{ form.formacao.value }}" name="formacao" class="form-control" id="formacao" placeholder="Ciência da Computação"
-                                onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false" maxlength="80">
+                            <input type="text" value="{{ form.formacao.value }}" name="formacao" class="form-control" id="formacao" placeholder="Ciência da Computação" maxlength="80">
                         </div>
                     </div>
                 </div>
