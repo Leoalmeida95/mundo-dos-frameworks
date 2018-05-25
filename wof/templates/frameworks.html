@@ -1,305 +1,328 @@
-{% extends "base.html" %} {% block titulo %}{{framework.linguagem.nome}}{%endblock%} {%block conteudo%} {%load staticfiles%}
-{%load filters%}
-<h3>
-    <span class="badge badge-primary ml-2 mt-3">{{framework.linguagem.nome}}</span>
-</h3>
-<p class="font-weight-light ml-2 mt-2 mb-4">Escolha um dos Frameworks disponíveis abaixo</p>
-<nav>
-    <div class="nav nav-tabs ml-2 mr-2" id="nav-tab" role="tablist">
-        {%for frm in lista_frameworks %} {% with lista_frameworks|first as first %} {% if frm == first%}
-        <a style="color:black" class="nav-item nav-link active" data-toggle="tab" href="#nav-home" role="tab" aria-selected="true">{{frm}}</a>
-        {%else%}
-        <a style="color:black" class="nav-item nav-link" data-toggle="tab" href="#nav-home" role="tab" aria-selected="false">{{frm}}</a>
-        {% endif %} {% endwith %} {%endfor%}
-    </div>
-</nav>
+{% extends "base.html" %} {% block titulo %}{{framework.linguagem.nome}} - {{framework.nome}}{%endblock%} {%block conteudo%}
+{%load staticfiles%} {%load filters%}
 
-<!--VERSÕES-->
-<div class="ml-3 mr-3">
-    <div class="form-inline">
-        <h4 class="mt-3">Versões
-            <i class="fa fa-shield" aria-hidden="true"></i>
-        </h4>
-        {% if user.is_authenticated %}
-        <label class="mt-2 ml-1">[
-            <a href="#">
-                <small title="editar versão">editar</small>
-            </a>]</label>{% endif %}
+<head>
+    <link href="{% static 'priorityscrolling.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <h3>
+        <span class="badge badge-primary ml-2 mt-3">{{framework.linguagem.nome}}</span>
+    </h3>
+    <p class="font-weight-light ml-2 mt-2 mb-4">Escolha um dos Frameworks disponíveis abaixo:</p>
+
+    <div id="priorityscroll">
+        <ul>
+            {%for frm in lista_frameworks %}
+            <li>
+                <a href="#">{{frm}}</a>
+            </li> {%endfor%}
+        </ul>
     </div>
 
-    {%for versao in framework.versoes.all%} {% if versao == framework.versoes.first%}
-    <div class="form-inline">
-        <p class="font-weight-light">
-            Escolha uma das versões do {{framework.nome}}:
-        </p>
-        <div class="dropdown ml-2 mb-3">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                Versões
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
-                {%for versao in framework.versoes.all%}
-                <a class="dropdown-item" href="#">{{versao.numero|floatformat:3}}</a>
-                {%endfor%}
-            </div>
-        </div>
-    </div>
-    <div class="form-inline">
-        <p class="font-weight-light mt-3">
-            <b>Versão selecionada:</b> {{versao.numero|floatformat:3}}</p>
-    </div>
-    <div class="form-inline">
-        <p class="font-weight-light">
-            <b>Funcionalidades:</b> {{versao.funcionalidades}}</p>
-    </div>
-    {% endif %} {% empty %} {% if user.is_authenticated %}
-    <div class="col-12 mt-2">
-        <p class="font-weight-light"> O {{framework.nome}} ainda não possui versões cadastradas. Clique no 'Editar' e seja o primeiro a fazer!</p>
-        {%else%}
-        <p class="font-weight-light">O {{framework.nome}} ainda não possui versões cadastradas. Cadastre-se e seja o primeiro a fazer! </p>
-    </div>
-    {%endif%} {%endfor%}
-</div>
+    <h1 class="display-4 ml-3 mt-2">{{framework.nome}}</h1>
 
-<!--HELLO WORLD-->
-<div class="col-md-12">
-    <div class="card mr-3 mt-2 ml-1" style="max-height:600px;">
-        <div class="card-header">
-            <div class="bg-default clearfix">
-                <div class="float-left">
-                    <h5 class="card-title ">Hello World
-                        <i class="fa fa-globe" aria-hidden="true"></i>
-                    </h5>
-                </div>
-                <div class="float-right">{% if user.is_authenticated %}
-                    <label>[
-                        <a data-toggle="modal" data-target=".bd-example-modal-lg" href="#">
-                            <small title="editar hello world">editar</small>
-                        </a>]</label>
-                    {% endif %}</div>
-            </div>
-        </div>
-        <div class="card-body" style="overflow-y:scroll;">
-            <p class="font-weight-light">O hello world é um conjunto de explicações e exemplos base para se iniciar um projeto com {{framework.nome}}</p>
-            {%if framework.helloworlds.first%}
-            <div class="col-md-12 mt-2">
-                {{framework.helloworlds.first.descricao}}
-            </div>
-            <div class="col-md-12 mt-3">
-            {%with "<pre id="|add:framework.linguagem.nome|add:">"|add:framework.helloworlds.first.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%} </div> {%else%}
-            <p class="font-weight-light">{% if user.is_authenticated %} Este framework ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
-                e seja o primeiro a fazer! {%else%} Este framework ainda não possui nenhum exemplo de Hello World. Cadastre-se
-                e seja o primeiro a fazer! {%endif%}</p>
-            <p class="font-weight-light">Veja um exemplo de um Hello World pronto no Framework
-                <a href="{% url 'wofapp:frameworks' 3 %}">Django</a>, da linguagem Python.{%endif%}</p>
-        </div>
-    </div>
-</div>
-
-<div class="row col-md-12 mt-5">
-    <!--OPINIÕES-->
-    <div class="col-md-6">
-        <div class="card ml-3" style="height:400px;">
+    <!--VERSÕES-->
+    <div class="col-md-12 mt-3">
+        <div class="card mr-3 mt-2 ml-1" style="max-height:600px;">
             <div class="card-header">
                 <div class="bg-default clearfix">
                     <div class="float-left">
-                        <h5 class="card-title">Opiniões
-                            <i class="fa fa-users" aria-hidden="true"></i>
+                        <h5 class="card-title ">Versões
+                            <i class="fa fa-shield" aria-hidden="true"></i>
                         </h5>
                     </div>
                     <div class="float-right">{% if user.is_authenticated %}
                         <label>[
-                            <a href="#">
-                                <small title="adicionar opinião">adicionar</small>
+                            <a data-toggle="modal" data-target=".bd-example-modal-lg" href="#">
+                                <small title="editar hello world">editar</small>
                             </a>]</label>
                         {% endif %}</div>
                 </div>
             </div>
-            <div class="card-body">
-                <p class="font-weight-light">Prós e contras dos usuários sobre o {{framework.nome}}</p>
-                <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="pills-pros-tab" data-toggle="pill" href="#pills-pros" role="tab" aria-controls="pills-pros"
-                            aria-selected="true">Prós</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="pills-contras-tab" data-toggle="pill" href="#pills-contras" role="tab" aria-controls="pills-contras"
-                            aria-selected="false">Contras</a>
-                    </li>
-                </ul>
-                <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-pros" role="tabpanel" aria-labelledby="pills-pros-tab">
-                        <div class="card mt-3">
-                            <ul>
-                                {% for opiniao in framework.opinioes.all %}
-                                <li class="mt-2">
-                                    {{opiniao.pro}}
-                                </li>
-                                {% empty %}
-                                <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou um pró sobre este framework. Clique no 'Adicionar'
-                                    e seja o primeiro a fazer! {%else%} Ninguém adicionou um pró sobre este framework. Cadastre-se
-                                    e seja o primeiro a fazer! {%endif%}</p> {%endfor%}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="pills-contras" role="tabpanel" aria-labelledby="pills-contras-tab">
-                        <div class="card mt-3">
-                            <ul>
-                                {% for opiniao in framework.opinioes.all %}
-                                <li class="mt-1">
-                                    {{opiniao.contra}}
-                                </li>
-                                {% empty %}
-                                <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou um contra sobre este framework. Clique no
-                                    'Adicionar' e seja o primeiro a fazer! {%else%} Ninguém adicionou um contra sobre este
-                                    framework. Cadastre-se e seja o primeiro a fazer! {%endif%}
-                                </p>{%endfor%}
-                            </ul>
-                        </div>
-                    </div>
+            <div class="card-body" style="overflow-y:auto;">
+                {%for versao in framework.versoes.all%} {% if versao == framework.versoes.first%}
+                <div class="form-inline">
+                    <p class="font-weight-light">
+                        <b>Versão:</b> {{versao.numero|floatformat:3}}</p>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <!--LINKS-->
-    <div class="col-md-6">
-        <div class="card" style="height:400px;">
-            <div class="card-header">
-                <div class="bg-default clearfix">
-                    <div class="float-left">
-                        <h5 class="card-title">Links
-                            <i class="fa fa-external-link" aria-hidden="true"></i>
-                        </h5>
-                    </div>
-                    <div class="float-right">{% if user.is_authenticated %}
-                        <label>[
-                            <a href="#">
-                                <small title="adicionar link">adicionar</small>
-                            </a>]</label>
-                        {% endif %}</div>
+                <div class="form-inline">
+                    <p class="font-weight-light">
+                        <b>Funcionalidades:</b> {{versao.funcionalidades}}</p>
                 </div>
-            </div>
-            <div class="card-body">
-                <p class="font-weight-light">Os melhores sites eleitos pelos usuários para tutorias e conhecimentos sobre o {{framework.nome}}</p>
-                <div class="col-md-12">
-                    <p class="font-weight-light mt-4 mb-4">
-                        <i class="fa fa-trophy" aria-hidden="true"></i> Ranking:</p>
-                    {% for link in framework.links.all %}
-                    <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="col-10 text-truncate">
-                                <a href={{link.path}}>{{link.path}}</a>
-                            </div>
-                            <span class="badge badge-primary">
-                                <i class="fa fa-thumbs-up" aria-hidden="true"></i> 14</i>
-                            </span>
-                        </li>
-                        {% empty %} 
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {% if user.is_authenticated %}
-                            <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Clique no 'mais' e seja o primeiro a fazer!
-                            </p>
-                            {%else%}
-                            <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Cadastre-se e seja o primeiro a fazer!</p>
-                            {%endif%}
-                        </li>
-                         {%endfor%}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
 
-<!--Comentário-->
-<div class="col-md-12">
-    <div class="card mt-5 mb-5 mr-3 ml-3">
-        <form class="form" role="form" method="POST" action="/comentario/{{framework.id}}">
-            {% csrf_token %}
-            <div class="card-header">
-                <h5 class="card-title">Comentários
-                    <i class="fa fa-comments-o" aria-hidden="true"></i>
-                </h5>
-            </div>
-            <div class="card-body">
-                {% for comentario in framework.comentarios.all %}
-                <div class="media comment-box">
-                    <div class="media-left">
-                        <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
-                    </div>
-                    <div class="media-body">
-                        <div class="media-heading text-dark">
-                            <div class="bg-default clearfix">
-                                <div class="float-left">
-                                    <a href="#">
-                                        <h6>{{comentario.usuario.get_full_name}}</h6>
-                                    </a>
-                                    <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
-                                </div>
-                                <div class="float-right">
-                                    <a class="text-dark" href="#">
-                                        <i class="fa fa-reply"> responder</i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <p>{{comentario.texto}}</p>
-                        {%if comentario.respostas %}
-                        <div class="col-md-5">
-                            {% for resposta in comentario.respostas.all %}
-                            <div class="media comment-box">
-                                <div class="media-left">
-                                    <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
-                                </div>
-                                <div class="media-body">
-                                    <div class="media-heading form-inline">
-                                        <a href="#">
-                                            <h6>{{resposta.usuario.get_full_name}}</h6>
-                                        </a>
-                                        <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
-                                    </div>
-                                    <p>{{resposta.texto}}</p>
-                                </div>
-                            </div>
+                {% if framework.versoes.count  > 1 %}
+                <div class="form-inline">
+                    <p class="font-weight-light mt-3">
+                        Escolha outra versão:
+                    </p>
+                    <div class="btn-group dropright ml-2">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Versões
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
+                            {%for versao in framework.versoes.all%}
+                            <a class="dropdown-item" href="#">{{versao.numero|floatformat:3}}</a>
                             {%endfor%}
                         </div>
                     </div>
                 </div>
-                {%endif%} {% empty %}
-                <div class="media comment-box">
-                    <div class="media-left">
-                        <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
+                {% endif %} {% endif %} {% empty %} {% if user.is_authenticated %}
+                    <p class="font-weight-light"> O
+                        <b>{{framework.nome}}</b> ainda não possui versões cadastradas. Clique no 'Editar' e seja o primeiro
+                        a fazer!</p>
+                    {%else%}
+                    <p class="font-weight-light">O
+                        <b>{{framework.nome}}</b> ainda não possui versões cadastradas. Cadastre-se e seja o primeiro a fazer!
+                    </p>
+                {%endif%} {%endfor%}
+            </div>
+        </div>
+    </div>
+
+    <!--HELLO WORLD-->
+    <div class="col-md-12 mt-5">
+        <div class="card mr-3 mt-2 ml-1" style="max-height:600px;">
+            <div class="card-header">
+                <div class="bg-default clearfix">
+                    <div class="float-left">
+                        <h5 class="card-title ">Hello World
+                            <i class="fa fa-globe" aria-hidden="true"></i>
+                        </h5>
                     </div>
-                    <div class="media-body">
-                        <div class="media-heading form-inline">
-                            <h6>World of Frameworks</h6>
+                    <div class="float-right">{% if user.is_authenticated %}
+                        <label>[
+                            <a data-toggle="modal" data-target=".bd-example-modal-lg" href="#">
+                                <small title="editar hello world">editar</small>
+                            </a>]</label>
+                        {% endif %}</div>
+                </div>
+            </div>
+            <div class="card-body" style="overflow-y:auto;">
+                <p class="font-weight-light">O hello world é um conjunto de explicações e exemplos base para saber como se inicia um projeto.</p>
+                {%if framework.helloworlds.first%}
+                <div class="col-md-12 mt-2">
+                    {{framework.helloworlds.first.descricao}}
+                </div>
+                <div class="col-md-12 mt-3">
+                    {%with "<pre id="|add:framework.linguagem.nome|add:">"|add:framework.helloworlds.first.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%} </div> {%else%}
+                <p class="font-weight-light">{% if user.is_authenticated %} Este framework ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
+                    e seja o primeiro a fazer! {%else%} Este framework ainda não possui nenhum exemplo de Hello World. Cadastre-se
+                    e seja o primeiro a fazer! {%endif%}</p>
+                <p class="font-weight-light">Veja um exemplo de um Hello World pronto no Framework
+                    <a href="{% url 'wofapp:frameworks' 3 %}">Django</a>, da linguagem Python.{%endif%}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row col-md-12 mt-5">
+        <!--OPINIÕES-->
+        <div class="col-md-6">
+            <div class="card ml-3" style="height:400px;">
+                <div class="card-header">
+                    <div class="bg-default clearfix">
+                        <div class="float-left">
+                            <h5 class="card-title">Opiniões
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                            </h5>
                         </div>
-                        <p class="font-weight-light">Ainda não há nenhum comentário. Use esse espaço para tirar suas dúvidas e fazer observações.</p>
+                        <div class="float-right">{% if user.is_authenticated %}
+                            <label>[
+                                <a href="#">
+                                    <small title="adicionar opinião">adicionar</small>
+                                </a>]</label>
+                            {% endif %}</div>
                     </div>
                 </div>
-                {%endfor%}
-                <div class="row mt-5 mr-1">
-                    <div class="col-md-11">
-                        <input type="text" name="texto" value="{{ form.texto.value }}" id="texto" class="form-control" placeholder="Seus comentários..."
-                            required />
-                        <div class="form-control-feedback">
-                            <small class="text-danger text-center">
-                                {{ form.texto.errors }}
-                            </small>
+                <div class="card-body" style="overflow-y:auto;">
+                    <p class="font-weight-light">Prós e contras dos usuários sobre o {{framework.nome}}</p>
+                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-pros-tab" data-toggle="pill" href="#pills-pros" role="tab" aria-controls="pills-pros"
+                                aria-selected="true">Prós</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-contras-tab" data-toggle="pill" href="#pills-contras" role="tab" aria-controls="pills-contras"
+                                aria-selected="false">Contras</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-pros" role="tabpanel" aria-labelledby="pills-pros-tab">
+                            <div class="card mt-3">
+                                <ul>
+                                    {% for opiniao in framework.opinioes.all %}
+                                    <li class="mt-2">
+                                        {{opiniao.pro}}
+                                    </li>
+                                    {% empty %}
+                                    <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou um pró sobre este framework. Clique
+                                        no 'Adicionar' e seja o primeiro a fazer! {%else%} Ninguém adicionou um pró sobre
+                                        este framework. Cadastre-se e seja o primeiro a fazer! {%endif%}</p> {%endfor%}
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-1">
-                        <button type="submit" class="btn btn-default">Enviar
-                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                            </i>
-                        </button>
+                        <div class="tab-pane fade" id="pills-contras" role="tabpanel" aria-labelledby="pills-contras-tab">
+                            <div class="card mt-3">
+                                <ul>
+                                    {% for opiniao in framework.opinioes.all %}
+                                    <li class="mt-1">
+                                        {{opiniao.contra}}
+                                    </li>
+                                    {% empty %}
+                                    <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou um contra sobre este framework. Clique
+                                        no 'Adicionar' e seja o primeiro a fazer! {%else%} Ninguém adicionou um contra sobre
+                                        este framework. Cadastre-se e seja o primeiro a fazer! {%endif%}
+                                    </p>{%endfor%}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
+
+        <!--LINKS-->
+        <div class="col-md-6">
+            <div class="card" style="height:400px;">
+                <div class="card-header">
+                    <div class="bg-default clearfix">
+                        <div class="float-left">
+                            <h5 class="card-title">Links
+                                <i class="fa fa-external-link" aria-hidden="true"></i>
+                            </h5>
+                        </div>
+                        <div class="float-right">{% if user.is_authenticated %}
+                            <label>[
+                                <a href="#">
+                                    <small title="adicionar link">adicionar</small>
+                                </a>]</label>
+                            {% endif %}</div>
+                    </div>
+                </div>
+                <div class="card-body" style="overflow-y:auto;">
+                    <p class="font-weight-light">Os melhores sites eleitos pelos usuários para aprendizado sobre o {{framework.nome}}</p>
+                    <div class="col-md-12">
+                        <p class="font-weight-light mt-4 mb-4">
+                            <i class="fa fa-trophy" aria-hidden="true"></i> Ranking:</p>
+                        {% for link in framework.links.all %}
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="col-10 text-truncate">
+                                    <a href={{link.path}}>{{link.path}}</a>
+                                </div>
+                                <span class="badge badge-primary">
+                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i> 14</i>
+                                </span>
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {% if user.is_authenticated %}
+                                <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Clique no 'mais' e seja o primeiro a fazer!
+                                </p>
+                                {%else%}
+                                <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Cadastre-se e seja o primeiro a fazer!</p>
+                                {%endif%}
+                            </li>
+                            {%endfor%}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+    </div>
+
+    <!--Comentário-->
+    <div class="col-md-12">
+        <div class="card mt-5 mb-5 mr-3 ml-3">
+            <form class="form" role="form" method="POST" action="/comentario/{{framework.id}}">
+                {% csrf_token %}
+                <div class="card-header">
+                    <h5 class="card-title">Comentários
+                        <i class="fa fa-comments-o" aria-hidden="true"></i>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for comentario in framework.comentarios.all %}
+                    <div class="media comment-box">
+                        <div class="media-left">
+                            <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
+                        </div>
+                        <div class="media-body">
+                            <div class="media-heading text-dark">
+                                <div class="bg-default clearfix">
+                                    <div class="float-left">
+                                        <a href="#">
+                                            <h6>{{comentario.usuario.get_full_name}}</h6>
+                                        </a>
+                                        <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
+                                    </div>
+                                    <div class="float-right">
+                                        <a class="text-dark" href="#">
+                                            <i class="fa fa-reply"> responder</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>{{comentario.texto}}</p>
+                            {%if comentario.respostas %}
+                            <div class="col-md-5">
+                                {% for resposta in comentario.respostas.all %}
+                                <div class="media comment-box">
+                                    <div class="media-left">
+                                        <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="media-heading form-inline">
+                                            <a href="#">
+                                                <h6>{{resposta.usuario.get_full_name}}</h6>
+                                            </a>
+                                            <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
+                                        </div>
+                                        <p>{{resposta.texto}}</p>
+                                    </div>
+                                </div>
+                                {%endfor%}
+                            </div>
+                        </div>
+                    </div>
+                    {%endif%} {% empty %}
+                    <div class="media comment-box">
+                        <div class="media-left">
+                            <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
+                        </div>
+                        <div class="media-body">
+                            <div class="media-heading form-inline">
+                                <h6>World of Frameworks</h6>
+                            </div>
+                            <p class="font-weight-light">Ainda não há nenhum comentário. Use esse espaço para tirar suas dúvidas e fazer observações.</p>
+                        </div>
+                    </div>
+                    {%endfor%}
+                    <div class="row mt-5 mr-1">
+                        <div class="col-md-11">
+                            <input type="text" name="texto" value="{{ form.texto.value }}" id="texto" class="form-control" placeholder="Seus comentários..."
+                                required />
+                            <div class="form-control-feedback">
+                                <small class="text-danger text-center">
+                                    {{ form.texto.errors }}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-default">Enviar
+                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
 
 <!-- Modal -->
 <form class="form" role="form" method="POST" action="/helloworld/{{framework.id}}">

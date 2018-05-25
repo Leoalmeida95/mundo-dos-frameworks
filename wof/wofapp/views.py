@@ -23,12 +23,11 @@ def login_view(request, *args, **kwargs):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse('wofapp:home'))
         else:
             erroMsg = form.errors['__all__'].data[0].message
             messages.error(request, erroMsg)
 
-    return render(request,'home.html')
+    return HttpResponseRedirect(reverse('wofapp:home'))
 
 def logout_view(request):
     logout(request)
@@ -52,7 +51,9 @@ def registrar_usuario_view(request):
         publica = 'True'
 
     args['publica'] = True if publica == 'True' else False 
-    args['linguagens'] =Linguagem.objects.all().order_by('nome')
+    linguagens = Linguagem.objects.all().order_by('nome')
+    args['linguagens'] = linguagens
+    args['metade_linguagens'] = (linguagens.count())/2
     return render(request,'usuario.html',args)
 
 def ativar_conta_view(request, uidb64=None, token=None):
@@ -84,7 +85,9 @@ def reset_senha_view(request):
         form = PasswordResetForm()
 
     args['form'] = form
-    args['linguagens'] = Linguagem.objects.all().order_by('nome')
+    linguagens = Linguagem.objects.all().order_by('nome')
+    args['linguagens'] = linguagens
+    args['metade_linguagens'] = (linguagens.count())/2
     return render(request,'reset_senha.html',args)
 
 def reset_senha_confirmacao_view(request, uidb64=None, token=None):
@@ -112,7 +115,9 @@ def reset_senha_confirmacao_view(request, uidb64=None, token=None):
     
     args['form'] = form
     args['authorized'] = authorized
-    args['linguagens'] = Linguagem.objects.all().order_by('nome')
+    linguagens = Linguagem.objects.all().order_by('nome')
+    args['linguagens'] = linguagens
+    args['metade_linguagens'] = (linguagens.count())/2
     return render(request, 'reset_senha_confirmacao.html', args)
 
 @login_required
@@ -127,7 +132,10 @@ def atualizar_usuario_view(request):
             return HttpResponseRedirect(reverse('wofapp:home'))
     else:
         form = UserChangeForm(instance=user)
-        
+
+    linguagens = Linguagem.objects.all().order_by('nome')
+    args['linguagens'] = linguagens
+    args['metade_linguagens'] = (linguagens.count())/2    
     args['publica'] = user.conta_publica
     args['form'] = form
     return render(request, 'usuario.html', args)
@@ -147,7 +155,9 @@ def trocar_senha_view(request):
     
     args['authorized'] = True
     args['form'] = form
-    args['linguagens'] = Linguagem.objects.all().order_by('nome')
+    linguagens = Linguagem.objects.all().order_by('nome')
+    args['linguagens'] = linguagens
+    args['metade_linguagens'] = (linguagens.count())/2
     return render(request, 'reset_senha_confirmacao.html', args)
 
 def frameworks_view(request,lg_id):
@@ -174,7 +184,9 @@ def frameworks_view(request,lg_id):
 
     args['lista_frameworks'] = frameworks
     args['framework'] = framework
-    args['linguagens'] = Linguagem.objects.all().order_by('nome')
+    linguagens = Linguagem.objects.all().order_by('nome')
+    args['linguagens'] = linguagens
+    args['metade_linguagens'] = (linguagens.count())/2
     return render(request,'frameworks.html',args)
 
 @login_required
@@ -217,7 +229,9 @@ def helloworld_view(request,id):
 def chart_view(request):
 
     linguagens = Linguagem.objects.all().order_by('nome')
-    frameworks = Framework.objects.all().order_by('nome')
+    metade = (linguagens.count())/2
+    top_linguagens = linguagens[:5]
+    frameworks = Framework.objects.all().order_by('nome')[:10]
 
     chart1 = """{ 
                 "chart": {
@@ -236,7 +250,7 @@ def chart_view(request):
                 "data": ["""
     
     i = 1
-    for linguagem in linguagens:
+    for linguagem in top_linguagens:
         chart1 = chart1 + """ {"label": " """ + linguagem.nome +  """", "value":" """   +  str(i*100) + """"},"""
         i = i+1
 
@@ -248,7 +262,7 @@ def chart_view(request):
 
     chart2 = """{ 
                 "chart": {
-                "caption": "Frameworks com mais contribuintes",
+                "caption": "Top 10 Frameworks com mais contribuintes",
                 "subcaption": "Total",
                 "startingangle": "120",
                 "showlabels": "1",
@@ -272,6 +286,7 @@ def chart_view(request):
         }"""
 
     p1 = FusionCharts("pie3d", "ex1" , "100%", "400", "chart-1", "json", chart1)
-    p2 = FusionCharts("pie3d", "ex2" , "100%", "400", "chart-2", "json", chart2)
+    p2 = FusionCharts("pie3d", "ex2" , "100%", "430", "chart-2", "json", chart2)
 
-    return  render(request, 'home.html', {'output1' : p1.render(),'output2' : p2.render(),'linguagens':linguagens})
+    return  render(request, 'home.html', {'output1' : p1.render(),'output2' : p2.render(),
+    'linguagens':linguagens,'metade_linguagens':metade})
