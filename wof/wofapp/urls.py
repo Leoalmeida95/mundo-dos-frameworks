@@ -10,6 +10,7 @@ urlpatterns = [
     path('atualizar_usuario/', views.atualizar_usuario_view, name="atualizar"),
     path('reset_senha/', views.reset_senha_view, name="reset_senha"),
     path('comentario/<int:id>', views.comentario_view, name="comentario"),
+    path('resposta/<int:fm_id>/<int:cm_id>', views.resposta_view, name="resposta"),
     path('helloworld/<int:id>', views.helloworld_view, name="helloworld"),
     path('frameworks/<int:id>', views.frameworks_view, name="frameworks"),
     path('reset_senha_confirmacao/<slug:uidb64>/<slug:token>', views.reset_senha_confirmacao_view, name="reset_senha_confirmacao"),

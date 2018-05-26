@@ -249,10 +249,11 @@ def comentario_view(request,id):
         form = ComentarioForm(request.POST)
         if form.is_valid():
             try:
-                coment = Comentario()
-                coment.texto = request.POST['texto']
-                coment.framework_id = id
-                coment.usuario_id = user.id
+                coment = Comentario(
+                    texto=request.POST['texto'],
+                    framework_id =id,
+                    usuario_id = user.id
+                )
                 coment.save()
             except Exception:
                 logger = logging.getLogger(__name__)
@@ -262,8 +263,31 @@ def comentario_view(request,id):
             erroMsg = form.errors['__all__'].data[0].message
             messages.warning(request, erroMsg)
 
-    # next = request.POST.get('next', '/')
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':id}))
+
+@login_required
+def resposta_view(request,fm_id,cm_id):
+    user = request.user
+    if request.method == 'POST':
+        form = ComentarioForm(request.POST)
+        if form.is_valid():
+            try:
+                coment = Comentario.objects.get(id=cm_id)
+                coment.respostas.create(
+                    texto=request.POST['texto'],
+                    framework_id= fm_id,
+                    usuario_id=user.id
+                )
+            except Exception:
+                logger = logging.getLogger(__name__)
+                logger.exception("Erro ao criar resposta.")
+                messages.error(request, 'Erro ao realizar resposta. Tente novamente mais tarde.')
+        else:
+            erroMsg = form.errors['__all__'].data[0].message
+            messages.warning(request, erroMsg)
+
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
 
 @login_required
 def helloworld_view(request,id):
@@ -284,4 +308,3 @@ def helloworld_view(request,id):
                 messages.error(request, 'Erro ao editar hello world. Tente novamente mais tarde.')
 
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':id}))
-

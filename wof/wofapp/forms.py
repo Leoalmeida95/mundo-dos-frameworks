@@ -235,7 +235,7 @@ class ComentarioForm(forms.ModelForm):
     def clean(self):        
         texto = self.cleaned_data.get('texto')
         if texto is None:
-            raise forms.ValidationError('Escreva alguma pergunta ou comentário.', code='texto')
+            raise forms.ValidationError('Escreva algo no seu comentário.', code='texto')
         
         return self.cleaned_data
 

@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
+from django.utils import timezone
 
 class EmailUserManager(BaseUserManager):
     def create_user(self, *args, **kwargs):
@@ -60,7 +61,7 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
     formacao = models.CharField(max_length=80,null = True)
     profissao = models.CharField(max_length=80,null = True)
     perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, null = False,default = 1)
-    data_cadastro = models.DateField(auto_now=True)
+    data_cadastro = models.DateTimeField(default=timezone.now)
 
     objects = EmailUserManager()
     USERNAME_FIELD = 'email'
@@ -137,8 +138,8 @@ class Comentario(models.Model):
     texto = models.CharField(max_length=1000)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='comentarios')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
-    data = models.DateField(auto_now=True)
-    respostas = models.ManyToManyField("self")
+    data = models.DateTimeField(default=timezone.now)
+    respostas = models.ManyToManyField("self",symmetrical=False)
     
     def __str__(self):
         return self.texto
@@ -161,7 +162,7 @@ class Versao(models.Model):
 
 
 class Denuncia(models.Model):
-    data = models.DateField(auto_now=True)
+    data = models.DateTimeField(default=timezone.now)
     motivo_denuncia = models.CharField(max_length=500)
     usuarios = models.ManyToManyField(Usuario)
 
