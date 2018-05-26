@@ -15,6 +15,64 @@ from .tokens import account_activation_token
 from .forms import *
 from .models import *
 
+def chart_view(request):
+    linguagens = Linguagem.objects.all().order_by('nome')
+    top_linguagens = linguagens[:5]
+    frameworks = Framework.objects.all().order_by('nome')[:10]
+
+    chart1 = """{ 
+                "chart": {
+                "caption": "Top 5 linguagens mais acessadas",
+                "subcaption": "Mensal",
+                "startingangle": "120",
+                "showlabels": "1",
+                "showlegend": "1",
+                "enablemultislicing": "1",
+                "slicingdistance": "15",
+                "showpercentvalues": "1",
+                "showpercentintooltip": "1",
+                "plottooltext": "Linguagem: $label, Acessos : $datavalue",
+                "theme": "zune"
+                },
+                "data": ["""
+    
+    i = 1
+    for linguagem in top_linguagens:
+        chart1 = chart1 + """ {"label": " """ + linguagem.nome +  """", "value":" """   +  str(i*100) + """"},"""
+        i = i+1
+    chart1 = chart1[:-1]    
+    chart1 = chart1 + """         ]
+        }"""
+
+
+    chart2 = """{ 
+                "chart": {
+                "caption": "Top 10 Frameworks com mais contribuintes",
+                "subcaption": "Total",
+                "startingangle": "120",
+                "showlabels": "1",
+                "showlegend": "1",
+                "enablemultislicing": "1",
+                "slicingdistance": "15",
+                "showpercentvalues": "1",
+                "showpercentintooltip": "1",
+                "plottooltext": "Framework: $label, Contribuintes : $datavalue",
+                "theme": "carbon"
+                },
+                "data": ["""
+    
+    for framework in frameworks:
+        chart2 = chart2 + """ {"label": " """ + framework.nome +  """", "value":" """   +  str(i*100) + """"},"""
+        i = i+1
+    chart2 = chart2[:-1]    
+    chart2 = chart2 + """         ]
+        }"""
+
+    p1 = FusionCharts("pie3d", "ex1" , "100%", "400", "chart-1", "json", chart1)
+    p2 = FusionCharts("pie3d", "ex2" , "100%", "430", "chart-2", "json", chart2)
+
+    return  render(request, 'home.html', {'output1' : p1.render(),'output2' : p2.render(),'linguagens':linguagens})
+
 def login_view(request, *args, **kwargs):
     if request.method == "POST":
         form = AuthenticationForm(request.POST)
@@ -24,6 +82,7 @@ def login_view(request, *args, **kwargs):
             try:
                 user = authenticate(request, username=username, password=password)
             except Exception:
+                logger = logging.getLogger(__name__)
                 logger.exception("Erro de autenticação no login.")
                 user = None
 
@@ -33,11 +92,13 @@ def login_view(request, *args, **kwargs):
             erroMsg = form.errors['__all__'].data[0].message
             messages.error(request, erroMsg)
      
-    return HttpResponseRedirect(reverse('wofapp:home'))
+    next = request.POST.get('next', '/')
+    return HttpResponseRedirect(next)
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse('wofapp:home'))
+    next = request.POST.get('next', '/')
+    return HttpResponseRedirect(next)
 
 def registrar_usuario_view(request):
     args = {}
@@ -54,8 +115,9 @@ def registrar_usuario_view(request):
                 messages.info(request, 'Muito bem! Agora para concluir seu registro, por favor confirme sua conta no email que enviamos pra você.')
                 return HttpResponseRedirect(reverse('wofapp:home'))
             except Exception:
+                logger = logging.getLogger(__name__)
                 logger.exception("Erro no registro de usuário.")
-                messages.info(request, 'Erro ao registrar usuário. Tente novamente mais tarde.')
+                messages.error(request, 'Erro ao registrar usuário. Tente novamente mais tarde.')
     else:
         form = CustomUserCreationForm()
         publica = 'True'
@@ -132,8 +194,9 @@ def atualizar_usuario_view(request):
                 messages.info(request, 'Seus dados foram atualizados com sucesso!')
                 return HttpResponseRedirect(reverse('wofapp:home'))
             except Exception:
+                logger = logging.getLogger(__name__)
                 logger.exception("Erro ao atualizar usuário.")
-                messages.info(request, 'Erro ao atualizar dados. Tente novamente mais tarde.')
+                messages.error(request, 'Erro ao atualizar dados. Tente novamente mais tarde.')
     else:
         form = UserChangeForm(instance=user)
 
@@ -183,96 +246,42 @@ def frameworks_view(request,id):
 def comentario_view(request,id):
     user = request.user
     if request.method == 'POST':
-        framework = Framework.objects.get(id=id)
         form = ComentarioForm(request.POST)
-        if framework is not None and form.is_valid():
+        if form.is_valid():
             try:
-                x = request.POST['texto']
+                coment = Comentario()
+                coment.texto = request.POST['texto']
+                coment.framework_id = id
+                coment.usuario_id = user.id
+                coment.save()
             except Exception:
+                logger = logging.getLogger(__name__)
                 logger.exception("Erro ao criar comentário.")
-                messages.info(request, 'Erro ao realizar comentário. Tente novamente mais tarde.')
+                messages.error(request, 'Erro ao realizar comentário. Tente novamente mais tarde.')
+        else:
+            erroMsg = form.errors['__all__'].data[0].message
+            messages.warning(request, erroMsg)
 
-    #retornar para o framework de origem do post
-    return render(request,'frameworks.html',{'form':form})
+    # next = request.POST.get('next', '/')
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':id}))
 
 @login_required
 def helloworld_view(request,id):
     user = request.user
     if request.method == 'POST':
-        #salvar ou alterar?
-        hello = Helloworld.objects.get(framework_id=id).first()
-        # args['framework'] = framework
         form = HelloWorldForm(request.POST)
         if form.is_valid():
             try:
-                if hello is None:
-                    hello = Helloworld() 
+                hello = Helloworld() 
                 hello.descricao = request.POST['descricao']
                 hello.codigo_exemplo =codigo_exemplo=request.POST['codigo_exemplo']
                 hello.framework_id = id
                 hello.usuario_id = user.id
                 hello.save()
             except Exception:
+                logger = logging.getLogger(__name__)
                 logger.exception("Erro ao criar Hello World.")
-                messages.info(request, 'Erro ao editar hello world. Tente novamente mais tarde.')
+                messages.error(request, 'Erro ao editar hello world. Tente novamente mais tarde.')
 
-    #retornar para o framework de origem do post
-    return render(request,'frameworks.html',{'form':form, 'helloword': hello})
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':id}))
 
-def chart_view(request):
-    linguagens = Linguagem.objects.all().order_by('nome')
-    top_linguagens = linguagens[:5]
-    frameworks = Framework.objects.all().order_by('nome')[:10]
-
-    chart1 = """{ 
-                "chart": {
-                "caption": "Top 5 linguagens mais acessadas",
-                "subcaption": "Mensal",
-                "startingangle": "120",
-                "showlabels": "1",
-                "showlegend": "1",
-                "enablemultislicing": "0",
-                "slicingdistance": "15",
-                "showpercentvalues": "1",
-                "showpercentintooltip": "1",
-                "plottooltext": "Linguagem: $label, Acessos : $datavalue",
-                "theme": "zune"
-                },
-                "data": ["""
-    
-    i = 1
-    for linguagem in top_linguagens:
-        chart1 = chart1 + """ {"label": " """ + linguagem.nome +  """", "value":" """   +  str(i*100) + """"},"""
-        i = i+1
-    chart1 = chart1[:-1]    
-    chart1 = chart1 + """         ]
-        }"""
-
-
-    chart2 = """{ 
-                "chart": {
-                "caption": "Top 10 Frameworks com mais contribuintes",
-                "subcaption": "Total",
-                "startingangle": "120",
-                "showlabels": "1",
-                "showlegend": "1",
-                "enablemultislicing": "0",
-                "slicingdistance": "15",
-                "showpercentvalues": "1",
-                "showpercentintooltip": "0",
-                "plottooltext": "Framework: $label, Contribuintes : $datavalue",
-                "theme": "carbon"
-                },
-                "data": ["""
-    
-    for framework in frameworks:
-        chart2 = chart2 + """ {"label": " """ + framework.nome +  """", "value":" """   +  str(i*100) + """"},"""
-        i = i+1
-    chart2 = chart2[:-1]    
-    chart2 = chart2 + """         ]
-        }"""
-
-    p1 = FusionCharts("pie3d", "ex1" , "100%", "400", "chart-1", "json", chart1)
-    p2 = FusionCharts("pie3d", "ex2" , "100%", "430", "chart-2", "json", chart2)
-
-    return  render(request, 'home.html', {'output1' : p1.render(),'output2' : p2.render(),'linguagens':linguagens})
