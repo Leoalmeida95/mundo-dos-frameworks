@@ -1,0 +1,66 @@
+{% extends "base.html" %} {% block titulo %}World of Frameworks{% endblock %} {% block conteudo %} {% load staticfiles %}
+
+
+<body>
+    <div class="container">
+        <h1 class="font-weight-light mt-3">
+            <b>Perguntas frequentes</b>
+        </h1>
+        <h4 class="font-weight-light mt-4">
+            <b>Qual o propósito do World of Frameworks?</b>
+        </h4>
+        <p class="font-weight-light mt-1">O objetivo do sistema é permitir que um usuário escolha, de uma lista de linguagens, um determinado framework sobre
+            o qual o mesmo poderá aprender sobre, e passar suas experiências dele. O sistema pretende, portanto, fazer um
+            levantamento de dados de variados frameworks para que, em um mesmo ambiente, o usuário possa ter diversas informações
+            sobre qualquer Framework de seu interesse.</p>
+
+        <h4 class="font-weight-light mt-3">
+            <b>Como posso alterar dados de um Framework?</b>
+        </h4>
+        <p class="font-weight-light mt-1">Para melhor controle do que acontece no site, todas alterações de informações dos Frameworks só podem ser feitas
+            por usuários cadastrados. Com isso, o usuário estando autenticado, ele poderá:</p>
+        <label class="font-weight-light">
+            1. Adiconar e editar as versões de um Framework.
+        </label>
+        <label class="font-weight-light">
+            2. Adicionar e editar descrição e código de exemplo para realizar um "Hello World" do Framework.
+        </label>
+        <label class="font-weight-light">
+            3. Adicionar opiniões de prós e contras sobre usar determinado Framework
+        </label>
+        <label class="font-weight-light">
+            4. Adicionar novos links para tutoriais de aprendizado, podendo votar quais são os melhores dentre eles.
+        </label>
+        <label class="font-weight-light">
+            5. Adicionar comentários para tirar dúvidas e dar explicações sobre determinado Framework.
+        </label>
+        <p class="font-weight-light mt-1">
+            Além disso, caso o usuário perceba uma assunto inadequado adicionado a algum Framework, ele poderá denunciar aquele conteúdo,
+            para que o usuário que o adicionou não possa mais acessar o sistema.
+        </p>
+        </p>
+
+        <h4 class="font-weight-light mt-3">
+            <b>Como denunciar um conteúdo inapropriado de um Framework?</b>
+        </h4>
+        <p class="font-weight-light mt-1">
+
+        </p>
+
+        <h4 class="font-weight-light mt-3">
+            <b>Porque meu Framework favorito não está no site?</b>
+        </h4>
+        <p class="font-weight-light mt-1">Adorariamos saber que Framework seria esse! Apenas
+            <a href="#">envie uma sugestão</a> para nós, e deixe o resto com a gente.</p>
+
+        <h4 class="font-weight-light mt-3">
+            <b>Quais são os critérios para decidir se algo é um "framework web"?</b>
+        </h4>
+        <p class="font-weight-light mt-1">Digamos que se você puder terminar a frase "Acabei de criar esse novo aplicativo/sistema web com [insira o nome do
+            framework aqui]", então ele provavelmente seria considerado uma framework web. Note que os frameworks não precisam
+            ser "full-stack", eles podem ser apenas do lado do cliente ou apenas do lado do servidor. O World of Frameworks
+            não inclui bibliotecas JavaScript como jQuery e MooTools, já que elas são normalmente usadas para aprimorar aplicativos
+            da Web que são criados usando outro Framework.</p>
+    </div>
+</body>
+{% endblock %}

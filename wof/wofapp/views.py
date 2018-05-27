@@ -100,6 +100,9 @@ def logout_view(request):
     next = request.POST.get('next', '/')
     return HttpResponseRedirect(next)
 
+def faq_view(request):
+    return render(request,'faq.html',{'linguagens':Linguagem.objects.all().order_by('nome')})
+
 def registrar_usuario_view(request):
     args = {}
     if request.method == "POST":

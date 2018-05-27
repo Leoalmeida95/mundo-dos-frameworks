@@ -228,6 +228,9 @@ class SetPasswordForm(UserCreationForm):
 # Formulários para Framework       
 class ComentarioForm(forms.ModelForm):
     
+    texto = forms.CharField(required=True, 
+        widget=forms.TextInput(attrs={'name': 'texto'}))
+
     class Meta:
         model = Comentario
         fields = ['texto']

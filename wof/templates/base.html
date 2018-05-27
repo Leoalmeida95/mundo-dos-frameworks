@@ -33,11 +33,11 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="/">Início</a>
+					<a class="nav-link" href="/"><i class="fa fa-home" aria-hidden="true"></i> Início</a>
 				</li>
 				<li class="nav-item dropdown has-mega-menu">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-					 aria-expanded="false">Linguagens</a>
+					 aria-expanded="false"><i class="fa fa-code" aria-hidden="true"></i> Linguagens</a>
 					<div class="dropdown-menu dropdown-menu-left">
 						<div class="px-0 container container-sm">
 							<div class="row">
@@ -54,7 +54,7 @@
 						</div>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">FAQ</a>
+					<a class="nav-link" href="/faq">FAQ</a>
 				</li>
 			</ul>
 			{% if user.is_authenticated %}
@@ -183,7 +183,7 @@
 	<hr style="border:solid 1p">
 	<footer class="text-center">
 		<small id="footer">
-			<p>
+			<p class="font-weight-light mt-3">
 				Universidade Federal Rural do Rio de Janeiro
 				<br /> Copyright © 2018 Leonardo Almeida
 				<br /> Todos os direitos reservados

@@ -33,10 +33,11 @@
                             </h5>
                         </div>
                         <div class="float-right">{% if user.is_authenticated %}
-                            <label>[
+                            <label class="mr-1">[
                                 <a data-toggle="modal" data-target=".bd-example-modal-lg" href="#">
-                                    <small title="editar hello world">editar</small>
+                                    <small title="editar hello world">editar <i class="fa fa-pencil fa-fw"></i></small>
                                 </a>]</label>
+                                <a href="#"><i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i></a>
                             {% endif %}</div>
                     </div>
                 </div>
@@ -96,10 +97,11 @@
                             </h5>
                         </div>
                         <div class="float-right">{% if user.is_authenticated %}
-                            <label>[
+                            <label class="mr-1">[
                                 <a data-toggle="modal" data-target=".bd-example-modal-lg" href="#">
-                                    <small title="editar hello world">editar</small>
+                                    <small title="editar hello world">editar <i class="fa fa-pencil fa-fw"></i></small>
                                 </a>]</label>
+                                <a href="#"><i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i></a>
                             {% endif %}</div>
                     </div>
                 </div>
@@ -122,6 +124,58 @@
             </div>
         </div>
 
+        <!--LINKS-->
+        <div class="col-md-12 mt-3">
+            <div class="card mr-2 mt-2 ml-1">
+                <div class="card-header">
+                    <div class="bg-default clearfix">
+                        <div class="float-left">
+                            <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Links
+                                <i class="fa fa-external-link" aria-hidden="true"></i>
+                            </h5>
+                        </div>
+                        <div class="float-right">{% if user.is_authenticated %}
+                            <label class="mr-1">[
+                                <a href="#">
+                                    <small title="adicionar link">adicionar <i class="fa fa-plus-circle" aria-hidden="true"></i></small>
+                                </a>]</label>
+                                <a href="#"><i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i></a>
+                            {% endif %}</div>
+                    </div>
+                </div>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                    <div class="card-body" style="overflow-y:auto;">
+                        <p class="font-weight-light">Os melhores sites eleitos pelos usuários para aprendizado sobre o {{framework.nome}}</p>
+                        <div class="col-md-12">
+                            <p class="font-weight-light mt-4 mb-4">
+                                <i class="fa fa-trophy" aria-hidden="true"></i> Ranking:</p>
+                            {% for link in framework.links.all %}
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="col-10 text-truncate">
+                                        <a href={{link.path}}>{{link.path}}</a>
+                                    </div>
+                                    <span class="btn btn-primary">
+                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 14</i>
+                                    </span>
+                                </li>
+                                {% empty %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {% if user.is_authenticated %}
+                                    <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Clique no 'mais' e seja o primeiro a
+                                        fazer!
+                                    </p>
+                                    {%else%}
+                                    <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Cadastre-se e seja o primeiro a fazer!</p>
+                                    {%endif%}
+                                </li>
+                                {%endfor%}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--OPINIÕES-->
         <div class="col-md-12 mt-3">
             <div class="card mr-2 mt-2 ml-1">
@@ -133,11 +187,12 @@
                             </h5>
                         </div>
                         <div class="float-right">{% if user.is_authenticated %}
-                            <label>[
+                            <label class="mr-1">[
                                 <a href="#">
-                                    <small title="adicionar opinião">adicionar</small>
+                                    <small title="adicionar opinião">adicionar <i class="fa fa-plus-circle" aria-hidden="true"></i></small>
                                 </a>]</label>
-                            {% endif %}</div>
+                                <a href="#"><i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i></a>
+                                {% endif %}</div>
                     </div>
                 </div>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
@@ -190,57 +245,6 @@
             </div>
         </div>
 
-        <!--LINKS-->
-        <div class="col-md-12 mt-3">
-            <div class="card mr-2 mt-2 ml-1">
-                <div class="card-header">
-                    <div class="bg-default clearfix">
-                        <div class="float-left">
-                            <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Links
-                                <i class="fa fa-external-link" aria-hidden="true"></i>
-                            </h5>
-                        </div>
-                        <div class="float-right">{% if user.is_authenticated %}
-                            <label>[
-                                <a href="#">
-                                    <small title="adicionar link">adicionar</small>
-                                </a>]</label>
-                            {% endif %}</div>
-                    </div>
-                </div>
-                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-                    <div class="card-body" style="overflow-y:auto;">
-                        <p class="font-weight-light">Os melhores sites eleitos pelos usuários para aprendizado sobre o {{framework.nome}}</p>
-                        <div class="col-md-12">
-                            <p class="font-weight-light mt-4 mb-4">
-                                <i class="fa fa-trophy" aria-hidden="true"></i> Ranking:</p>
-                            {% for link in framework.links.all %}
-                            <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="col-10 text-truncate">
-                                        <a href={{link.path}}>{{link.path}}</a>
-                                    </div>
-                                    <span class="badge badge-primary">
-                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i> 14</i>
-                                    </span>
-                                </li>
-                                {% empty %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    {% if user.is_authenticated %}
-                                    <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Clique no 'mais' e seja o primeiro a
-                                        fazer!
-                                    </p>
-                                    {%else%}
-                                    <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Cadastre-se e seja o primeiro a fazer!</p>
-                                    {%endif%}
-                                </li>
-                                {%endfor%}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!--Comentário-->
         <div class="col-md-12 mt-3">
             <div class="card mr-2 mt-2 ml-1">
@@ -262,22 +266,26 @@
                                     <div class="media-heading text-dark">
                                         <div class="bg-default clearfix">
                                             <div class="float-left">
-                                                <a href="#">
-                                                    <h6>{{comentario.usuario.get_full_name}}</h6>
-                                                </a>
+                                                {% if comentario.usuario.conta_publica %}
+                                                <a href="#"><h6 class="text-dark">{{comentario.usuario.get_full_name}}</h6></a>
+                                                {%else%}
+                                                <h6>Usuário anônimo</h6>
+                                                {%endif%}
                                                 <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
                                             </div>
+                                            {% if user.is_authenticated %}
                                             <div class="float-right">
                                                 <a class="text-dark" data-toggle="collapse" href="#{{comentario.id}}" role="button" aria-expanded="false" aria-controls="{{comentario.id}}">
                                                     <i class="fa fa-reply"> responder</i>
                                                 </a>
                                             </div>
+                                            {%endif%}
                                         </div>
                                     </div>
                                     <p>{{comentario.texto}}</p>
                                     <div class="collapse" id="{{comentario.id}}">
                                         <div class="form-inline">
-                                            <input type="text" name="texto" id="texto" class="form-control form-control-sm col-md-9" placeholder="Responder comentário..."
+                                            <input type="text" name="texto" id="texto{{comentario.id}}" class="form-control form-control-sm col-md-9" placeholder="Responder comentário..."
                                                 required />
                                             <button type="submit" class="btn btn-default btn-sm ml-2">Responder
                                                 <i class="fa fa-reply" aria-hidden="true"></i>
@@ -294,9 +302,11 @@
                                             </div>
                                             <div class="media-body">
                                                 <div class="media-heading form-inline">
-                                                    <a href="#">
-                                                        <h6>{{resposta.usuario.get_full_name}}</h6>
-                                                    </a>
+                                                        {% if resposta.usuario.conta_publica %}
+                                                    <a href="#"><h6 class="text-dark">{{resposta.usuario.get_full_name}}</h6></a>
+                                                    {%else%}
+                                                    <h6>Usuário anônimo</h6>
+                                                    {%endif%}
                                                     <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
                                                 </div>
                                                 <p>{{resposta.texto}}</p>
@@ -321,6 +331,7 @@
                         </div>
                         {%endfor%}
                     </div>
+                    {% if user.is_authenticated %}
                     <div class="card-footer">
                         <form class="form" role="form" method="POST" action="/comentario/{{framework.id}}">
                             {% csrf_token %}
@@ -338,6 +349,7 @@
                             </div>
                         </form>
                     </div>
+                    {%endif%}
                 </div>
             </div>
         </div>
