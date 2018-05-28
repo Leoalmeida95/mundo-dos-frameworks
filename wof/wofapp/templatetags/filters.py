@@ -11,22 +11,20 @@ def pygmentize(value):
     try:
         formatter = HtmlFormatter(linenos=True, noclasses=True,style='monokai')
         tree = BeautifulSoup(unescape_html(value))
-        code = tree.find('pre')
-        if not code['id']: code['id'] = 'text'
-        ling = code['id']
-
-        try:
-            lexer = get_lexer_by_name(ling[0], stripall=True)
-        except ValueError:
+        for code in tree.findAll('pre'):
+            if not code['id']: code['id'] = 'text'
             try:
-                lexer = guess_lexer(ling[0])
+                lexer = get_lexer_by_name(code['id'], stripall=True)
             except ValueError:
-                messages.error(request, 'Erro ao selecionar a linguagem')
-                return HttpResponseRedirect(reverse('wofapp:home'))
-
-        new_content = highlight(code.contents[0], lexer, formatter)
-        new_content += u"<style>%s</style>" % formatter.get_style_defs('.highlight')
-        code.replaceWith(BeautifulSoup(new_content))
+                try:
+                    lexer = guess_lexer(code['id'])
+                except ValueError:
+                    messages.error(request, 'Erro ao selecionar a linguagem')
+                    return HttpResponseRedirect(reverse('wofapp:home'))
+            result = ''.join([str(item) for item in code.contents])
+            new_content = highlight(result, lexer, formatter)
+            new_content += u"<style>%s</style>" % formatter.get_style_defs('.highlight')
+            code.replaceWith(BeautifulSoup(new_content))
 
         return tree
     except KeyError:

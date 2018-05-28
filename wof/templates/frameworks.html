@@ -399,14 +399,14 @@
                         <div class="col-12">
                             <textarea rows="7" class="form-control" name="descricao" id="descricao" 
                             placeholder="Entre com uma descrição sobre o Hello World."
-                            >{%if framework.helloworlds.last%}{{framework.helloworlds.last.descricao}}{%endif%}</textarea>
+                            required >{%if framework.helloworlds.last%}{{framework.helloworlds.last.descricao}}{%endif%}</textarea>
                         </div>
                     </div>
                     <label for="codigo_exemplo" class="col-form-label">Código:</label>
                     <div class="col-12">
                         <textarea rows="7" class="form-control" name="codigo_exemplo" id="codigo_exemplo"
                             placeholder="Entre com um código de exemplo do Hello World." 
-                            >{%if framework.helloworlds.last%}{{framework.helloworlds.last.codigo_exemplo}}{%endif%}</textarea>
+                            required >{%if framework.helloworlds.last%}{{framework.helloworlds.last.codigo_exemplo}}{%endif%}</textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

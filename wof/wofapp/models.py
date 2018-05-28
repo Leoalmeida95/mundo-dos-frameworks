@@ -126,8 +126,8 @@ class Opiniao(models.Model):
         return self.nome    
 
 class Helloworld(models.Model):
-    codigo_exemplo = models.CharField(max_length=5000)
-    descricao = models.CharField(max_length=5000)
+    codigo_exemplo = models.CharField(max_length=50000)
+    descricao = models.CharField(max_length=50000)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='helloworlds')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
