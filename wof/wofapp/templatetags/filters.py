@@ -1,37 +1,31 @@
-from django import template
-from pygments import highlight
-from pygments.lexers import get_lexer_by_name, guess_lexer
-from pygments.formatters import HtmlFormatter
-from bs4 import BeautifulSoup
-
-register = template.Library()
-
-@register.filter(is_safe=True)
-def pygmentize(value):
-    try:
-        formatter = HtmlFormatter(linenos=True, noclasses=True,style='monokai')
-        tree = BeautifulSoup(unescape_html(value))
-        for code in tree.findAll('pre'):
-            if not code['id']: code['id'] = 'text'
-            try:
-                lexer = get_lexer_by_name(code['id'], stripall=True)
-            except ValueError:
-                try:
-                    lexer = guess_lexer(code['id'])
-                except ValueError:
-                    messages.error(request, 'Erro ao selecionar a linguagem')
-                    return HttpResponseRedirect(reverse('wofapp:home'))
-            result = ''.join([str(item) for item in code.contents])
-            new_content = highlight(result, lexer, formatter)
-            new_content += u"<style>%s</style>" % formatter.get_style_defs('.highlight')
-            code.replaceWith(BeautifulSoup(new_content))
-
-        return tree
-    except KeyError:
-        return value
-
-def unescape_html(html):
-    html = html.replace('&lt;', '<')
-    html = html.replace('&gt;', '>')
-    html = html.replace('&amp;', '&')
-    return html
+import re 
+import pygments 
+from django import template 
+from pygments import lexers 
+from pygments import formatters 
+ 
+register = template.Library() 
+regex = re.compile(r'<pre(.*?)>(.*?)</pre>', re.DOTALL) 
+ 
+@register.filter(is_safe=True) 
+def pygmentize(value): 
+    last_end = 0 
+    to_return = '' 
+    found = 0 
+    for match_obj in regex.finditer(value): 
+        code_class = match_obj.group(1) 
+        code_string = match_obj.group(2) 
+        if code_class.find('id'): 
+            language = re.split('id=', code_class)[1] 
+            lexer = lexers.get_lexer_by_name(language, stripall=True) 
+        else: 
+            try: 
+                lexer = lexers.guess_lexer(str(code_string)) 
+            except ValueError: 
+                lexer = lexers.PythonLexer() 
+        pygmented_string = pygments.highlight(code_string, lexer, formatters.HtmlFormatter(linenos=True, noclasses=True,style='monokai')) 
+        to_return = to_return + value[last_end:match_obj.start(0)] + pygmented_string 
+        last_end = match_obj.end(2) 
+        found = found + 1 
+    to_return = to_return + value[last_end:] 
+    return to_return 

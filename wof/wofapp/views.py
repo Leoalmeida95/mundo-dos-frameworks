@@ -311,8 +311,7 @@ def helloworld_view(request,id):
                 logger.exception("Erro ao criar Hello World.")
                 messages.error(request, 'Erro ao editar hello world. Tente novamente mais tarde.')
         else:
-            #ajeitar get do erro
-            erroMsg = form.errors[0].message
+            erroMsg = form.errors['__all__'].data[0].message
             messages.warning(request, erroMsg)
 
 

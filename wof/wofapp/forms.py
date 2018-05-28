@@ -104,9 +104,6 @@ class UserChangeForm(forms.ModelForm):
         fields = ['first_name','last_name','cpf','conta_publica','formacao','profissao', 'email','password']
 
     def clean_password(self):
-        # Regardless of what the user provides, return the initial value.
-        # This is done here, rather than on the field, because the
-        # field does not have access to the initial value
         return self.initial["password"]
 
 class AuthenticationForm(forms.Form):
@@ -243,24 +240,20 @@ class ComentarioForm(forms.ModelForm):
         return self.cleaned_data
 
 class HelloWorldForm(forms.ModelForm):
+    
     descricao = forms.CharField(required=True, 
-        widget=forms.TextInput(attrs={'id': 'descricao'}))
+        widget=forms.TextInput(attrs={'name': 'descricao'}))
     codigo_exemplo = forms.CharField(required=True, 
-        widget=forms.TextInput(attrs={'id': 'codigo_exemplo'}))
+        widget=forms.TextInput(attrs={'name': 'codigo_exemplo'}))
+
     class Meta:
         model = Helloworld
         fields = ['descricao','codigo_exemplo']
 
-    def clean_descricao(self):        
+    def clean(self):        
         descricao = self.cleaned_data.get('descricao')
-
-        if descricao is None:
-            raise forms.ValidationError('Faça um explicação sobre o código que você irá inserir.', code='texto')
-        return self.cleaned_data
-
-    def clean_codigo_exemplo(self):        
         codigo_exemplo = self.cleaned_data.get('codigo_exemplo')
 
-        if codigo_exemplo is None:
-            raise forms.ValidationError('Entre com um código de exemplo para o Hello World.', code='codigo_exemplo')
+        if descricao is None or codigo_exemplo is None:
+            raise forms.ValidationError('A descrição e o exemplo de código são obrigatórios.')
         return self.cleaned_data
