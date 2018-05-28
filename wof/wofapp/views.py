@@ -299,15 +299,21 @@ def helloworld_view(request,id):
         form = HelloWorldForm(request.POST)
         if form.is_valid():
             try:
-                hello = Helloworld() 
-                hello.descricao = request.POST['descricao']
-                hello.codigo_exemplo =codigo_exemplo=request.POST['codigo_exemplo']
-                hello.framework_id = id
-                hello.usuario_id = user.id
+                hello = Helloworld(
+                    descricao=request.POST['descricao'],
+                    codigo_exemplo=request.POST['codigo_exemplo'],
+                    framework_id=id,
+                    usuario_id=user.id
+                ) 
                 hello.save()
             except Exception:
                 logger = logging.getLogger(__name__)
                 logger.exception("Erro ao criar Hello World.")
                 messages.error(request, 'Erro ao editar hello world. Tente novamente mais tarde.')
+        else:
+            #ajeitar get do erro
+            erroMsg = form.errors[0].message
+            messages.warning(request, erroMsg)
+
 
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':id}))

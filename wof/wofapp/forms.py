@@ -243,7 +243,10 @@ class ComentarioForm(forms.ModelForm):
         return self.cleaned_data
 
 class HelloWorldForm(forms.ModelForm):
-    
+    descricao = forms.CharField(required=True, 
+        widget=forms.TextInput(attrs={'id': 'descricao'}))
+    codigo_exemplo = forms.CharField(required=True, 
+        widget=forms.TextInput(attrs={'id': 'codigo_exemplo'}))
     class Meta:
         model = Helloworld
         fields = ['descricao','codigo_exemplo']

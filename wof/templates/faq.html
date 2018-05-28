@@ -20,19 +20,23 @@
         <p class="font-weight-light mt-1">Para melhor controle do que acontece no site, todas alterações de informações dos Frameworks só podem ser feitas
             por usuários cadastrados. Com isso, o usuário estando autenticado, ele poderá:</p>
         <label class="font-weight-light">
-            1. Adiconar e editar as versões de um Framework.
+            1. Adiconar e editar as <label class="font-italic">versões</label> de um Framework.
         </label>
+        <br>
         <label class="font-weight-light">
-            2. Adicionar e editar descrição e código de exemplo para realizar um "Hello World" do Framework.
+            2. Adicionar e editar descrição e código de exemplo para realizar um <label class="font-italic">"Hello World"</label> do Framework.
         </label>
+        <br>
         <label class="font-weight-light">
-            3. Adicionar opiniões de prós e contras sobre usar determinado Framework
+            3. Adicionar <label class="font-italic">opiniões</label> de prós e contras sobre usar determinado Framework
         </label>
+        <br>
         <label class="font-weight-light">
-            4. Adicionar novos links para tutoriais de aprendizado, podendo votar quais são os melhores dentre eles.
+            4. Adicionar novos <label class="font-italic">links</label> para tutoriais de aprendizado, podendo votar quais são os melhores dentre eles.
         </label>
+        <br>
         <label class="font-weight-light">
-            5. Adicionar comentários para tirar dúvidas e dar explicações sobre determinado Framework.
+            5. Adicionar <label class="font-italic">comentários</label> para tirar dúvidas e dar explicações sobre determinado Framework.
         </label>
         <p class="font-weight-light mt-1">
             Além disso, caso o usuário perceba uma assunto inadequado adicionado a algum Framework, ele poderá denunciar aquele conteúdo,
@@ -44,23 +48,36 @@
             <b>Como denunciar um conteúdo inapropriado de um Framework?</b>
         </h4>
         <p class="font-weight-light mt-1">
-
+            Em todo Framework, cada tópico citado acima, terá o símbolo 
+            <i class="fa fa-ban  text-dark"></i> visível para o usuário quando o memso estiver autenticado. Se você
+            identificar um assunto inapropriado em algum desses tópicos, clique no símbolo que uma tela se abrirá relacionada
+            ao tópico, para que a denúncia seja realizada.            
         </p>
 
         <h4 class="font-weight-light mt-3">
             <b>Porque meu Framework favorito não está no site?</b>
         </h4>
         <p class="font-weight-light mt-1">Adorariamos saber que Framework seria esse! Apenas
-            <a href="#">envie uma sugestão</a> para nós, e deixe o resto com a gente.</p>
+            <a href="#sugestao">envie uma sugestão</a> para nós, e deixe o resto com a gente.</p>
 
         <h4 class="font-weight-light mt-3">
             <b>Quais são os critérios para decidir se algo é um "framework web"?</b>
         </h4>
-        <p class="font-weight-light mt-1">Digamos que se você puder terminar a frase "Acabei de criar esse novo aplicativo/sistema web com [insira o nome do
+        <p class="font-weight-light mt-1 mb-5">Digamos que se você puder terminar a frase "Acabei de criar esse novo aplicativo/sistema web com [insira o nome do
             framework aqui]", então ele provavelmente seria considerado uma framework web. Note que os frameworks não precisam
             ser "full-stack", eles podem ser apenas do lado do cliente ou apenas do lado do servidor. O World of Frameworks
             não inclui bibliotecas JavaScript como jQuery e MooTools, já que elas são normalmente usadas para aprimorar aplicativos
             da Web que são criados usando outro Framework.</p>
+
+        <h2 class="font-weight-light mt-3" id="sugestao">Envie uma sugestão</h2>
+        <form>
+        Email:<input type="email" name="email" class="form-control col-md-6" id="email"
+        required maxlength="60">
+        <br>
+
+        Mensagem:<textarea rows="4" class="form-control col-md-6" name="sugestao" id="sugestao"
+        required></textarea>       
+        </form>
     </div>
 </body>
-{% endblock %}
+<script src="{% static 'validacao.js' %}"></script>{% endblock %}
