@@ -222,25 +222,11 @@ def trocar_senha_view(request):
     'linguagens':Linguagem.objects.all().order_by('nome')})
 
 def frameworks_view(request,id):
-    # from django.db import connection
-    # print (len(connection.queries))
     framework = Framework.objects.get(id=id)
+    # http://www.gilenofilho.com.br/como-funciona-o-orm-do-django/
+    # sql = "wofapp_comentario_respostas.to_comentario_id in (select to_comentario_id from wofapp_comentario_respostas)"
+    # comentarios = Comentario.objects.extra(where=[sql], params=[True])
     frameworks = framework.linguagem.frameworks.all()
-    # print (len(connection.queries))
-
-    # for comentario in framework.comentarios.all():
-    #     print (comentario.texto)
-    
-    # print (len(connection.queries)) # realiza 3 queries
-
-    # testes = Framework.objects.all().filter(id=id).prefetch_related('comentarios')
-    # teste = testes.first()
-
-    # print (len(connection.queries))
-    # for comentario in teste.comentarios.all():
-    #     print (comentario.texto)
-    
-    # print (len(connection.queries))
 
     return render(request,'frameworks.html', {'lista_frameworks':frameworks,'framework':framework,
     'linguagens':Linguagem.objects.all().order_by('nome')})

@@ -3,13 +3,13 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
+    "configurations": [   
         {
             "name": "Django",
             "type": "python",
             "request": "launch",
             "stopOnEntry": false,
-            "pythonPath": "C:/Users/Leonardo/AppData/Local/Programs/Python/Python36-32/python.exe",
+            "pythonPath": "C:/Users/leonardo.silva/Python/python.exe",
             "program": "${workspaceRoot}/wof/manage.py",
             "args": [
                 "runserver",
