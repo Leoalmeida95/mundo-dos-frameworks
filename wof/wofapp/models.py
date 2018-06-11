@@ -7,6 +7,25 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
 from django.utils import timezone
 
+class Linguagem(models.Model):
+    nome = models.CharField(max_length=30)
+    
+    def __str__(self):
+        return self.nome
+
+class Framework(models.Model):
+    nome = models.CharField(max_length=30)
+    linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, null = False,related_name='frameworks')
+
+    def __str__(self):
+        return self.nome
+
+class Perfil(models.Model):
+    nome = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.nome
+
 class EmailUserManager(BaseUserManager):
     def create_user(self, *args, **kwargs):
         email = kwargs["email"]
@@ -27,12 +46,6 @@ class EmailUserManager(BaseUserManager):
         user.is_admin = True
         user.save(using=self._db)
         return user
-
-class Perfil(models.Model):
-    nome = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.nome
 
 class Usuario(PermissionsMixin, AbstractBaseUser):
     cpf = models.CharField(
@@ -62,6 +75,7 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
     profissao = models.CharField(max_length=80,null = True)
     perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, null = False,default = 1)
     data_cadastro = models.DateTimeField(default=timezone.now)
+    favoritos = models.ManyToManyField(Framework, blank=True)
 
     objects = EmailUserManager()
     USERNAME_FIELD = 'email'
@@ -103,36 +117,64 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
     def is_active(self):
         return self.is_activeUser
 
-class Linguagem(models.Model):
-    nome = models.CharField(max_length=30)
-    
-    def __str__(self):
-        return self.nome
-
-class Framework(models.Model):
-    nome = models.CharField(max_length=30)
-    linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, null = False,related_name='frameworks')
-
-    def __str__(self):
-        return self.nome
-
-class Opiniao(models.Model):
-    pro = models.CharField(max_length=800)
-    contra = models.CharField(max_length=800)
-    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False, related_name='opinioes')
+class Denuncia(models.Model):
+    data = models.DateTimeField(default=timezone.now)
+    motivo_denuncia = models.CharField(max_length=500)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
     def __str__(self):
-        return self.nome    
+        return self.motivo_denuncia
+
+class Versao(models.Model):
+    numero = models.DecimalField(default=0, max_digits=10, decimal_places=5)
+    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='versoes')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
+    denuncias = models.ManyToManyField(Denuncia, blank=True)
+
+    def __str__(self):
+        return self.numero
+
+class Funcionalidades(models.Model):
+    descricao = models.CharField(max_length=5000)
+    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='funcionalidades')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
+    versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
+    denuncias = models.ManyToManyField(Denuncia, blank=True)
+
+    def __str__(self):
+        return self.descricao
 
 class Helloworld(models.Model):
     codigo_exemplo = models.CharField(max_length=50000)
     descricao = models.CharField(max_length=50000)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='helloworlds')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
+    versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
+    denuncias = models.ManyToManyField(Denuncia, blank=True)
 
     def __str__(self):
         return self.descricao
+
+class Opiniao(models.Model):
+    texto = models.CharField(max_length=1000)
+    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False, related_name='opinioes')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
+    versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
+    denuncias = models.ManyToManyField(Denuncia, blank=True)
+    models.BooleanField(default=True)
+    eh_favoravel = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nome    
+
+class Link(models.Model):
+    path = models.CharField(max_length=800)
+    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='links')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
+    denuncias = models.ManyToManyField(Denuncia, blank=True)
+
+    def __str__(self):
+        return self.path
 
 class Comentario(models.Model):
     texto = models.CharField(max_length=1000)
@@ -140,38 +182,14 @@ class Comentario(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     data = models.DateTimeField(default=timezone.now)
     respostas = models.ManyToManyField("self",symmetrical=False)
-    
+    denuncias = models.ManyToManyField(Denuncia, blank=True)
+
     def __str__(self):
         return self.texto
-
-class Link(models.Model):
-    path = models.CharField(max_length=800)
-    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='links')
-
-    def __str__(self):
-        return self.path
-
-class Versao(models.Model):
-    numero = models.DecimalField(default=0, max_digits=10, decimal_places=5)
-    funcionalidades = models.CharField(max_length=4000)
-    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='versoes')
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
-
-    def __str__(self):
-        return self.funcionalidades
-
-
-class Denuncia(models.Model):
-    data = models.DateTimeField(default=timezone.now)
-    motivo_denuncia = models.CharField(max_length=500)
-    usuarios = models.ManyToManyField(Usuario)
-
-    def __str__(self):
-        return self.nome
 
 class Voto(models.Model):
     link = models.ForeignKey(Link, on_delete=models.CASCADE, null = False)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
     def __str__(self):
-        return self.nome
+        return self.link
