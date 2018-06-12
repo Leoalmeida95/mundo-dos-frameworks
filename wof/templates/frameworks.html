@@ -53,10 +53,10 @@
                                 <b>Versão:</b> {{versao.numero|floatformat:3}}</p>
                         </div>
 
-                        <div class="form-inline">
+                        <!-- <div class="form-inline">
                             <p class="font-weight-light">
                                 <b>Funcionalidades:</b> {{versao.funcionalidades}}</p>
-                        </div>
+                        </div> -->
 
                         {% if framework.versoes.count > 1 %}
                         <div class="form-inline">
@@ -393,25 +393,24 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        
+                    {%if framework.versoes.first is None%} <p class="font-weight-light mt-3">Primeiramente adicione a Versão do Framework o qual você deseja criar o Hallo World.</p> {%else%}
                     <div class="form-group">
                         <label for="descricao" class="col-form-label">Descrição:</label>
                         <div class="col-12">
-                            <textarea rows="7" class="form-control" name="descricao" id="descricao" 
-                            placeholder="Entre com uma descrição sobre o Hello World."
-                            required >{%if framework.helloworlds.last%}{{framework.helloworlds.last.descricao}}{%endif%}</textarea>
+                            <textarea rows="7" class="form-control" name="descricao" id="descricao" placeholder="Entre com uma descrição sobre o Hello World."
+                                required>{%if framework.helloworlds.last%}{{framework.helloworlds.last.descricao}}{%endif%}</textarea>
                         </div>
                     </div>
                     <label for="codigo_exemplo" class="col-form-label">Código:</label>
                     <div class="col-12">
-                        <textarea rows="7" class="form-control" name="codigo_exemplo" id="codigo_exemplo"
-                            placeholder="Entre com um código de exemplo do Hello World." 
-                            required >{%if framework.helloworlds.last%}{{framework.helloworlds.last.codigo_exemplo}}{%endif%}</textarea>
+                        <textarea rows="7" class="form-control" name="codigo_exemplo" id="codigo_exemplo" placeholder="Entre com um código de exemplo do Hello World."
+                            required>{%if framework.helloworlds.last%}{{framework.helloworlds.last.codigo_exemplo}}{%endif%}</textarea>
                     </div>
+                    {%endif%}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-info">Salvar</button>
+                    <button type="submit" class="btn btn-info" {%if framework.versoes.first is None%}disabled{%endif%}>Salvar</button>
                 </div>
             </div>
         </div>

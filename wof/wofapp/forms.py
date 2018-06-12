@@ -245,6 +245,8 @@ class HelloWorldForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'name': 'descricao'}))
     codigo_exemplo = forms.CharField(required=True, 
         widget=forms.TextInput(attrs={'name': 'codigo_exemplo'}))
+    versao_id = forms.CharField(required=True, 
+        widget=forms.TextInput(attrs={'name': 'versao_id'}))
 
     class Meta:
         model = Helloworld
@@ -253,7 +255,12 @@ class HelloWorldForm(forms.ModelForm):
     def clean(self):        
         descricao = self.cleaned_data.get('descricao')
         codigo_exemplo = self.cleaned_data.get('codigo_exemplo')
+        versao_id = self.cleaned_data.get('versao_id')
 
         if descricao is None or codigo_exemplo is None:
             raise forms.ValidationError('A descrição e o exemplo de código são obrigatórios.')
+        return self.cleaned_data
+
+        if versao_id is None:
+            raise forms.ValidationError('Você deve adiconar a versão do framework antes do hello world.')
         return self.cleaned_data

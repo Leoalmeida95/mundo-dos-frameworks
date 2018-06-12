@@ -223,9 +223,7 @@ def trocar_senha_view(request):
 
 def frameworks_view(request,id):
     framework = Framework.objects.get(id=id)
-    # http://www.gilenofilho.com.br/como-funciona-o-orm-do-django/
-    # sql = "wofapp_comentario_respostas.to_comentario_id in (select to_comentario_id from wofapp_comentario_respostas)"
-    # comentarios = Comentario.objects.extra(where=[sql], params=[True])
+    respostas = Comentario.objects.raw('''SELECT to_comentario_id AS id FROM wofapp_comentario_respostas''')
     frameworks = framework.linguagem.frameworks.all()
 
     return render(request,'frameworks.html', {'lista_frameworks':frameworks,'framework':framework,
@@ -289,13 +287,14 @@ def helloworld_view(request,id):
                     descricao=request.POST['descricao'],
                     codigo_exemplo=request.POST['codigo_exemplo'],
                     framework_id=id,
-                    usuario_id=user.id
+                    usuario_id=user.id,
+                    versao_id =request.POST['versao_id']
                 ) 
                 hello.save()
             except Exception:
                 logger = logging.getLogger(__name__)
-                logger.exception("Erro ao criar Hello World.")
-                messages.error(request, 'Erro ao editar hello world. Tente novamente mais tarde.')
+                logger.exception("Erro ao atualizar Hello World.")
+                messages.error(request, 'Erro ao atualizar hello world. Tente novamente mais tarde.')
         else:
             erroMsg = form.errors['__all__'].data[0].message
             messages.warning(request, erroMsg)
