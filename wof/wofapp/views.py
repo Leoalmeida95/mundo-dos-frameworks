@@ -224,10 +224,12 @@ def trocar_senha_view(request):
 def frameworks_view(request,id):
     framework = Framework.objects.get(id=id)
     respostas = Comentario.objects.raw('''SELECT to_comentario_id AS id FROM wofapp_comentario_respostas''')
+    respostas_ids = [resposta.pk for resposta in respostas]
+    comentarios = Comentario.objects.all().exclude(id__in=respostas_ids)
     frameworks = framework.linguagem.frameworks.all()
 
     return render(request,'frameworks.html', {'lista_frameworks':frameworks,'framework':framework,
-    'linguagens':Linguagem.objects.all().order_by('nome')})
+    'linguagens':Linguagem.objects.all().order_by('nome'), 'comentarios':comentarios})
 
 @login_required
 def comentario_view(request,id):
@@ -242,6 +244,7 @@ def comentario_view(request,id):
                     usuario_id = user.id
                 )
                 coment.save()
+                messages.info(request, 'Seu comentário foi enviado com sucesso.')
             except Exception:
                 logger = logging.getLogger(__name__)
                 logger.exception("Erro ao criar comentário.")

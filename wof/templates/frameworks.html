@@ -7,7 +7,8 @@
 
 <body>
     <h3>
-        <span class="badge badge-primary ml-2 mt-3">{{framework.linguagem.nome}}</span>
+        <span class="badge badge-primary ml-2 mt-3">{{framework.linguagem.nome}}</span> <i class="fa fa-star" aria-hidden="true"></i> 
+        <!-- <i class="fa fa-star-o" aria-hidden="true"></i> -->
     </h3>
     <p class="font-weight-light ml-2 mt-2 mb-4">Escolha um dos Frameworks disponíveis abaixo:</p>
 
@@ -22,6 +23,8 @@
 
     <h1 class="display-4 ml-3 mt-2">{{framework.nome}}</h1>
     <div id="accordion">
+
+
         <!--VERSÕES-->
         <div class="col-md-12 mt-3">
             <div class="card mr-2 mt-2 ml-1">
@@ -52,11 +55,6 @@
                             <p class="font-weight-light">
                                 <b>Versão:</b> {{versao.numero|floatformat:3}}</p>
                         </div>
-
-                        <!-- <div class="form-inline">
-                            <p class="font-weight-light">
-                                <b>Funcionalidades:</b> {{versao.funcionalidades}}</p>
-                        </div> -->
 
                         {% if framework.versoes.count > 1 %}
                         <div class="form-inline">
@@ -90,6 +88,37 @@
             </div>
         </div>
 
+        <!--FUNCIONALIDADES-->
+        <div class="col-md-12 mt-3">
+            <div class="card mr-2 mt-2 ml-1">
+                <div class="card-header">
+                    <div class="bg-default clearfix">
+                        <div class="float-left">
+                            <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">Funcionalidades
+                                <i class="fa fa-cubes" aria-hidden="true"></i>
+                            </h5>
+                        </div>
+                        <div class="float-right">{% if user.is_authenticated %}
+                            <label class="mr-1">[
+                                <a href="#">
+                                    <small title="adicionar link">adicionar
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    </small>
+                                </a>]</label>
+                            <a href="#">
+                                <i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i>
+                            </a>
+                            {% endif %}</div>
+                    </div>
+                </div>
+                <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+                    <div class="card-body" style="overflow-y:auto;">
+                        <p class="font-weight-light">As funcionalidades do {{framework.nome}} na versão x.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--HELLO WORLD-->
         <div class="col-md-12 mt-3">
             <div class="card mr-2 mt-2 ml-1">
@@ -115,7 +144,7 @@
                 </div>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                     <div class="card-body" style="overflow-y:auto;">
-                        <p class="font-weight-light">O hello world é um conjunto de explicações e exemplos base para saber como se inicia um projeto.</p>
+                        <p class="font-weight-light">Esse hello world representa o básico necessário para iniciar um projeto com o {{framework.nome}} na versão x.</p>
                         {%if framework.helloworlds.last%}
                         <div class="col-md-12 mt-2">
                             {{framework.helloworlds.last.descricao}}
@@ -127,6 +156,79 @@
                             de Hello World. Cadastre-se e seja o primeiro a fazer! {%endif%}</p>
                         <p class="font-weight-light">Veja um exemplo de um Hello World pronto no Framework
                             <a href="{% url 'wofapp:frameworks' 145 %}">Django</a>, da linguagem Python.{%endif%}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--OPINIÕES-->
+        <div class="col-md-12 mt-3">
+            <div class="card mr-2 mt-2 ml-1">
+                <div class="card-header">
+                    <div class="bg-default clearfix">
+                        <div class="float-left">
+                            <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Opiniões
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                            </h5>
+                        </div>
+                        <div class="float-right">{% if user.is_authenticated %}
+                            <label class="mr-1">[
+                                <a href="#">
+                                    <small title="adicionar opinião">adicionar
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    </small>
+                                </a>]</label>
+                            <a href="#">
+                                <i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i>
+                            </a>
+                            {% endif %}</div>
+                    </div>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body" style="overflow-y:auto;">
+                        <p class="font-weight-light">Prós e contras dos usuários sobre o {{framework.nome}} na versão x.</p>
+                        <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-pros-tab" data-toggle="pill" href="#pills-pros" role="tab" aria-controls="pills-pros"
+                                    aria-selected="true">Prós</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-contras-tab" data-toggle="pill" href="#pills-contras" role="tab" aria-controls="pills-contras"
+                                    aria-selected="false">Contras</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-pros" role="tabpanel" aria-labelledby="pills-pros-tab">
+                                <div class="card mt-3">
+                                    <ul>
+                                        {% for opiniao in framework.opinioes.all %}
+                                        <li class="mt-2">
+                                            {{opiniao.pro}}
+                                        </li>
+                                        {% empty %}
+                                        <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou um pró sobre este framework. Clique
+                                            no 'Adicionar' e seja o primeiro a fazer! {%else%} Ninguém adicionou um pró sobre
+                                            este framework. Cadastre-se e seja o primeiro a fazer! {%endif%}</p>
+                                        {%endfor%}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="pills-contras" role="tabpanel" aria-labelledby="pills-contras-tab">
+                                <div class="card mt-3">
+                                    <ul>
+                                        {% for opiniao in framework.opinioes.all %}
+                                        <li class="mt-1">
+                                            {{opiniao.contra}}
+                                        </li>
+                                        {% empty %}
+                                        <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou um contra sobre este framework.
+                                            Clique no 'Adicionar' e seja o primeiro a fazer! {%else%} Ninguém adicionou um
+                                            contra sobre este framework. Cadastre-se e seja o primeiro a fazer! {%endif%}
+                                        </p>{%endfor%}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -188,79 +290,6 @@
             </div>
         </div>
 
-        <!--OPINIÕES-->
-        <div class="col-md-12 mt-3">
-            <div class="card mr-2 mt-2 ml-1">
-                <div class="card-header">
-                    <div class="bg-default clearfix">
-                        <div class="float-left">
-                            <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Opiniões
-                                <i class="fa fa-users" aria-hidden="true"></i>
-                            </h5>
-                        </div>
-                        <div class="float-right">{% if user.is_authenticated %}
-                            <label class="mr-1">[
-                                <a href="#">
-                                    <small title="adicionar opinião">adicionar
-                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                    </small>
-                                </a>]</label>
-                            <a href="#">
-                                <i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i>
-                            </a>
-                            {% endif %}</div>
-                    </div>
-                </div>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                    <div class="card-body" style="overflow-y:auto;">
-                        <p class="font-weight-light">Prós e contras dos usuários sobre o {{framework.nome}}</p>
-                        <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="pills-pros-tab" data-toggle="pill" href="#pills-pros" role="tab" aria-controls="pills-pros"
-                                    aria-selected="true">Prós</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="pills-contras-tab" data-toggle="pill" href="#pills-contras" role="tab" aria-controls="pills-contras"
-                                    aria-selected="false">Contras</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-pros" role="tabpanel" aria-labelledby="pills-pros-tab">
-                                <div class="card mt-3">
-                                    <ul>
-                                        {% for opiniao in framework.opinioes.all %}
-                                        <li class="mt-2">
-                                            {{opiniao.pro}}
-                                        </li>
-                                        {% empty %}
-                                        <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou um pró sobre este framework. Clique
-                                            no 'Adicionar' e seja o primeiro a fazer! {%else%} Ninguém adicionou um pró sobre
-                                            este framework. Cadastre-se e seja o primeiro a fazer! {%endif%}</p>
-                                        {%endfor%}
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="pills-contras" role="tabpanel" aria-labelledby="pills-contras-tab">
-                                <div class="card mt-3">
-                                    <ul>
-                                        {% for opiniao in framework.opinioes.all %}
-                                        <li class="mt-1">
-                                            {{opiniao.contra}}
-                                        </li>
-                                        {% empty %}
-                                        <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou um contra sobre este framework.
-                                            Clique no 'Adicionar' e seja o primeiro a fazer! {%else%} Ninguém adicionou um
-                                            contra sobre este framework. Cadastre-se e seja o primeiro a fazer! {%endif%}
-                                        </p>{%endfor%}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!--Comentário-->
         <div class="col-md-12 mt-3">
             <div class="card mr-2 mt-2 ml-1">
@@ -271,7 +300,7 @@
                 </div>
                 <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
                     <div class="card-body">
-                        {% for comentario in framework.comentarios.all %}
+                        {% for comentario in comentarios %}
                         <form class="form" role="form" method="POST" action="/resposta/{{framework.id}}/{{comentario.id}}">
                             {% csrf_token %}
                             <div class="media comment-box">
@@ -393,7 +422,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    {%if framework.versoes.first is None%} <p class="font-weight-light mt-3">Primeiramente adicione a Versão do Framework o qual você deseja criar o Hallo World.</p> {%else%}
+                    {%if framework.versoes.first is None%}
+                    <p class="font-weight-light mt-3">Primeiramente adicione a Versão do Framework o qual você deseja criar o Hallo World.</p> {%else%}
                     <div class="form-group">
                         <label for="descricao" class="col-form-label">Descrição:</label>
                         <div class="col-12">
