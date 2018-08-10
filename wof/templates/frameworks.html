@@ -7,7 +7,8 @@
 
 <body>
     <h3>
-        <span class="badge badge-primary ml-2 mt-3">{{framework.linguagem.nome}}</span> <i class="fa fa-star" aria-hidden="true"></i> 
+        <span class="badge badge-primary ml-2 mt-3">{{framework.linguagem.nome}}</span>
+        <i class="fa fa-star" aria-hidden="true"></i>
         <!-- <i class="fa fa-star-o" aria-hidden="true"></i> -->
     </h3>
     <p class="font-weight-light ml-2 mt-2 mb-4">Escolha um dos Frameworks disponíveis abaixo:</p>
@@ -144,7 +145,8 @@
                 </div>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                     <div class="card-body" style="overflow-y:auto;">
-                        <p class="font-weight-light">Esse hello world representa o básico necessário para iniciar um projeto com o {{framework.nome}} na versão x.</p>
+                        <p class="font-weight-light">Esse hello world representa o básico necessário para iniciar um projeto com o {{framework.nome}}
+                            na versão x.</p>
                         {%if framework.helloworlds.last%}
                         <div class="col-md-12 mt-2">
                             {{framework.helloworlds.last.descricao}}
@@ -198,36 +200,30 @@
                             </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
+                            {% for opiniao in framework.opinioes.all %}
                             <div class="tab-pane fade show active" id="pills-pros" role="tabpanel" aria-labelledby="pills-pros-tab">
                                 <div class="card mt-3">
                                     <ul>
-                                        {% for opiniao in framework.opinioes.all %}
                                         <li class="mt-2">
-                                            {{opiniao.pro}}
+                                            {%if opiniao.eh_favoravel == True%} {{opiniao.texto}}
                                         </li>
-                                        {% empty %}
-                                        <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou um pró sobre este framework. Clique
-                                            no 'Adicionar' e seja o primeiro a fazer! {%else%} Ninguém adicionou um pró sobre
-                                            este framework. Cadastre-se e seja o primeiro a fazer! {%endif%}</p>
-                                        {%endfor%}
                                     </ul>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="pills-contras" role="tabpanel" aria-labelledby="pills-contras-tab">
                                 <div class="card mt-3">
                                     <ul>
-                                        {% for opiniao in framework.opinioes.all %}
                                         <li class="mt-1">
-                                            {{opiniao.contra}}
+                                            {%else%} {{opiniao.texto}}{% endif %}
                                         </li>
-                                        {% empty %}
-                                        <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou um contra sobre este framework.
-                                            Clique no 'Adicionar' e seja o primeiro a fazer! {%else%} Ninguém adicionou um
-                                            contra sobre este framework. Cadastre-se e seja o primeiro a fazer! {%endif%}
-                                        </p>{%endfor%}
                                     </ul>
                                 </div>
                             </div>
+                            {% empty %}
+                            <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou um pró sobre este framework. Clique no 'Adicionar'
+                                e seja o primeiro a fazer! {%else%} Ninguém adicionou um pró sobre este framework. Cadastre-se
+                                e seja o primeiro a fazer! {%endif%}</p>
+                            {%endfor%}
                         </div>
                     </div>
                 </div>

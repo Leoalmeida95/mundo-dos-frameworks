@@ -117,19 +117,10 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
     def is_active(self):
         return self.is_activeUser
 
-class Denuncia(models.Model):
-    data = models.DateTimeField(default=timezone.now)
-    motivo_denuncia = models.CharField(max_length=500)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
-
-    def __str__(self):
-        return self.motivo_denuncia
-
 class Versao(models.Model):
     numero = models.DecimalField(default=0, max_digits=10, decimal_places=5)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='versoes')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
-    denuncias = models.ManyToManyField(Denuncia, blank=True)
 
     def __str__(self):
         return self.numero
@@ -139,7 +130,6 @@ class Funcionalidades(models.Model):
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='funcionalidades')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
-    denuncias = models.ManyToManyField(Denuncia, blank=True)
 
     def __str__(self):
         return self.descricao
@@ -150,7 +140,6 @@ class Helloworld(models.Model):
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='helloworlds')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
-    denuncias = models.ManyToManyField(Denuncia, blank=True)
 
     def __str__(self):
         return self.descricao
@@ -160,7 +149,6 @@ class Opiniao(models.Model):
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False, related_name='opinioes')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
-    denuncias = models.ManyToManyField(Denuncia, blank=True)
     models.BooleanField(default=True)
     eh_favoravel = models.BooleanField(default=True)
 
@@ -171,7 +159,6 @@ class Link(models.Model):
     path = models.CharField(max_length=800)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False,related_name='links')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
-    denuncias = models.ManyToManyField(Denuncia, blank=True)
 
     def __str__(self):
         return self.path
@@ -182,7 +169,6 @@ class Comentario(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     data = models.DateTimeField(default=timezone.now)
     respostas = models.ManyToManyField("self",symmetrical=False)
-    denuncias = models.ManyToManyField(Denuncia, blank=True)
 
     def __str__(self):
         return self.texto
@@ -190,6 +176,19 @@ class Comentario(models.Model):
 class Voto(models.Model):
     link = models.ForeignKey(Link, on_delete=models.CASCADE, null = False)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
+
+class Denuncia(models.Model):
+    data = models.DateTimeField(default=timezone.now)
+    motivo_denuncia = models.CharField(max_length=500)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
+    comentario = models.ForeignKey(Comentario, on_delete=models.CASCADE, null = False)
+    link = models.ForeignKey(Link, on_delete=models.CASCADE, null = False)
+    helloworld = models.ForeignKey(Helloworld, on_delete=models.CASCADE, null = False)
+    funcionalidades = models.ForeignKey(Funcionalidades, on_delete=models.CASCADE, null = False)
+    versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
+    
+    def __str__(self):
+        return self.motivo_denuncia
 
     def __str__(self):
         return self.link
