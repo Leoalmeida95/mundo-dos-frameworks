@@ -1,0 +1,85 @@
+{%load filters%}
+
+<div class="col-md-12 mt-3">
+    <div class="card mr-2 mt-2 ml-1">
+        <div class="card-header">
+            <div class="bg-default clearfix">
+                <div class="float-left">
+                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Hello World
+                        <i class="fa fa-globe" aria-hidden="true"></i>
+                    </h5>
+                </div>
+                <div class="float-right">{% if user.is_authenticated %}
+                    <label class="mr-1">[
+                        <a data-toggle="modal" data-target=".bd-example-modal-lg" href="#">
+                            <small title="editar hello world">editar
+                                <i class="fa fa-pencil fa-fw"></i>
+                            </small>
+                        </a>]</label>
+                    <a href="#">
+                        <i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i>
+                    </a>
+                    {% endif %}</div>
+            </div>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body" style="overflow-y:auto;">
+                <p class="font-weight-light">Esse hello world representa o básico necessário para iniciar um projeto com o {{framework.nome}} na versão
+                    x.
+                </p>
+                {%if framework.helloworlds.last%}
+                <div class="col-md-12 mt-2">
+                    {{framework.helloworlds.last.descricao}}
+                </div>
+                <div class="col-md-12 mt-3">
+                    {%with "<pre id="|add:framework.linguagem.nome|add:">"|add:framework.helloworlds.last.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%} </div> {%else%}
+                <p class="font-weight-light">{% if user.is_authenticated %} Este framework ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
+                    e seja o primeiro a fazer! {%else%} Este framework ainda não possui nenhum exemplo de Hello World. Cadastre-se
+                    e seja o primeiro a fazer! {%endif%}</p>
+                <p class="font-weight-light">Veja um exemplo de um Hello World pronto no Framework
+                    <a href="{% url 'wofapp:frameworks' 145 %}">Django</a>, da linguagem Python.{%endif%}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<form class="form" role="form" method="POST" action="/helloworld/{{framework.id}}">
+    {% csrf_token %}
+    <div class="modal fade bd-example-modal-lg" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">
+                        <i class="fa fa-globe" aria-hidden="true"></i> Edição do Hello World</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {%if framework.versoes.first is None%}
+                    <p class="font-weight-light mt-3">Primeiramente adicione a Versão do Framework o qual você deseja criar o Hallo World.</p> {%else%}
+                    <div class="form-group">
+                        <label for="descricao" class="col-form-label">Descrição:</label>
+                        <div class="col-12">
+                            <textarea rows="7" class="form-control" name="descricao" id="descricao" placeholder="Entre com uma descrição sobre o Hello World."
+                                required>{%if framework.helloworlds.last%}{{framework.helloworlds.last.descricao}}{%endif%}</textarea>
+                        </div>
+                    </div>
+                    <label for="codigo_exemplo" class="col-form-label">Código:</label>
+                    <div class="col-12">
+                        <textarea rows="7" class="form-control" name="codigo_exemplo" id="codigo_exemplo" placeholder="Entre com um código de exemplo do Hello World."
+                            required>{%if framework.helloworlds.last%}{{framework.helloworlds.last.codigo_exemplo}}{%endif%}</textarea>
+                    </div>
+                    {%endif%}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-info" {%if framework.versoes.first is None%}disabled{%endif%}>Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- EndModal -->

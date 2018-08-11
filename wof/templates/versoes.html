@@ -1,0 +1,61 @@
+<div class="col-md-12 mt-3">
+    <div class="card mr-2 mt-2 ml-1">
+        <div class="card-header" id="headingOne">
+            <div class="bg-default clearfix">
+                <div class="float-left">
+                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Versões
+                        <i class="fa fa-shield" aria-hidden="true"></i>
+                    </h5>
+                </div>
+                <div class="float-right">{% if user.is_authenticated %}
+                    <label class="mr-1">[
+                        <a data-toggle="modal" data-target=".bd-example-modal-lg" href="#">
+                            <small title="editar hello world">editar
+                                <i class="fa fa-pencil fa-fw"></i>
+                            </small>
+                        </a>]</label>
+                    <a href="#">
+                        <i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i>
+                    </a>
+                    {% endif %}</div>
+            </div>
+        </div>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body" style="overflow-y:auto;">
+                {%for versao in framework.versoes.all%} {% if versao == framework.versoes.first%}
+                <div class="form-inline">
+                    <p class="font-weight-light">
+                        <b>Versão:</b> {{versao.numero|floatformat:3}}</p>
+                </div>
+
+                {% if framework.versoes.count > 1 %}
+                <div class="form-inline">
+                    <p class="font-weight-light mt-3">
+                        Escolha outra versão:
+                    </p>
+                    <div class="btn-group dropright ml-2">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Versões
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
+                            {%for versao in framework.versoes.all%}
+                            <a class="dropdown-item" href="#">{{versao.numero|floatformat:3}}</a>
+                            {%endfor%}
+                        </div>
+                    </div>
+                </div>
+                {% endif %} {% endif %} {% empty %} {% if user.is_authenticated %}
+                <p class="font-weight-light"> O
+                    <b>{{framework.nome}}</b> ainda não possui versões cadastradas. Clique no 'Editar' e seja o primeiro
+                    a fazer!</p>
+                {%else%}
+                <p class="font-weight-light">O
+                    <b>{{framework.nome}}</b> ainda não possui versões cadastradas. Cadastre-se e seja o primeiro a
+                    fazer!
+                </p>
+                {%endif%} {%endfor%}
+            </div>
+        </div>
+    </div>
+</div>

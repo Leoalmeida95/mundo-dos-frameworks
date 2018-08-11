@@ -1,0 +1,29 @@
+<div class="col-md-12 mt-3">
+    <div class="card mr-2 mt-2 ml-1">
+        <div class="card-header">
+            <div class="bg-default clearfix">
+                <div class="float-left">
+                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">Funcionalidades
+                        <i class="fa fa-cubes" aria-hidden="true"></i>
+                    </h5>
+                </div>
+                <div class="float-right">{% if user.is_authenticated %}
+                    <label class="mr-1">[
+                        <a href="#">
+                            <small title="adicionar link">adicionar
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            </small>
+                        </a>]</label>
+                    <a href="#">
+                        <i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i>
+                    </a>
+                    {% endif %}</div>
+            </div>
+        </div>
+        <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+            <div class="card-body" style="overflow-y:auto;">
+                <p class="font-weight-light">As funcionalidades do {{framework.nome}} na versão x.</p>
+            </div>
+        </div>
+    </div>
+</div>

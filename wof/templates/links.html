@@ -1,0 +1,54 @@
+<div class="col-md-12 mt-3">
+    <div class="card mr-2 mt-2 ml-1">
+        <div class="card-header">
+            <div class="bg-default clearfix">
+                <div class="float-left">
+                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Links
+                        <i class="fa fa-external-link" aria-hidden="true"></i>
+                    </h5>
+                </div>
+                <div class="float-right">{% if user.is_authenticated %}
+                    <label class="mr-1">[
+                        <a href="#">
+                            <small title="adicionar link">adicionar
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            </small>
+                        </a>]</label>
+                    <a href="#">
+                        <i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i>
+                    </a>
+                    {% endif %}</div>
+            </div>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+            <div class="card-body" style="overflow-y:auto;">
+                <p class="font-weight-light">Os melhores sites eleitos pelos usuários para aprendizado sobre o {{framework.nome}}</p>
+                <div class="col-md-12">
+                    <p class="font-weight-light mt-4 mb-4">
+                        <i class="fa fa-trophy" aria-hidden="true"></i> Ranking:</p>
+                    {% for link in framework.links.all %}
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="col-10 text-truncate">
+                                <a href={{link.path}}>{{link.path}}</a>
+                            </div>
+                            <span class="btn btn-primary">
+                                <i class="fa fa-thumbs-up" aria-hidden="true"></i> 14</i>
+                            </span>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {% if user.is_authenticated %}
+                            <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Clique no 'mais' e seja o primeiro a
+                                fazer!
+                            </p>
+                            {%else%}
+                            <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Cadastre-se e seja o primeiro a fazer!</p>
+                            {%endif%}
+                        </li>
+                        {%endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
