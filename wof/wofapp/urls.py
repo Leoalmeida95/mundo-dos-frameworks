@@ -17,5 +17,6 @@ urlpatterns = [
     path('frameworks/<int:id>', views.frameworks_view, name="frameworks"),
     path('comentario/<int:id>', views.comentario_view, name="comentario"),
     path('resposta/<int:fm_id>/<int:cm_id>', views.resposta_view, name="resposta"),
-    path('helloworld/<int:id>', views.helloworld_view, name="helloworld")
+    path('helloworld/<int:fm_id>/<int:vs_id>', views.helloworld_view, name="helloworld"),
+    path('versao/<int:id>', views.versao_view, name="versao"),
 ]

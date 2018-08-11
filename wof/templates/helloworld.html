@@ -11,7 +11,7 @@
                 </div>
                 <div class="float-right">{% if user.is_authenticated %}
                     <label class="mr-1">[
-                        <a data-toggle="modal" data-target=".bd-example-modal-lg" href="#">
+                        <a data-toggle="modal" data-target="#edicaoHelloWorld" href="#">
                             <small title="editar hello world">editar
                                 <i class="fa fa-pencil fa-fw"></i>
                             </small>
@@ -44,9 +44,9 @@
 </div>
 
 <!-- Modal -->
-<form class="form" role="form" method="POST" action="/helloworld/{{framework.id}}">
+<form class="form" role="form" method="POST" action="/helloworld/{{framework.id}}/{{versao_id}}">
     {% csrf_token %}
-    <div class="modal fade bd-example-modal-lg" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    <div class="modal fade" id="edicaoHelloWorld" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">

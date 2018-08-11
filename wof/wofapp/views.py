@@ -228,8 +228,14 @@ def frameworks_view(request,id):
     comentarios = Comentario.objects.all().exclude(id__in=respostas_ids)
     frameworks = framework.linguagem.frameworks.all()
 
+    versao_id = None
+    versao = framework.versoes.first()
+    if(versao is not None):
+        versao_id = versao.id
+    
     return render(request,'frameworks.html', {'lista_frameworks':frameworks,'framework':framework,
-    'linguagens':Linguagem.objects.all().order_by('nome'), 'comentarios':comentarios})
+    'linguagens':Linguagem.objects.all().order_by('nome'), 'comentarios':comentarios,
+    'versao_id':versao_id})
 
 @login_required
 def comentario_view(request,id):
@@ -280,7 +286,7 @@ def resposta_view(request,fm_id,cm_id):
 
 
 @login_required
-def helloworld_view(request,id):
+def helloworld_view(request,fm_id,vs_id):
     user = request.user
     if request.method == 'POST':
         form = HelloWorldForm(request.POST)
@@ -289,15 +295,39 @@ def helloworld_view(request,id):
                 hello = Helloworld(
                     descricao=request.POST['descricao'],
                     codigo_exemplo=request.POST['codigo_exemplo'],
-                    framework_id=id,
+                    framework_id=fm_id,
                     usuario_id=user.id,
-                    versao_id =request.POST['versao_id']
+                    versao_id =vs_id
                 ) 
                 hello.save()
             except Exception:
                 logger = logging.getLogger(__name__)
                 logger.exception("Erro ao atualizar Hello World.")
                 messages.error(request, 'Erro ao atualizar hello world. Tente novamente mais tarde.')
+        else:
+            erroMsg = form.errors['__all__'].data[0].message
+            messages.warning(request, erroMsg)
+
+
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
+@login_required
+def versao_view(request,id):
+    user = request.user
+    if request.method == 'POST':
+        form = VersaoForm(request.POST)
+        if form.is_valid():
+            try:
+                versao = Versao(
+                    numero=request.POST['numero_versao'],
+                    framework_id=id,
+                    usuario_id=user.id,
+                ) 
+                versao.save()
+            except Exception:
+                logger = logging.getLogger(__name__)
+                logger.exception("Erro ao editar Versão.")
+                messages.error(request, 'Erro ao editar Versão. Tente novamente mais tarde.')
         else:
             erroMsg = form.errors['__all__'].data[0].message
             messages.warning(request, erroMsg)

@@ -9,8 +9,8 @@
                 </div>
                 <div class="float-right">{% if user.is_authenticated %}
                     <label class="mr-1">[
-                        <a data-toggle="modal" data-target=".bd-example-modal-lg" href="#">
-                            <small title="editar hello world">editar
+                        <a data-toggle="modal" data-target="#edicaoVersoes" href="#">
+                            <small title="editar versões">editar
                                 <i class="fa fa-pencil fa-fw"></i>
                             </small>
                         </a>]</label>
@@ -47,15 +47,71 @@
                 </div>
                 {% endif %} {% endif %} {% empty %} {% if user.is_authenticated %}
                 <p class="font-weight-light"> O
-                    <b>{{framework.nome}}</b> ainda não possui versões cadastradas. Clique no 'Editar' e seja o primeiro
-                    a fazer!</p>
+                    <b>{{framework.nome}}</b> ainda não possui versões cadastradas. Clique no 'Editar' e seja o primeiro a fazer!</p>
                 {%else%}
                 <p class="font-weight-light">O
-                    <b>{{framework.nome}}</b> ainda não possui versões cadastradas. Cadastre-se e seja o primeiro a
-                    fazer!
+                    <b>{{framework.nome}}</b> ainda não possui versões cadastradas. Cadastre-se e seja o primeiro a fazer!
                 </p>
                 {%endif%} {%endfor%}
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<form class="form" role="form" method="POST" action="/versao/{{framework.id}}">
+    {% csrf_token %}
+    <div class="modal fade" id="edicaoVersoes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">
+                        <i class="fa fa-shield" aria-hidden="true"></i> Edição das Versões</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if framework.versoes.count > 1 %}
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First</th>
+                                <th scope="col">Last</th>
+                                <th scope="col">Handle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>@mdo</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Larry</td>
+                                <td>the Bird</td>
+                                <td>@twitter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {%else%} Adicione a primeira Versão do Framework:
+                    <input type="text" class="form-control" name="numero_versao" id="numero_versao" 
+                    placeholder="Ex: 1.0" required> {%endif%}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-info">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
