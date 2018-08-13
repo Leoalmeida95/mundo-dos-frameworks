@@ -123,7 +123,7 @@ class Versao(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
     def __str__(self):
-        return self.numero
+        return str(self.numero)
 
 class Funcionalidades(models.Model):
     descricao = models.CharField(max_length=5000)
@@ -189,6 +189,3 @@ class Denuncia(models.Model):
     
     def __str__(self):
         return self.motivo_denuncia
-
-    def __str__(self):
-        return self.link

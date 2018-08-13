@@ -227,15 +227,11 @@ def frameworks_view(request,id):
     respostas_ids = [resposta.pk for resposta in respostas]
     comentarios = Comentario.objects.all().exclude(id__in=respostas_ids)
     frameworks = framework.linguagem.frameworks.all()
-
-    versao_id = None
     versao = framework.versoes.first()
-    if(versao is not None):
-        versao_id = versao.id
     
     return render(request,'frameworks.html', {'lista_frameworks':frameworks,'framework':framework,
     'linguagens':Linguagem.objects.all().order_by('nome'), 'comentarios':comentarios,
-    'versao_id':versao_id})
+    'versao_selecionada':versao})
 
 @login_required
 def comentario_view(request,id):

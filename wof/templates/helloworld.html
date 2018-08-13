@@ -24,8 +24,10 @@
         </div>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
             <div class="card-body" style="overflow-y:auto;">
-                <p class="font-weight-light">Esse hello world representa o básico necessário para iniciar um projeto com o {{framework.nome}} na versão
-                    x.
+                <p class="font-weight-light">
+                    {%if versao_selecionada is not None%} Esse hello world representa o básico necessário para iniciar um projeto com o {{framework}}
+                    na versão {{versao_selecionada.numero|floatformat:3}}. {%else%} Esse hello world representa o básico
+                    necessário para iniciar um projeto com uma das versões do {{framework}}. {%endif%}
                 </p>
                 {%if framework.helloworlds.last%}
                 <div class="col-md-12 mt-2">
@@ -44,7 +46,7 @@
 </div>
 
 <!-- Modal -->
-<form class="form" role="form" method="POST" action="/helloworld/{{framework.id}}/{{versao_id}}">
+<form class="form" role="form" method="POST" action="/helloworld/{{framework.id}}/{{versao_selecionada.id}}">
     {% csrf_token %}
     <div class="modal fade" id="edicaoHelloWorld" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
@@ -59,7 +61,8 @@
                 </div>
                 <div class="modal-body">
                     {%if framework.versoes.first is None%}
-                    <p class="font-weight-light mt-3">Primeiramente adicione a Versão do Framework o qual você deseja criar o Hallo World.</p> {%else%}
+                    <p class="font-weight-light mt-3">Antes de adicionar o Hello world, adicione a Versão do Framework a qual você deseja relaciona-lo.</p>
+                    {%else%}
                     <div class="form-group">
                         <label for="descricao" class="col-form-label">Descrição:</label>
                         <div class="col-12">

@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block titulo %}{{framework.linguagem.nome}} - {{framework.nome}}{%endblock%} {%block conteudo%}
+{% extends "base.html" %} {% block titulo %}{{framework.linguagem.nome}} - {{framework}}{%endblock%} {%block conteudo%}
 {%load staticfiles%} {%load filters%}
 
 <head>
@@ -21,7 +21,7 @@
             </li> {%endfor%}
         </ul>
     </div>
-    <h1 class="display-4 ml-3 mt-2">{{framework.nome}}</h1>
+    <h1 class="display-4 ml-3 mt-2">{{framework}}</h1>
     <div id="accordion">
         <!--VERSÕES-->
         {% include "versoes.html" %}
