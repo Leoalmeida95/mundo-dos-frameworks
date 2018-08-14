@@ -67,11 +67,10 @@ WSGI_APPLICATION = 'wof.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mds',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': '14945042780',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
