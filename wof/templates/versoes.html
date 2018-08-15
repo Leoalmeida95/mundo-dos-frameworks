@@ -22,10 +22,13 @@
         </div>
         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body" style="overflow-y:auto;">
+                <div class="form-inline">
+                    <p class="font-weight-light">O <b>Hello World</b>, as <b>Funcionalidades</b> e as <b>Opiniões</b> sobre esse Framework estão relacionadas a cada Versão que ele possui.</p>
+                </div>
                 {% if versao_selecionada is not None%}
                 <div class="form-inline">
                     <p class="font-weight-light">
-                        <b>Versão do {{framework}}:</b> {{versao_selecionada.numero|floatformat:3}}</p>
+                        A Versão selecionada do {{framework}} é: <b>{{versao_selecionada.numero|floatformat:3}}</b></p>
                 </div>
                 {%else%} {% if user.is_authenticated %}
                 <p class="font-weight-light"> O
@@ -36,7 +39,7 @@
                 </p>
                 {%endif%} {%endif%} {% if framework.versoes.count > 1 %}
                 <div class="form-inline">
-                    <p class="font-weight-light mt-3">Versões disponíveis:</p>
+                    <p class="font-weight-light mt-3">Escolha uma das outras Versões disponíveis:</p>
                     <div class="btn-group dropright ml-2">
                         <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
@@ -44,7 +47,7 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
                             {%for versao in framework.versoes.all%}
-                            <a class="dropdown-item" href="#">{{versao.numero|floatformat:3}}</a>
+                            <a class="dropdown-item" href="{% url 'wofapp:trocar_versao' versao.id %}">{{versao.numero|floatformat:3}}</a>
                             {%endfor%}
                         </div>
                     </div>
@@ -72,11 +75,11 @@
                 </div>
                 <div class="modal-body">
                     {% if framework.versoes.count > 0 %}
-                    <table class="table">
+                    <table class="table text-center">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">Versão</th>
-                                <th scope="col">Remover</th>
+                                <th scope="col">Alterar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,7 +87,7 @@
                             <tr>
                                 <td>{{versao.numero|floatformat:3}}</td>
                                 <td>
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </td>
                             </tr>
                             {%endfor%}

@@ -29,12 +29,12 @@
                     na versão {{versao_selecionada.numero|floatformat:3}}. {%else%} Esse hello world representa o básico
                     necessário para iniciar um projeto com uma das versões do {{framework}}. {%endif%}
                 </p>
-                {%if framework.helloworlds.last%}
+                {%if helloworld is not None %}
                 <div class="col-md-12 mt-2">
-                    {{framework.helloworlds.last.descricao}}
+                    {{helloworld.descricao}}
                 </div>
                 <div class="col-md-12 mt-3">
-                    {%with "<pre id="|add:framework.linguagem.nome|add:">"|add:framework.helloworlds.last.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%} </div> {%else%}
+                    {%with "<pre id="|add:framework.linguagem.nome|add:">"|add:helloworld.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%} </div> {%else%}
                 <p class="font-weight-light">{% if user.is_authenticated %} Este framework ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
                     e seja o primeiro a fazer! {%else%} Este framework ainda não possui nenhum exemplo de Hello World. Cadastre-se
                     e seja o primeiro a fazer! {%endif%}</p>
@@ -67,13 +67,13 @@
                         <label for="descricao" class="col-form-label">Descrição:</label>
                         <div class="col-12">
                             <textarea rows="7" class="form-control" name="descricao" id="descricao" placeholder="Entre com uma descrição sobre o Hello World."
-                                required>{%if framework.helloworlds.last%}{{framework.helloworlds.last.descricao}}{%endif%}</textarea>
+                                required>{%if helloworld is not None%}{{helloworld.descricao}}{%endif%}</textarea>
                         </div>
                     </div>
                     <label for="codigo_exemplo" class="col-form-label">Código:</label>
                     <div class="col-12">
                         <textarea rows="7" class="form-control" name="codigo_exemplo" id="codigo_exemplo" placeholder="Entre com um código de exemplo do Hello World."
-                            required>{%if framework.helloworlds.last%}{{framework.helloworlds.last.codigo_exemplo}}{%endif%}</textarea>
+                            required>{%if helloworld is not None%}{{helloworld.codigo_exemplo}}{%endif%}</textarea>
                     </div>
                     {%endif%}
                 </div>

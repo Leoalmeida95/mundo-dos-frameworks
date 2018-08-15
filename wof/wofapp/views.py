@@ -221,17 +221,43 @@ def trocar_senha_view(request):
     return render(request, 'reset_senha_confirmacao.html', {'authorized':True,'form':form,
     'linguagens':Linguagem.objects.all().order_by('nome')})
 
-def frameworks_view(request,id):
-    framework = Framework.objects.get(id=id)
+def montar_framework(framework,versao):
+    #pega os comentários excluindo-se os que são resposta.
     respostas = Comentario.objects.raw('''SELECT to_comentario_id AS id FROM wofapp_comentario_respostas''')
     respostas_ids = [resposta.pk for resposta in respostas]
     comentarios = Comentario.objects.all().exclude(id__in=respostas_ids)
+
     frameworks = framework.linguagem.frameworks.all()
+    helloworlds = framework.helloworlds.all().filter(versao=versao)
+    funcionalidades = framework.funcionalidades.all().filter(versao=versao)
+    opinioes = framework.opinioes.all().filter(versao=versao)
+    args = {}
+
+    args['lista_frameworks'] = frameworks
+    args['framework'] = framework
+    args['linguagens'] = Linguagem.objects.all().order_by('nome')
+    args['comentarios'] = comentarios
+    args['versao_selecionada'] = versao
+    args['helloworld'] = helloworlds.last()
+ 
+    return args
+
+
+def frameworks_view(request,id_fram):
+    framework = Framework.objects.get(id=id_fram)
     versao = framework.versoes.first()
+    args = {}
+    args = montar_framework(framework,versao)
     
-    return render(request,'frameworks.html', {'lista_frameworks':frameworks,'framework':framework,
-    'linguagens':Linguagem.objects.all().order_by('nome'), 'comentarios':comentarios,
-    'versao_selecionada':versao})
+    return render(request,'frameworks.html', args)
+
+def trocar_versao(request,id_versao):
+    versao = Versao.objects.get(id=id_versao)
+    framework = versao.framework
+    args = {}
+    args = montar_framework(framework,versao)
+    
+    return render(request,'frameworks.html', args)
 
 @login_required
 def comentario_view(request,id):
