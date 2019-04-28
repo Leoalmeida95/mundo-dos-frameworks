@@ -7,8 +7,8 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from wofapp.models import *
 from wofapp.forms import *
 
-admin.site.site_title = 'WOF'
-admin.site.site_header = 'Administração - WOF'
+admin.site.site_title = 'Mundo dos Frameworks'
+admin.site.site_header = 'Administração - Mundo dos Frameworks'
 admin.site.index_title = 'Ambiente de administração do site'
 
 class LinguagemAdmin(admin.ModelAdmin):
@@ -25,32 +25,25 @@ class FrameworkmAdmin(admin.ModelAdmin):
     search_fields = ['nome',]
     save_on_top = True
 
-class PerfilAdmin(admin.ModelAdmin):
-    model = Perfil
-    list_display = ['nome']
-    list_filter = ['nome']
-    search_fields = ['nome',]
-    save_on_top = True
-
 class UsuarioAdmin(BaseUserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
-    add_form = UserCreationForm
+    add_form = CustomUserCreationForm
 
     model = Usuario
-    list_display = ['email','last_name','is_admin']
+    list_display = ['email','primeiro_nome','ultimo_nome','administrador']
     list_filter = ['email']
-    search_fields = ['email','first_name']
+    search_fields = ['email','primeiro_nome', 'cpf']
     save_on_top = True
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Informação Pessoal', {'fields': ('first_name','last_name','cpf','conta_publica','formacao','profissao',)}),
-        ('Permissão', {'fields': ('is_admin','is_activeUser')}),
+        ('Informação Pessoal', {'fields': ('primeiro_nome','ultimo_nome','cpf','conta_publica','formacao','profissao',)}),
+        ('Permissão', {'fields': ('administrador','ativo')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email','first_name','last_name','cpf','conta_publica','formacao','profissao', 'password1', 'password2')}
+            'fields': ('email','primeiro_nome','ultimo_nome','cpf','conta_publica','formacao','profissao', 'password1', 'password2')}
         ),
     )
     ordering = ('email',)
@@ -58,7 +51,6 @@ class UsuarioAdmin(BaseUserAdmin):
 
 admin.site.register(Linguagem,LinguagemAdmin)
 admin.site.register(Framework,FrameworkmAdmin)
-admin.site.register(Perfil,PerfilAdmin)
 admin.site.register(Usuario,UsuarioAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.

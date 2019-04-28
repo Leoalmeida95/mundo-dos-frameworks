@@ -25,7 +25,7 @@
             <div class="row mt-3">
                 <div class="col-md-3 field-label-responsive">
                     <span style="color:red">*</span>
-                    <label for="first_name">Nome</label>
+                    <label for="primeiro_nome">Nome</label>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
@@ -33,7 +33,7 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-user"></i>
                             </div>
-                            <input type="text" id="first_name" value="{{ form.first_name.value }}" name="first_name" class="form-control" placeholder="Leonardo"
+                            <input type="text" id="primeiro_nome" value="{{ form.primeiro_nome.value }}" name="primeiro_nome" class="form-control" placeholder="Leonardo"
                                 required onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false"
                                 maxlength="50">
                         </div>
@@ -42,7 +42,7 @@
             </div>
             <div class="form-control-feedback">
                 <small class="text-danger text-center">
-                    {{ form.first_name.errors }}
+                    {{ form.primeiro_nome.errors }}
                 </small>
             </div>
             <div class="row">
@@ -56,7 +56,7 @@
                             <div class="mt-2" style="width: 2.6rem">
                                 <i class="fa fa-user-o" aria-hidden="true"></i>
                             </div>
-                            <input type="text" value="{{ form.last_name.value }}" name="last_name" class="form-control" id="last_name" placeholder="Almeida"
+                            <input type="text" value="{{ form.ultimo_nome.value }}" name="ultimo_nome" class="form-control" id="ultimo_nome" placeholder="Almeida"
                                 required onKeyPress="return validaLetras(event);" onpaste="return false" ondrop="return false"
                                 maxlength="50">
                         </div>
@@ -65,7 +65,7 @@
             </div>
             <div class="form-control-feedback">
                 <small class="text-danger text-center">
-                    {{ form.last_name.errors }}
+                    {{ form.ultimo_nome.errors }}
                 </small>
             </div>
             <div class="row">

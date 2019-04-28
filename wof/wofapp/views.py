@@ -8,6 +8,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
+from django.db.models import Avg, Count
 import logging
 
 from .fusioncharts import FusionCharts
@@ -16,7 +17,8 @@ from .forms import *
 from .models import *
 
 def chart_view(request):
-    linguagens = Linguagem.objects.all().order_by('nome')
+    #pega as linguagens que possuem pelo menos 1 framework
+    linguagens = Linguagem.objects.annotate(num_frameworks=Count('framework')).filter(num_frameworks__gt=0)
     top_linguagens = linguagens[:5]
     frameworks = Framework.objects.all().order_by('nome')[:10]
 
@@ -112,7 +114,7 @@ def registrar_usuario_view(request):
         if form.is_valid():
             try:
                 user = form.save(commit=False)
-                user.is_activeUser = False
+                user.ativo = False
                 user.save()
                 form.enviar_email(user,request=request)
                 messages.info(request, 'Muito bem! Agora para concluir seu registro, por favor confirme sua conta no email que enviamos pra você.')
@@ -138,7 +140,7 @@ def ativar_conta_view(request, uidb64=None, token=None):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
-        user.is_activeUser = True
+        user.ativo = True
         user.save()
         login(request, user)
         messages.info(request, 'Parabéns, registro concluído com sucesso.')
@@ -187,6 +189,8 @@ def reset_senha_confirmacao_view(request, uidb64=None, token=None):
 @login_required
 def atualizar_usuario_view(request):
     user = request.user
+    user.profissao = "" if user.profissao is None else user.profissao
+    user.formacao = "" if user.formacao  is None else user.formacao 
     if request.method == 'POST':
         POST = request.POST.copy()
         POST['cpf'] = user.cpf
@@ -317,7 +321,6 @@ def helloworld_view(request,fm_id,vs_id):
                 hello = Helloworld(
                     descricao=request.POST['descricao'],
                     codigo_exemplo=request.POST['codigo_exemplo'],
-                    framework_id=fm_id,
                     usuario_id=user.id,
                     versao_id =vs_id
                 ) 

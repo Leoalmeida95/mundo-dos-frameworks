@@ -24,10 +24,10 @@ class CustomUserCreationForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={'id': 'password1'}))
     password2 = forms.CharField(label='password2',required=True, 
         widget=forms.PasswordInput(attrs={'id': 'password2'}))
-    first_name = forms.CharField(label='first_name',required=True, 
-        widget=forms.TextInput(attrs={'id': 'first_name'}))
-    last_name = forms.CharField(label='last_name',required=True, 
-        widget=forms.TextInput(attrs={'id': 'last_name'}))
+    primeiro_nome = forms.CharField(label='primeiro_nome',required=True, 
+        widget=forms.TextInput(attrs={'id': 'primeiro_nome'}))
+    ultimo_nome = forms.CharField(label='ultimo_nome',required=True, 
+        widget=forms.TextInput(attrs={'id': 'ultimo_nome'}))
     cpf = forms.CharField(label='cpf',required=True, widget=forms.TextInput(attrs={'id': 'cpf'}))
     conta_publica = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, initial = True)
     formacao = forms.CharField(label='formacao',required=False, 
@@ -37,7 +37,7 @@ class CustomUserCreationForm(UserCreationForm):
     email = forms.CharField(label='email',required=True, widget=forms.TextInput(attrs={'id': 'email'}))
     class Meta:
         model = Usuario
-        fields = ['first_name','last_name','cpf','conta_publica','formacao','profissao', 'email','password1','password2']
+        fields = ['primeiro_nome','ultimo_nome','cpf','conta_publica','formacao','profissao', 'email','password1','password2']
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -49,19 +49,19 @@ class CustomUserCreationForm(UserCreationForm):
         
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        username = self.cleaned_data.get('first_name')
+        username = self.cleaned_data.get('primeiro_nome')
  
-        if email and Usuario.objects.filter(email=email).exclude(first_name=username).count():
+        if email and Usuario.objects.filter(email=email).exclude(primeiro_nome=username).count():
             raise forms.ValidationError("Este email já está em uso, por favor escolha outro.")
         return email
     
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
-        username = self.cleaned_data.get('first_name')
+        username = self.cleaned_data.get('primeiro_nome')
 
-        if cpf and Usuario.objects.filter(cpf=cpf).exclude(first_name=username).count():
+        if cpf and Usuario.objects.filter(cpf=cpf).exclude(primeiro_nome=username).count():
             raise forms.ValidationError("Este CPF já está em uso, por favor verifique se foi digitado corretamente.")
-        elif CpfValido().validate(self.cleaned_data.get('cpf')):
+        elif CpfValido().validate(cpf):
             raise forms.ValidationError("Número de CPF inválido.")
         return cpf
 
@@ -88,10 +88,10 @@ class CustomUserCreationForm(UserCreationForm):
 class UserChangeForm(forms.ModelForm):
 
     password = ReadOnlyPasswordHashField(label='password')
-    first_name = forms.CharField(label='first_name',required=True, 
-        widget=forms.TextInput(attrs={'id': 'first_name'}))
-    last_name = forms.CharField(label='last_name',required=True, 
-        widget=forms.TextInput(attrs={'id': 'last_name'}))
+    primeiro_nome = forms.CharField(label='primeiro_nome',required=True, 
+        widget=forms.TextInput(attrs={'id': 'primeiro_nome'}))
+    ultimo_nome = forms.CharField(label='ultimo_nome',required=True, 
+        widget=forms.TextInput(attrs={'id': 'ultimo_nome'}))
     cpf = forms.CharField(label='cpf',required=True, widget=forms.TextInput(attrs={'id': 'cpf'}))
     conta_publica = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
     formacao = forms.CharField(label='formacao',required=False, 
@@ -101,7 +101,7 @@ class UserChangeForm(forms.ModelForm):
     email = forms.CharField(label='email',required=True, widget=forms.TextInput(attrs={'id': 'email'}))
     class Meta:
         model = Usuario
-        fields = ['first_name','last_name','cpf','conta_publica','formacao','profissao', 'email','password']
+        fields = ['primeiro_nome','ultimo_nome','cpf','conta_publica','formacao','profissao', 'email','password']
 
     def clean_password(self):
         return self.initial["password"]
@@ -129,7 +129,7 @@ class AuthenticationForm(forms.Form):
         return self.cleaned_data
 
     def confirm_login_allowed(self, user):
-        if not user.is_activeUser:
+        if not user.ativo:
             raise forms.ValidationError(
                 'Sua conta não está ativa. Por favor, verifique seu email para completar seu registro.',
                 code='Essa conta está inativa.') 
@@ -140,7 +140,7 @@ class PasswordResetForm(forms.Form):
     def clean(self):
         email = self.cleaned_data["email"]
         active_users = get_user_model()._default_manager.filter(
-            email=email, is_activeUser=True)
+            email=email, ativo=True)
 
         if active_users:
             self.user_cache = active_users
