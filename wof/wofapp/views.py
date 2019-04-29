@@ -231,25 +231,26 @@ def montar_framework(framework,versao):
     respostas_ids = [resposta.pk for resposta in respostas]
     comentarios = Comentario.objects.all().exclude(id__in=respostas_ids)
 
-    frameworks = framework.linguagem.frameworks.all()
-    helloworlds = framework.helloworlds.all().filter(versao=versao)
-    funcionalidades = framework.funcionalidades.all().filter(versao=versao)
-    opinioes = framework.opinioes.all().filter(versao=versao)
+    linguagens = Linguagem.objects.all().order_by('nome')
+    frameworks = linguagens.filter(id=framework.id).first().framework_set.all()
+    #helloworld = framework.versao_set.first().helloworld
+    #funcionalidades = framework.versao_set.first().funcionalidade_set
+    #opinioes = framework.versao_set..first().opiniao.all().filter(versao=versao)
     args = {}
 
     args['lista_frameworks'] = frameworks
     args['framework'] = framework
-    args['linguagens'] = Linguagem.objects.all().order_by('nome')
+    args['linguagens'] = linguagens
     args['comentarios'] = comentarios
     args['versao_selecionada'] = versao
-    args['helloworld'] = helloworlds.last()
+    #args['helloworld'] = helloworld
  
     return args
 
 
 def frameworks_view(request,id_fram):
     framework = Framework.objects.get(id=id_fram)
-    versao = framework.versoes.first()
+    versao = framework.versao_set.first()
     args = {}
     args = montar_framework(framework,versao)
     

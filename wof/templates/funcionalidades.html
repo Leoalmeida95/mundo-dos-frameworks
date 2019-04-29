@@ -22,12 +22,10 @@
         </div>
         <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
             <div class="card-body" style="overflow-y:auto;">
-                {%if framework.funcionalidades is not None%}
-                <p class="font-weight-light">{%if versao_selecionada is not None%}Funcionalidades do {{framework}} na versão {{versao_selecionada.numero|floatformat:3}}.
-                    {%else%} Funcionalidades do {{framework}} em suas versões. {%endif%}
-                </p>
-                {%else%}
                 <p class="font-weight-light">
+                {%if versao_selecionada is not None and versao_selecionada.funcionalidades is not None%}
+                Funcionalidades do {{framework}} na versão {{versao_selecionada.numero|floatformat:3}}.
+                {%else%}
                     {% if user.is_authenticated %} Este framework ainda não possui funcionalidades registradas. Clique no 'Adicionar' e seja
                     o primeiro a fazer! {%else%} Este framework ainda não possui funcionalidades registradas. Cadastre-se
                     e seja o primeiro a fazer! {%endif%}
