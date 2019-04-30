@@ -10,10 +10,11 @@
                 <div class="float-right">{% if user.is_authenticated %}
                     <label class="mr-1">[
                         <a href="#">
-                            <small title="adicionar funcionalidades">adicionar
-                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            <small title="editar funcionalidades">editar
+                                <i class="fa fa-pencil fa-fw"></i>
                             </small>
-                        </a>]</label>
+                        </a>]
+                    </label>
                     <a href="#">
                         <i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i>
                     </a>
@@ -26,7 +27,7 @@
                 {%if versao_selecionada is not None and versao_selecionada.funcionalidades is not None%}
                 Funcionalidades do {{framework}} na versão {{versao_selecionada.numero|floatformat:3}}.
                 {%else%}
-                    {% if user.is_authenticated %} Este framework ainda não possui funcionalidades registradas. Clique no 'Adicionar' e seja
+                    {% if user.is_authenticated %} Este framework ainda não possui funcionalidades registradas. Clique no 'Editar' e seja
                     o primeiro a fazer! {%else%} Este framework ainda não possui funcionalidades registradas. Cadastre-se
                     e seja o primeiro a fazer! {%endif%}
                 </p>

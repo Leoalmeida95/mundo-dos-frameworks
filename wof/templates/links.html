@@ -10,10 +10,11 @@
                 <div class="float-right">{% if user.is_authenticated %}
                     <label class="mr-1">[
                         <a href="#">
-                            <small title="adicionar link">adicionar
-                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            <small title="editar links">editar
+                                <i class="fa fa-pencil fa-fw"></i>
                             </small>
-                        </a>]</label>
+                        </a>]
+                    </label>
                     <a href="#">
                         <i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i>
                     </a>
@@ -39,7 +40,7 @@
                         {% empty %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             {% if user.is_authenticated %}
-                            <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Clique no 'mais' e seja o primeiro a
+                            <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Clique no 'Editar' e seja o primeiro a
                                 fazer!
                             </p>
                             {%else%}
