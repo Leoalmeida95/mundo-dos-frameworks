@@ -43,11 +43,11 @@
 							<div class="row">
 								{%for lg in linguagens_combo %} {% if lg.id|divisibleby:"2" %}
 								<div class="col-sm-6 col-md-x">
-									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.obter_id_primeiro_framework %}">{{lg.nome}}</a>
+									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.framework_set.first.id %}">{{lg.nome}}</a>
 								</div>
 								{% else %}
 								<div class="col-sm-6 col-md-x">
-									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.obter_id_primeiro_framework %}">{{lg.nome}}</a>
+									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.framework_set.first.id %}">{{lg.nome}}</a>
 								</div>
 								{%endif%} {% endfor %}
 							</div>

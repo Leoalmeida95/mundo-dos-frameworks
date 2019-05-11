@@ -229,16 +229,16 @@ def montar_framework(framework,versao):
     args = {}
     args['framework'] = framework
     args['versao_selecionada'] = versao
+    args['ultimo_helloworld'] = versao.helloworld_set.last() if versao is not None else None
     args['lista_frameworks'] = Linguagem.obter_frameworks_linguagem(framework.linguagem_id)
     args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
     args['comentarios'] = Comentario.obter_somente_comentarios()
-    args['ultimo_helloworld'] = versao.obter_ultimo_helloWorld() if versao is not None else None
  
     return args
 
 def frameworks_view(request,id):
     framework = Framework.obter_framework_por_id(id)
-    versao = framework.obter_ultima_versao()
+    versao = framework.versao_set.last()
     args = montar_framework(framework,versao)
     
     return render(request,'frameworks.html', args)

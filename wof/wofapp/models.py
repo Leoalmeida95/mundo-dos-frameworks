@@ -142,9 +142,6 @@ class Linguagem(models.Model):
     def obter_frameworks_linguagem(fm_id):
         return Linguagem.objects.filter(id=fm_id).first().framework_set.all()
 
-    def obter_id_primeiro_framework(self):
-        return self.framework_set.first().id
-
 class Framework(models.Model):
     nome = models.CharField(max_length=30)
     linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, null = False)
@@ -162,22 +159,6 @@ class Framework(models.Model):
     def obter_framework_por_id(id):
         return Framework.objects.get(id=id)
 
-    def obter_ultima_versao(self):
-        if self.versao_set is not None:
-            return self.versao_set.last()
-        else:
-            return None
-
-    def obter_quantidade_versoes(self):
-        return self.versao_set.count
-
-    def obter_versoes(self):
-        if self.versao_set is not None:
-            return self.versao_set.all()
-        else:
-            return None
-
-
 class Versao(models.Model):
     numero = models.DecimalField(default=0, max_digits=10, decimal_places=3)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
@@ -189,25 +170,6 @@ class Versao(models.Model):
     @staticmethod
     def obter_versao_por_id(id):
         return Versao.objects.get(id=id)
-        
-    def obter_ultimo_helloWorld(self):
-        if self.helloworld_set is not None:
-            return self.helloworld_set.last()
-        else:
-            return None
-
-    def obter_funcionalidades(self):
-        if self.funcionalidade_set is not None:
-            return self.funcionalidade_set.all()
-        else:
-            return None
-
-    def obter_opinioes(self):
-        if self.opiniao_set is not None:
-            return self.opiniao_set.all()
-        else:
-            return None
-
 
 class Funcionalidade(models.Model):
     descricao = models.CharField(max_length=5000)

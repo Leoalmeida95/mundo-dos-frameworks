@@ -38,7 +38,7 @@
                 </ul>
                 {%if versao_selecionada is not None%} 
                 <div class="tab-content" id="pills-tabContent">
-                    {% for opiniao in versao_selecionada.obter_opinioes %}
+                    {% for opiniao in versao_selecionada.opiniao_set.all %}
                     <div class="tab-pane fade show active" id="pills-pros" role="tabpanel" aria-labelledby="pills-pros-tab">
                         <div class="card mt-3">
                             <ul>
