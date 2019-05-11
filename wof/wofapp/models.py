@@ -142,6 +142,11 @@ class Linguagem(models.Model):
     def obter_frameworks_linguagem(fm_id):
         return Linguagem.objects.filter(id=fm_id).first().framework_set.all()
 
+    @staticmethod
+    def verifica_nome(nome):
+        m = Linguagem.objects.filter(nome=nome).first()
+        return m
+
 class Framework(models.Model):
     nome = models.CharField(max_length=30)
     linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, null = False)

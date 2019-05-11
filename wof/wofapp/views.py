@@ -347,3 +347,29 @@ def versao_view(request,fm_id):
             messages.warning(request, erroMsg)
 
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
+@login_required
+def nova_linguagem(request):
+    args = {}
+    user = request.user
+    if request.method == 'POST':
+        form = LinguagemForm(request.POST)
+        args['form'] = form
+        if form.is_valid():
+            try:
+                linguagem = Linguagem(
+                    nome=request.POST['nome'],
+                    usuario_id=user.id,
+                ) 
+                linguagem.save()
+                messages.info(request, 'Linguagem registrada com sucesso!')
+            except Exception:
+                logger = logging.getLogger(__name__)
+                logger.exception("Erro ao editar Versão.")
+                messages.error(request, 'Erro ao adicionar a Linguagem. Tente novamente mais tarde.')
+        else:
+            erroMsg = form.errors['__all__'].data[0].message
+            messages.warning(request, erroMsg)
+
+    args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
+    return render(request,'faq.html',args)

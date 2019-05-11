@@ -9,7 +9,6 @@
             "type": "python",
             "request": "launch",
             "stopOnEntry": false,
-            "pythonPath": "C:/Users/leonardo.silva/Python/python.exe",
             "program": "${workspaceRoot}/wof/manage.py",
             "args": [
                 "runserver",

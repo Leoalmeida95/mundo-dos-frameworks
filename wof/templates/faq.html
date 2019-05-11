@@ -18,30 +18,39 @@
             <b>Como posso alterar dados de um Framework?</b>
         </h4>
         <p class="font-weight-light mt-1">Para melhor controle do que acontece no site, todas alterações de informações dos Frameworks só podem ser feitas
-            por usuários cadastrados no sistema. Logo, o usuário que tiver se registrado e estiver autenticado com sua conta poderá:</p>
+            por usuários cadastrados no sistema, sempre com o intuito de incluir novos conteúdos e melhorar o existente. Dessa forma, o usuário que tiver 
+            se registrado e estiver autenticado com sua conta poderá editar os seguintes conteúdos:</p>
         <label class="font-weight-light">
-            1. Adiconar e editar as
-            <label class="font-italic">versões</label> de um Framework.
+            1. Novas <label class="font-italic">linguagens de progrmação</label> o qual desejam aprender.
         </label>
         <br>
         <label class="font-weight-light">
-            2. Adicionar e editar descrição e código de exemplo para realizar um
-            <label class="font-italic">"Hello World"</label> do Framework.
+            2. Novos <label class="font-italic">frameworks</label> que forem lançados de uma Linguagem.
         </label>
         <br>
         <label class="font-weight-light">
-            3. Adicionar
-            <label class="font-italic">opiniões</label> de prós e contras sobre usar determinado Framework
+            3. <label class="font-italic">Versões</label> disponíveis de um Framework.
         </label>
         <br>
         <label class="font-weight-light">
-            4. Adicionar novos
-            <label class="font-italic">links</label> para tutoriais de aprendizado, podendo votar quais são os melhores dentre eles.
+            4. <label class="font-italic">Funcionalidades</label> de uma versão de um dos Frameworks.
         </label>
         <br>
         <label class="font-weight-light">
-            5. Adicionar
-            <label class="font-italic">comentários</label> para tirar dúvidas e dar explicações sobre determinado Framework.
+            5. Descrição e código de exemplo para realizar um <label class="font-italic">"Hello World"</label> de uma versão de um Framework.
+        </label>
+        <br>
+        <label class="font-weight-light">
+            6. <label class="font-italic">Opiniões</label> de vantagens e desvantagens sobre usar determinada versão do Framework.
+        </label>
+        <br>
+        <label class="font-weight-light">
+            7. <label class="font-italic">Links</label> para tutoriais de aprendizado, podendo votar quais são os melhores dentre eles.
+        </label>
+        <br>
+        <label class="font-weight-light">
+            8. <label class="font-italic">Comentários</label> para tirar dúvidas e dar explicações sobre determinado Framework, e ainda
+            responder comentários e dúvidas de demais usuários.
         </label>
         <p class="font-weight-light mt-1">
             Além disso, caso o usuário perceba uma assunto inadequado adicionado a algum Framework, ele poderá denunciar aquele conteúdo,
@@ -60,10 +69,26 @@
         </p>
 
         <h4 class="font-weight-light mt-3">
+            <b>O que é uma "Hello World"?</b>
+        </h4>
+        <p class="font-weight-light mt-1">
+            Na programação, o "Hello World" ou "Olá Mundo" é o primeiro passo a ser dado por uma pessoa que está aprendendo
+            uma nova Linguagem de Programação ou Framework. Ele se resume no mínimo necessário para que aquela determinada tecnologia
+            funcione e "imprima" algo na tela. Assim, o Hello World no sistema representa o código básico que é preciso para que
+            um determinado Framework funcione.
+        </p>
+
+        <h4 class="font-weight-light mt-3">
             <b>Porque meu Framework favorito não está no site?</b>
         </h4>
         <p class="font-weight-light mt-1">Adorariamos saber que Framework seria esse! Apenas
-            <a href="#sugestao">envie uma sugestão</a> para nós, e deixe o resto com a gente.</p>
+        selecione qual Linguagem esse framework pertence e clique em "Adiconar novo Framework" para adicioná-la.</p>
+
+        <h4 class="font-weight-light mt-3">
+            <b>E as Linguagens de Programação? Cade aquela que lançou semana passada?</b>
+        </h4>
+        <p class="font-weight-light mt-1">Opa, não estamos sabendo dessa ai não!! :O <a data-toggle="modal" data-target="#addLinguagem" href="#">Clique aqui</a>
+        e adicione ela agora mesmo!</p>
 
         <h4 class="font-weight-light mt-3">
             <b>Quais são os critérios para decidir se algo é um "framework web"?</b>
@@ -73,19 +98,37 @@
             ser "full-stack", eles podem ser apenas do lado do cliente ou apenas do lado do servidor. O Mundo dos Frameworks
             não inclui bibliotecas JavaScript como jQuery e MooTools, já que elas são normalmente usadas para aprimorar aplicativos
             da Web que são criados usando outro Framework.</p>
-
-        <h2 class="font-weight-light mt-3" id="sugestao">Envie uma sugestão</h2>
-        <form>
-            Email:
-            <input type="email" name="email" class="form-control col-md-6" id="email" required maxlength="60">
-            <br> Mensagem:
-
-            <textarea rows="4" class="form-control col-md-6" name="sugestao" id="sugestao" required></textarea>
-
-            <div class="col-md-6 text-right">
-                <input type="submit" class="btn btn-dark mt-3" value="Enviar">
-            </div>
-        </form>
     </div>
+
+<!-- Modal -->
+<form class="form" role="form" method="POST" action="/nova_linguagem/">
+    {% csrf_token %}
+    <div class="modal fade" id="addLinguagem" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">
+                        <i class="fa fa-code" aria-hidden="true"></i> Nova Linguagem de Programação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                {% if user.is_authenticated %}
+                <p class="font-weight-light mt-1">Insira uma nova Linguagem que ainda não está no sistema, é só entrar com o nome! :)</p>
+                    <input type="text" class="form-control" name="nome" id="nome" placeholder="Ex: Go" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Salvar</button>
+                </div>
+                {%else%}
+                <p class="font-weight-light mt-1">Para poder Adicionar a Linguagem é preciso se autenticar! ;)</p>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+</form>
+
+
 </body>
 <script src="{% static 'validacao.js' %}"></script>{% endblock %}

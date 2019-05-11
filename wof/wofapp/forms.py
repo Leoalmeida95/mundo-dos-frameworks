@@ -44,7 +44,7 @@ class CustomUserCreationForm(UserCreationForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("As senhas não são iguais.")
+            raise forms.ValidationError('As senhas não são iguais.')
         return password2
         
     def clean_email(self):
@@ -52,7 +52,7 @@ class CustomUserCreationForm(UserCreationForm):
         username = self.cleaned_data.get('primeiro_nome')
  
         if email and Usuario.verifica_email_valido(email,username):
-            raise forms.ValidationError("Este email já está em uso, por favor escolha outro.")
+            raise forms.ValidationError('Este email já está em uso, por favor escolha outro.')
         return email
     
     def clean_cpf(self):
@@ -60,9 +60,9 @@ class CustomUserCreationForm(UserCreationForm):
         username = self.cleaned_data.get('primeiro_nome')
 
         if cpf and Usuario.verifica_cpf_valido(cpf,username):
-            raise forms.ValidationError("Este CPF já está em uso, por favor verifique se foi digitado corretamente.")
+            raise forms.ValidationError('Este CPF já está em uso, por favor verifique se foi digitado corretamente.')
         elif CpfValido().validate(cpf):
-            raise forms.ValidationError("Número de CPF inválido.")
+            raise forms.ValidationError('Número de CPF inválido.')
         return cpf
 
     def save(self, commit=True):
@@ -211,7 +211,7 @@ class SetPasswordForm(UserCreationForm):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("As senhas não são iguais.")
+            raise forms.ValidationError('As senhas não são iguais.')
 
         return self.cleaned_data
 
@@ -272,4 +272,22 @@ class VersaoForm(forms.ModelForm):
 
         if numero_versao is None:
             raise forms.ValidationError('O Número da Versão é obrigatório.')
+        return self.cleaned_data
+
+class LinguagemForm(forms.ModelForm):
+    
+    nome = forms.CharField(required=True, 
+        widget=forms.TextInput(attrs={'name': 'nome'}))
+
+    class Meta:
+        model = Linguagem
+        fields = ['nome']
+
+    def clean(self):        
+        nome = self.cleaned_data.get('nome')
+
+        if nome is None:
+            raise forms.ValidationError('O nome é obrigatório.')
+        elif Linguagem.verifica_nome(nome):
+            raise forms.ValidationError('Essa Linguagem já está registrada no sistema.')
         return self.cleaned_data

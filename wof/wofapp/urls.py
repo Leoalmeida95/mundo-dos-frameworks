@@ -20,4 +20,5 @@ urlpatterns = [
     path('resposta/<int:fm_id>/<int:cm_id>', views.resposta_view, name="resposta"),
     path('helloworld/<int:fm_id>/<int:vs_id>', views.helloworld_view, name="helloworld"),
     path('versao/<int:fm_id>', views.versao_view, name="versao"),
+    path('nova_linguagem/', views.nova_linguagem, name="nova_linguagem"),
 ]
