@@ -144,8 +144,11 @@ class Linguagem(models.Model):
 
     @staticmethod
     def verifica_nome(nome):
-        m = Linguagem.objects.filter(nome=nome).first()
-        return m
+        return Linguagem.objects.filter(nome=nome).first()
+    
+    @staticmethod
+    def obter_linguagens():
+        return Linguagem.objects.all()
 
 class Framework(models.Model):
     nome = models.CharField(max_length=30)

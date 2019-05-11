@@ -81,14 +81,15 @@
         <h4 class="font-weight-light mt-3">
             <b>Porque meu Framework favorito não está no site?</b>
         </h4>
-        <p class="font-weight-light mt-1">Adorariamos saber que Framework seria esse! Apenas
-        selecione qual Linguagem esse framework pertence e clique em "Adiconar novo Framework" para adicioná-la.</p>
+        <p class="font-weight-light mt-1">Adorariamos saber que Framework seria esse! <a data-toggle="modal" data-target="#addFramework" href="#" class="text-success"><b>Clique aqui</b></a> 
+        para ter acesso as linguagens disponíveis no sistema só esperando para receber novos Frameworks!</p>
 
         <h4 class="font-weight-light mt-3">
             <b>E as Linguagens de Programação? Cade aquela que lançou semana passada?</b>
         </h4>
-        <p class="font-weight-light mt-1">Opa, não estamos sabendo dessa ai não!! :O <a data-toggle="modal" data-target="#addLinguagem" href="#">Clique aqui</a>
-        e adicione ela agora mesmo!</p>
+        <p class="font-weight-light mt-1">Opa, não estamos sabendo dessa ai não!! :O <a data-toggle="modal" data-target="#addLinguagem" href="#" ><b>Clique aqui</b></a>
+        e adicione ela agora mesmo! Lembrando que as linguagens só são exibidas na lista do sistema quando tem <b>pelo menos um framework</b> adicionado.
+        Caso sua linguagem não esteja aparecendo na barra do sistema, veja acima se ela não já não existe!</p>
 
         <h4 class="font-weight-light mt-3">
             <b>Quais são os critérios para decidir se algo é um "framework web"?</b>
@@ -129,6 +130,47 @@
     </div>
 </form>
 
+<form class="form" role="form" method="POST" action="/novo_framework/">
+    {% csrf_token %}
+    <div class="modal fade" id="addFramework" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle2">
+                        <i class="fa fa-laptop" aria-hidden="true"></i> Novo Framework</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                {% if user.is_authenticated %}
+                <p class="font-weight-light mt-1">Escolha abaixo a Linguagem do novo Framework e seu nome:</p>
+                    <div class="btn-group">
+                        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownFrameworks" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            Selecione
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownFrameworks">
+                            {%for lg in linguagens %}
+                            <a class="dropdown-item" value="{{lg.id}}">{{lg.nome}}</a>
+                            {%endfor%}
+                        </div>
+                    </div>
+                    <div>
+                        <p class="font-weight-light mt-1">Linguagem selecionada: </p>
+                    </div>
+                    <input type="text" class="form-control mt-3" name="nome" id="nome_fram" placeholder="Ex: Angular JS" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Salvar</button>
+                </div>
+                {%else%}
+                <p class="font-weight-light mt-1">Para poder Adicionar O Framework é preciso se autenticar! ;)</p>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+</form>
 
 </body>
 <script src="{% static 'validacao.js' %}"></script>{% endblock %}

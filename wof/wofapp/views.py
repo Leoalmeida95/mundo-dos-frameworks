@@ -103,7 +103,8 @@ def logout_view(request):
 
 def faq_view(request):
     linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
-    return render(request,'faq.html',{'linguagens_combo':linguagens_combo})
+    linguagens = Linguagem.obter_linguagens()
+    return render(request,'faq.html',{'linguagens_combo':linguagens_combo,'linguagens':linguagens})
 
 def registrar_usuario_view(request):
     args = {}
