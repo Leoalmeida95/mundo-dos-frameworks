@@ -14,10 +14,10 @@ urlpatterns = [
     path('reset_senha/', views.reset_senha_view, name="reset_senha"),
     path('faq/', views.faq_view, name="faq"),
 
-    path('frameworks/<int:id_fram>', views.frameworks_view, name="frameworks"),
-    path('trocar_versao/<int:id_versao>', views.trocar_versao, name="trocar_versao"),
-    path('comentario/<int:id>', views.comentario_view, name="comentario"),
+    path('frameworks/<int:id>', views.frameworks_view, name="frameworks"),
+    path('trocar_versao/<int:vs_id>', views.trocar_versao, name="trocar_versao"),
+    path('comentario/<int:fm_id>', views.comentario_view, name="comentario"),
     path('resposta/<int:fm_id>/<int:cm_id>', views.resposta_view, name="resposta"),
     path('helloworld/<int:fm_id>/<int:vs_id>', views.helloworld_view, name="helloworld"),
-    path('versao/<int:id>', views.versao_view, name="versao"),
+    path('versao/<int:fm_id>', views.versao_view, name="versao"),
 ]

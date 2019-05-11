@@ -15,38 +15,37 @@
                             <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
                         </div>
                         <div class="media-body">
+
                             <div class="media-heading text-dark">
                                 <div class="bg-default clearfix">
                                     <div class="float-left">
-                                        {% if comentario.usuario.conta_publica %}
-                                        <a href="#">
-                                            <h6 class="text-dark">{{comentario.usuario.get_full_name}}</h6>
-                                        </a>
-                                        {%else%}
-                                        <h6>Usuário anônimo</h6>
-                                        {%endif%}
-                                        <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
+                                    <a href="#">
+                                        <h6 class="text-dark">{{comentario.usuario.obter_nome_exibicao}}</h6>
+                                    </a>
+                                    <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
                                     </div>
                                     {% if user.is_authenticated %}
                                     <div class="float-right">
-                                        <a class="text-dark" data-toggle="collapse" href="#{{comentario.id}}" role="button" aria-expanded="false" aria-controls="{{comentario.id}}">
+                                        <a data-toggle="collapse" href="#{{comentario.id}}" aria-expanded="false" data-target="#collapse{{comentario.id}}" aria-controls="collapse{{comentario.id}}" role="button">
                                             <i class="fa fa-reply"> responder</i>
                                         </a>
                                     </div>
                                     {%endif%}
                                 </div>
                             </div>
+
                             <p>{{comentario.texto}}</p>
-                            <div class="collapse" id="{{comentario.id}}">
+                            <div id="collapse{{comentario.id}}" class="collapse" >
                                 <div class="form-inline">
                                     <input type="text" name="texto" id="texto{{comentario.id}}" class="form-control form-control-sm col-md-9" placeholder="Responder comentário..."
                                         required />
-                                    <button type="submit" class="btn btn-default btn-sm ml-2">Responder
+                                    <button type="submit" class="btn btn-outline-dark btn-sm ml-2">Responder
                                         <i class="fa fa-reply" aria-hidden="true"></i>
                                         </i>
                                     </button>
                                 </div>
                             </div>
+
                             {%if comentario.respostas %}
                             <div class="col-md-5">
                                 {% for resposta in comentario.respostas.all %}
@@ -56,13 +55,9 @@
                                     </div>
                                     <div class="media-body">
                                         <div class="media-heading form-inline">
-                                            {% if resposta.usuario.conta_publica %}
-                                            <a href="#">
-                                                <h6 class="text-dark">{{resposta.usuario.get_full_name}}</h6>
-                                            </a>
-                                            {%else%}
-                                            <h6>Usuário anônimo</h6>
-                                            {%endif%}
+                                        <a href="#">
+                                            <h6 class="text-dark">{{resposta.usuario.obter_nome_exibicao}}</h6>
+                                        </a>
                                             <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
                                         </div>
                                         <p>{{resposta.texto}}</p>
@@ -70,6 +65,7 @@
                                 </div>
                                 {%endfor%}
                             </div>
+
                         </div>
                     </div>
                 </form>
@@ -92,12 +88,12 @@
                 <form class="form" role="form" method="POST" action="/comentario/{{framework.id}}">
                     {% csrf_token %}
                     <div class="row mr-1">
-                        <div class="col-md-11">
+                        <div class="col-md-10">
                             <input type="text" name="texto" id="texto" class="form-control" placeholder="Tire dúvidas, dê explicações, faça comentários..."
                                 required />
                         </div>
-                        <div class="col-md-1">
-                            <button type="submit" class="btn btn-default">Enviar
+                        <div class="col-md-2 text-right">
+                            <button type="submit" class="btn btn-outline-dark">Enviar
                                 <i class="fa fa-paper-plane" aria-hidden="true"></i>
                                 </i>
                             </button>

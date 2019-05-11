@@ -8,7 +8,6 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
-from django.db.models import Avg, Count
 import logging
 
 from .fusioncharts import FusionCharts
@@ -18,9 +17,9 @@ from .models import *
 
 def chart_view(request):
     #pega as linguagens que possuem pelo menos 1 framework
-    linguagens = Linguagem.objects.annotate(num_frameworks=Count('framework')).filter(num_frameworks__gt=0)
-    top_linguagens = linguagens[:5]
-    frameworks = Framework.objects.all().order_by('nome')[:10]
+    linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
+    top_linguagens = linguagens_combo[:5]
+    frameworks = Framework.obter_mais_contribuidos()
 
     chart1 = """{ 
                 "chart": {
@@ -73,7 +72,7 @@ def chart_view(request):
     p1 = FusionCharts("pie3d", "ex1" , "100%", "400", "chart-1", "json", chart1)
     p2 = FusionCharts("pie3d", "ex2" , "100%", "430", "chart-2", "json", chart2)
 
-    return  render(request, 'home.html', {'output1' : p1.render(),'output2' : p2.render(),'linguagens':linguagens})
+    return  render(request, 'home.html', {'output1' : p1.render(),'output2' : p2.render(),'linguagens_combo':linguagens_combo})
 
 def login_view(request, *args, **kwargs):
     if request.method == "POST":
@@ -103,7 +102,8 @@ def logout_view(request):
     return HttpResponseRedirect(next)
 
 def faq_view(request):
-    return render(request,'faq.html',{'linguagens':Linguagem.objects.all().order_by('nome')})
+    linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
+    return render(request,'faq.html',{'linguagens_combo':linguagens_combo})
 
 def registrar_usuario_view(request):
     args = {}
@@ -128,14 +128,14 @@ def registrar_usuario_view(request):
         publica = 'True'
 
     args['publica'] = True if publica == 'True' else False 
-    args['linguagens'] = Linguagem.objects.all().order_by('nome')
+    args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
     return render(request,'usuario.html',args)
 
 def ativar_conta_view(request, uidb64=None, token=None):
     assert uidb64 is not None and token is not None
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
-        user = Usuario.objects.get(pk=uid)
+        user = Usuario.obter_usuario_por_id(uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
@@ -158,13 +158,14 @@ def reset_senha_view(request):
     else:
         form = PasswordResetForm()
 
-    return render(request,'nova_senha.html',{'form':form,'linguagens':Linguagem.objects.all().order_by('nome')})
+    linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
+    return render(request,'nova_senha.html',{'form':form,'linguagens_combo':linguagens_combo})
 
 def reset_senha_confirmacao_view(request, uidb64=None, token=None):
     assert uidb64 is not None and token is not None
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
-        user = Usuario.objects.get(pk=uid)
+        user = Usuario.obter_usuario_por_id(uid)
     except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
         user = None
 
@@ -182,9 +183,8 @@ def reset_senha_confirmacao_view(request, uidb64=None, token=None):
         authorized = False
         form = None
     
-
-    return render(request, 'reset_senha_confirmacao.html', {'form':form,'authorized':authorized,
-    'linguagens':Linguagem.objects.all().order_by('nome')})
+    linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
+    return render(request, 'reset_senha_confirmacao.html', {'form':form,'authorized':authorized,'linguagens_combo':linguagens_combo})
 
 @login_required
 def atualizar_usuario_view(request):
@@ -207,8 +207,8 @@ def atualizar_usuario_view(request):
     else:
         form = UserChangeForm(instance=user)
 
-    return render(request, 'usuario.html', {'linguagens':Linguagem.objects.all().order_by('nome'),'form':form,
-    'publica':user.conta_publica})
+    linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
+    return render(request, 'usuario.html', {'linguagens_combo':linguagens_combo,'form':form, 'publica':user.conta_publica})
 
 @login_required
 def trocar_senha_view(request):
@@ -222,42 +222,29 @@ def trocar_senha_view(request):
     else:
         form = SetPasswordForm(user)
     
-    return render(request, 'reset_senha_confirmacao.html', {'authorized':True,'form':form,
-    'linguagens':Linguagem.objects.all().order_by('nome')})
+    linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
+    return render(request, 'reset_senha_confirmacao.html', {'authorized':True,'form':form, 'linguagens_combo':linguagens_combo})
 
 def montar_framework(framework,versao):
-    #pega os comentários excluindo-se os que são resposta.
-    respostas = Comentario.objects.raw('''SELECT to_comentario_id AS id FROM wofapp_comentario_respostas''')
-    respostas_ids = [resposta.pk for resposta in respostas]
-    comentarios = Comentario.objects.all().exclude(id__in=respostas_ids)
-
-    linguagens = Linguagem.objects.all().order_by('nome')
-    frameworks = linguagens.filter(id=framework.id).first().framework_set.all()
-    #helloworld = framework.versao_set.first().helloworld
-    #funcionalidades = framework.versao_set.first().funcionalidade_set
-    #opinioes = framework.versao_set..first().opiniao.all().filter(versao=versao)
     args = {}
-
-    args['lista_frameworks'] = frameworks
     args['framework'] = framework
-    args['linguagens'] = linguagens
-    args['comentarios'] = comentarios
     args['versao_selecionada'] = versao
-    #args['helloworld'] = helloworld
+    args['lista_frameworks'] = Linguagem.obter_frameworks_linguagem(framework.linguagem_id)
+    args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
+    args['comentarios'] = Comentario.obter_somente_comentarios()
+    args['ultimo_helloworld'] = versao.obter_ultimo_helloWorld() if versao is not None else None
  
     return args
 
-
-def frameworks_view(request,id_fram):
-    framework = Framework.objects.get(id=id_fram)
-    versao = framework.versao_set.first()
-    args = {}
+def frameworks_view(request,id):
+    framework = Framework.obter_framework_por_id(id)
+    versao = framework.obter_ultima_versao()
     args = montar_framework(framework,versao)
     
     return render(request,'frameworks.html', args)
 
-def trocar_versao(request,id_versao):
-    versao = Versao.objects.get(id=id_versao)
+def trocar_versao(request,vs_id):
+    versao = Versao.obter_versao_por_id(vs_id)
     framework = versao.framework
     args = {}
     args = montar_framework(framework,versao)
@@ -265,7 +252,7 @@ def trocar_versao(request,id_versao):
     return render(request,'frameworks.html', args)
 
 @login_required
-def comentario_view(request,id):
+def comentario_view(request,fm_id):
     user = request.user
     if request.method == 'POST':
         form = ComentarioForm(request.POST)
@@ -273,7 +260,7 @@ def comentario_view(request,id):
             try:
                 coment = Comentario(
                     texto=request.POST['texto'],
-                    framework_id =id,
+                    framework_id =fm_id,
                     usuario_id = user.id
                 )
                 coment.save()
@@ -286,7 +273,7 @@ def comentario_view(request,id):
             erroMsg = form.errors['__all__'].data[0].message
             messages.warning(request, erroMsg)
 
-    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':id}))
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
 
 @login_required
 def resposta_view(request,fm_id,cm_id):
@@ -295,12 +282,13 @@ def resposta_view(request,fm_id,cm_id):
         form = ComentarioForm(request.POST)
         if form.is_valid():
             try:
-                coment = Comentario.objects.get(id=cm_id)
+                coment = Comentario.obter_comentario_por_id(cm_id)
                 coment.respostas.create(
                     texto=request.POST['texto'],
                     framework_id= fm_id,
                     usuario_id=user.id
                 )
+                messages.info(request, 'Sua resposta foi enviada com sucesso.')
             except Exception:
                 logger = logging.getLogger(__name__)
                 logger.exception("Erro ao criar resposta.")
@@ -310,7 +298,6 @@ def resposta_view(request,fm_id,cm_id):
             messages.warning(request, erroMsg)
 
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
-
 
 @login_required
 def helloworld_view(request,fm_id,vs_id):
@@ -326,6 +313,7 @@ def helloworld_view(request,fm_id,vs_id):
                     versao_id =vs_id
                 ) 
                 hello.save()
+                messages.info(request, 'Hello World editaco com sucesso!')
             except Exception:
                 logger = logging.getLogger(__name__)
                 logger.exception("Erro ao atualizar Hello World.")
@@ -334,11 +322,10 @@ def helloworld_view(request,fm_id,vs_id):
             erroMsg = form.errors['__all__'].data[0].message
             messages.warning(request, erroMsg)
 
-
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
 
 @login_required
-def versao_view(request,id):
+def versao_view(request,fm_id):
     user = request.user
     if request.method == 'POST':
         form = VersaoForm(request.POST)
@@ -346,10 +333,11 @@ def versao_view(request,id):
             try:
                 versao = Versao(
                     numero=request.POST['numero_versao'],
-                    framework_id=id,
+                    framework_id=fm_id,
                     usuario_id=user.id,
                 ) 
                 versao.save()
+                messages.info(request, 'Versão editada com sucesso!')
             except Exception:
                 logger = logging.getLogger(__name__)
                 logger.exception("Erro ao editar Versão.")
@@ -358,5 +346,4 @@ def versao_view(request,id):
             erroMsg = form.errors['__all__'].data[0].message
             messages.warning(request, erroMsg)
 
-
-    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':id}))
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))

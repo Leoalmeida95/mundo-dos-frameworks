@@ -1,6 +1,6 @@
 {% autoescape off %}
 
-{{ user.get_full_name }}, para iniciar o processo de redefinição de senha para sua conta do WOF, clique no link abaixo:
+{{ user.obter_nome_completo }}, para iniciar o processo de redefinição de senha para sua conta do WOF, clique no link abaixo:
 
 {{ protocol }}://{{ domain }}{% url 'wofapp:reset_senha_confirmacao' uidb64=uid token=token %}
 

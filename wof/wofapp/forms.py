@@ -51,7 +51,7 @@ class CustomUserCreationForm(UserCreationForm):
         email = self.cleaned_data.get('email')
         username = self.cleaned_data.get('primeiro_nome')
  
-        if email and Usuario.objects.filter(email=email).exclude(primeiro_nome=username).count():
+        if email and Usuario.verifica_email_valido(email,username):
             raise forms.ValidationError("Este email já está em uso, por favor escolha outro.")
         return email
     
@@ -59,7 +59,7 @@ class CustomUserCreationForm(UserCreationForm):
         cpf = self.cleaned_data.get('cpf')
         username = self.cleaned_data.get('primeiro_nome')
 
-        if cpf and Usuario.objects.filter(cpf=cpf).exclude(primeiro_nome=username).count():
+        if cpf and Usuario.verifica_cpf_valido(cpf,username):
             raise forms.ValidationError("Este CPF já está em uso, por favor verifique se foi digitado corretamente.")
         elif CpfValido().validate(cpf):
             raise forms.ValidationError("Número de CPF inválido.")

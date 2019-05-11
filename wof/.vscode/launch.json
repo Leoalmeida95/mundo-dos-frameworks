@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "stopOnEntry": false,
-            "pythonPath": "C:/Users/Leonardo/AppData/Local/Programs/Python/Python36-32/python.exe",
+            "pythonPath": "C:/Users/Leoal/AppData/Local/Programs/Python/Python36/python.exe",
             "program": "${workspaceRoot}/manage.py",
             "args": [
                 "runserver",

@@ -41,13 +41,13 @@
 					<div class="dropdown-menu dropdown-menu-left">
 						<div class="px-0 container container-sm">
 							<div class="row">
-								{%for lg in linguagens %} {% if lg.id|divisibleby:"2" %}
+								{%for lg in linguagens_combo %} {% if lg.id|divisibleby:"2" %}
 								<div class="col-sm-6 col-md-x">
-									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.framework_set.first.id %}">{{lg.nome}}</a>
+									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.obter_id_primeiro_framework %}">{{lg.nome}}</a>
 								</div>
 								{% else %}
 								<div class="col-sm-6 col-md-x">
-									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.framework_set.first.id %}">{{lg.nome}}</a>
+									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.obter_id_primeiro_framework %}">{{lg.nome}}</a>
 								</div>
 								{%endif%} {% endfor %}
 							</div>
@@ -70,16 +70,16 @@
 								<div class="font-weight-light">
 									<div class="text-truncate">
 										<i class="fa fa-user" aria-hidden="true"></i>
-										{{user.get_full_name}}
+										{{user.obter_nome_completo}}
 									</div>
 								</div>
 							</div>
-							{% if user.get_profissao != "" %}
+							{% if user.obter_profissao is not None %}
 								<div class="dropdown-item disabled">
 									<div class="font-weight-light">
 										<div class="text-truncate">
 											<i class="fa fa-address-card-o" aria-hidden="true"></i>
-											{{user.profissao}}
+											{{user.obter_profissao}}
 										</div>
 									</div>
 								</div>

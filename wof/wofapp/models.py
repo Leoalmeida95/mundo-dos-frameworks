@@ -6,6 +6,7 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
 from django.utils import timezone
+from django.db.models import Avg, Count
 
 class EmailUserManager(BaseUserManager):
     def create_user(self, email, password=None, primeiro_nome=None, ultimo_nome=None, cpf = None, **kwargs):
@@ -73,14 +74,32 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
     def __str__(self):
         return self.email
 
-    def get_full_name(self):
+    def obter_nome_completo(self):
         return self.primeiro_nome +" "+ self.ultimo_nome
 
-    def get_profissao(self):
+    def obter_nome_exibicao(self):
+        if self.conta_publica:
+            return self.obter_nome_completo()
+        else:
+            return "Usuário Anônimo" 
+
+    def obter_profissao(self):
         if not self.profissao:
-            return ""
+            return None
         else:
             return self.profissao        
+
+    @staticmethod
+    def obter_usuario_por_id(id):
+        return Usuario.objects.get(pk=id)
+
+    @staticmethod
+    def verifica_email_valido(email,primeiro_nome):
+        return Usuario.objects.filter(email=email).exclude(primeiro_nome=primeiro_nome).count()
+
+    @staticmethod
+    def verifica_cpf_valido(cpf,primeiro_nome):
+        return Usuario.objects.filter(cpf=cpf).exclude(primeiro_nome=primeiro_nome).count()
 
     def has_module_perms(self, app_label):
         "O usuário tem permissão para visualizar o app `app_label`?"
@@ -115,6 +134,17 @@ class Linguagem(models.Model):
     def __str__(self):
         return self.nome
 
+    @staticmethod
+    def obter_linguagens_minimo_um_framework():
+        return Linguagem.objects.annotate(num_frameworks=Count('framework')).filter(num_frameworks__gt=0).all()
+    
+    @staticmethod
+    def obter_frameworks_linguagem(fm_id):
+        return Linguagem.objects.filter(id=fm_id).first().framework_set.all()
+
+    def obter_id_primeiro_framework(self):
+        return self.framework_set.first().id
+
 class Framework(models.Model):
     nome = models.CharField(max_length=30)
     linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, null = False)
@@ -123,6 +153,30 @@ class Framework(models.Model):
 
     def __str__(self):
         return self.nome
+    
+    @staticmethod
+    def obter_mais_contribuidos():
+        return Framework.objects.all().order_by('nome')[:10]
+
+    @staticmethod
+    def obter_framework_por_id(id):
+        return Framework.objects.get(id=id)
+
+    def obter_ultima_versao(self):
+        if self.versao_set is not None:
+            return self.versao_set.last()
+        else:
+            return None
+
+    def obter_quantidade_versoes(self):
+        return self.versao_set.count
+
+    def obter_versoes(self):
+        if self.versao_set is not None:
+            return self.versao_set.all()
+        else:
+            return None
+
 
 class Versao(models.Model):
     numero = models.DecimalField(default=0, max_digits=10, decimal_places=3)
@@ -131,6 +185,29 @@ class Versao(models.Model):
 
     def __str__(self):
         return str(self.numero)
+
+    @staticmethod
+    def obter_versao_por_id(id):
+        return Versao.objects.get(id=id)
+        
+    def obter_ultimo_helloWorld(self):
+        if self.helloworld_set is not None:
+            return self.helloworld_set.last()
+        else:
+            return None
+
+    def obter_funcionalidades(self):
+        if self.funcionalidade_set is not None:
+            return self.funcionalidade_set.all()
+        else:
+            return None
+
+    def obter_opinioes(self):
+        if self.opiniao_set is not None:
+            return self.opiniao_set.all()
+        else:
+            return None
+
 
 class Funcionalidade(models.Model):
     descricao = models.CharField(max_length=5000)
@@ -144,7 +221,7 @@ class Helloworld(models.Model):
     codigo_exemplo = models.CharField(max_length=50000)
     descricao = models.CharField(max_length=50000)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
-    versao = models.OneToOneField(Versao, on_delete=models.CASCADE, null = False)
+    versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
 
     def __str__(self):
         return self.descricao
@@ -175,6 +252,17 @@ class Comentario(models.Model):
 
     def __str__(self):
         return self.texto
+
+    @staticmethod
+    def obter_comentario_por_id(id):
+        return Comentario.objects.get(id=id)
+
+    @staticmethod
+    def obter_somente_comentarios():
+        #pega os comentários excluindo-se os que são resposta.
+        respostas = Comentario.objects.raw('''SELECT to_comentario_id AS id FROM wofapp_comentario_respostas''')
+        respostas_ids = [resposta.pk for resposta in respostas]
+        return Comentario.objects.all().exclude(id__in=respostas_ids)
 
 class Voto(models.Model):
     link = models.ForeignKey(Link, on_delete=models.CASCADE, null = False)

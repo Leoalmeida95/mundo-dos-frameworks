@@ -25,21 +25,27 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
             <div class="card-body" style="overflow-y:auto;">
                 <p class="font-weight-light">
-                    {%if versao_selecionada is not None%} Esse hello world representa o básico necessário para iniciar um projeto com o {{framework}}
-                    na versão {{versao_selecionada.numero|floatformat:3}}. {%else%} Esse hello world representa o básico
-                    necessário para iniciar um projeto com uma das versões do {{framework}}. {%endif%}
+                {%if versao_selecionada is not None%} 
+                    Esse hello world representa o básico necessário para iniciar um projeto com o {{framework}} na versão {{versao_selecionada.numero|floatformat:3}}. 
+                        
+                    {%if ultimo_helloworld is not None %}
+                        <div class="col-md-12 mt-2">
+                            {{ultimo_helloworld.descricao}}
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            {%with "<pre id="|add:framework.linguagem.nome|add:">"|add:ultimo_helloworld.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%} 
+                        </div> 
+                    {%else%}
+                        <p class="font-weight-light">{% if user.is_authenticated %} Esas versão do framework ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
+                            e seja o primeiro a fazer! {%else%} Esas versão do framework ainda não possui nenhum exemplo de Hello World. Cadastre-se
+                            e seja o primeiro a fazer! {%endif%}</p>
+                        <p class="font-weight-light">Veja um exemplo de um Hello World pronto no Framework
+                            <a href="{% url 'wofapp:frameworks' 145 %}">Django</a>, da linguagem Python.
+                    {%endif%}</p>
+                {%else%} 
+                    Esse hello world representa o básico necessário para iniciar um projeto com uma das versões do {{framework}}. Adicone uma versão antes de editá-lo!
+                {%endif%}
                 </p>
-                {%if versao_selecionada is not None and versao_selecionada.helloworld is not None %}
-                <div class="col-md-12 mt-2">
-                    {{helloworld.descricao}}
-                </div>
-                <div class="col-md-12 mt-3">
-                    {%with "<pre id="|add:framework.linguagem.nome|add:">"|add:helloworld.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%} </div> {%else%}
-                <p class="font-weight-light">{% if user.is_authenticated %} Este framework ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
-                    e seja o primeiro a fazer! {%else%} O framework ainda não possui nenhum exemplo de Hello World. Cadastre-se
-                    e seja o primeiro a fazer! {%endif%}</p>
-                <p class="font-weight-light">Veja um exemplo de um Hello World pronto no Framework
-                    <a href="{% url 'wofapp:frameworks' 145 %}">Django</a>, da linguagem Python.{%endif%}</p>
             </div>
         </div>
     </div>
@@ -60,26 +66,26 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    {%if framework.versoes.first is None%}
+                    {%if versao_selecionada is None%}
                     <p class="font-weight-light mt-3">Antes de adicionar o Hello world, adicione a Versão do Framework a qual você deseja relaciona-lo.</p>
                     {%else%}
                     <div class="form-group">
                         <label for="descricao" class="col-form-label">Descrição:</label>
                         <div class="col-12">
                             <textarea rows="7" class="form-control" name="descricao" id="descricao" placeholder="Entre com uma descrição sobre o Hello World."
-                                required>{%if helloworld is not None%}{{helloworld.descricao}}{%endif%}</textarea>
+                                required>{%if ultimo_helloworld is not None%}{{ultimo_helloworld.descricao}}{%endif%}</textarea>
                         </div>
                     </div>
                     <label for="codigo_exemplo" class="col-form-label">Código:</label>
                     <div class="col-12">
                         <textarea rows="7" class="form-control" name="codigo_exemplo" id="codigo_exemplo" placeholder="Entre com um código de exemplo do Hello World."
-                            required>{%if helloworld is not None%}{{helloworld.codigo_exemplo}}{%endif%}</textarea>
+                            required>{%if ultimo_helloworld is not None%}{{ultimo_helloworld.codigo_exemplo}}{%endif%}</textarea>
                     </div>
                     {%endif%}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-info" {%if framework.versoes.first is None%}disabled{%endif%}>Salvar</button>
+                    <button type="submit" class="btn btn-info" {%if versao_selecionada is None%}disabled{%endif%}>Salvar</button>
                 </div>
             </div>
         </div>
