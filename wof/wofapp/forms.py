@@ -291,3 +291,31 @@ class LinguagemForm(forms.ModelForm):
         elif Linguagem.verifica_nome(nome):
             raise forms.ValidationError('Essa Linguagem já está registrada no sistema.')
         return self.cleaned_data
+
+
+class FrameworkForm(forms.ModelForm):
+    
+    nome = forms.CharField(required=False, 
+        widget=forms.TextInput(attrs={'name': 'nome'}))
+    linguagem_id = forms.CharField(required=False, 
+        widget=forms.TextInput())
+
+    class Meta:
+        model = Framework
+        fields = ['nome','linguagem_id']
+
+    def __init__(self, linguagem_id, *args, **kwargs):
+        self.linguagem_id = linguagem_id
+        super(FrameworkForm, self).__init__(*args, **kwargs)
+
+    def clean(self):        
+        nome = self.cleaned_data.get('nome')
+        linguagem_id = self.linguagem_id
+
+        if nome is None or nome is '' or linguagem_id is None:
+            raise forms.ValidationError('Os campos são obrigatórios.')
+        elif Framework.verifica_nome(nome):
+            raise forms.ValidationError('Essa Framework já está registrada no sistema.')
+        elif Linguagem.obter_linguagem_por_id(linguagem_id) is None:
+            raise forms.ValidationError('Escolha uma Linguagem válida para o Framework.')
+        return self.cleaned_data

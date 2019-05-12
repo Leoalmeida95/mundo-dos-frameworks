@@ -150,6 +150,10 @@ class Linguagem(models.Model):
     def obter_linguagens():
         return Linguagem.objects.all()
 
+    @staticmethod
+    def obter_linguagem_por_id(id):
+        return Linguagem.objects.get(id=id)
+
 class Framework(models.Model):
     nome = models.CharField(max_length=30)
     linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, null = False)
@@ -166,6 +170,10 @@ class Framework(models.Model):
     @staticmethod
     def obter_framework_por_id(id):
         return Framework.objects.get(id=id)
+
+    @staticmethod
+    def verifica_nome(nome):
+        return Framework.objects.filter(nome=nome).first()
 
 class Versao(models.Model):
     numero = models.DecimalField(default=0, max_digits=10, decimal_places=3)

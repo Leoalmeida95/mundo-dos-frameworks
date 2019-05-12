@@ -350,7 +350,7 @@ def versao_view(request,fm_id):
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
 
 @login_required
-def nova_linguagem(request):
+def nova_linguagem_view(request):
     args = {}
     user = request.user
     if request.method == 'POST':
@@ -373,4 +373,43 @@ def nova_linguagem(request):
             messages.warning(request, erroMsg)
 
     args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
+    args['linguagens'] = Linguagem.obter_linguagens()
     return render(request,'faq.html',args)
+
+@login_required
+def novo_framework_view(request,lg_id):
+    args = {}
+    user = request.user
+    if request.method == 'POST':
+        form = FrameworkForm(lg_id, request.POST)
+        args['form'] = form
+        if form.is_valid():
+            try:
+                fram = Framework(
+                    nome=request.POST['nome'],
+                    linguagem_id = lg_id,
+                    usuario_id=user.id,
+                ) 
+                fram.save()
+                messages.info(request, 'Framwork registrado com sucesso!')
+            except Exception:
+                logger = logging.getLogger(__name__)
+                logger.exception("Erro ao editar Versão.")
+                messages.error(request, 'Erro ao adicionar a Linguagem. Tente novamente mais tarde.')
+        else:
+            erroMsg = form.errors['__all__'].data[0].message
+            messages.warning(request, erroMsg)
+
+    linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
+    linguagens = Linguagem.obter_linguagens()
+    return render(request,'faq.html',{'linguagens_combo':linguagens_combo,'linguagens':linguagens})
+
+@login_required
+def define_linguagem_adcframework_view(request,lg_id):
+    args={}
+    args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
+    args['linguagens'] = Linguagem.obter_linguagens()
+    args['lg_escolhida'] = Linguagem.obter_linguagem_por_id(lg_id)
+    args['exibe_modal_fram'] = "show"
+
+    return render(request,'faq.html', args)
