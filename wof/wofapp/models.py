@@ -154,6 +154,20 @@ class Linguagem(models.Model):
     def obter_linguagem_por_id(id):
         return Linguagem.objects.get(id=id)
 
+    @staticmethod
+    def obter_numero_frameworks():
+        return Linguagem.objects.raw('''SELECT 
+                                            l.id
+                                            ,l.nome
+                                            ,count(f) as total_fram
+                                        FROM public.wofapp_linguagem as l
+                                        LEFT JOIN public.wofapp_framework f on f.linguagem_id = l.id
+                                        GROUP BY l.id
+                                                ,l.nome
+                                        ORDER BY total_fram DESC
+                                        LIMIT 10 
+                                    ''')
+
 class Framework(models.Model):
     nome = models.CharField(max_length=30)
     linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, null = False)

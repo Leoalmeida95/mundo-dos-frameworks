@@ -11,68 +11,83 @@ from django.utils.http import urlsafe_base64_decode
 import logging
 
 from .fusioncharts import FusionCharts
+from  collections import OrderedDict
 from .tokens import account_activation_token
 from .forms import *
 from .models import *
 
 def chart_view(request):
     linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
-    top_linguagens = linguagens_combo[:5]
-    frameworks = Framework.obter_top10_constribuicoes()
-
+    top_linguagens = Linguagem.obter_numero_frameworks()
+    top_frameworks = Framework.obter_top10_constribuicoes()
     
-    chart1 = """{ 
-                "chart": {
-                "caption": "Top 5 linguagens mais acessadas",
-                "subcaption": "Mensal",
-                "startingangle": "120",
-                "showlabels": "1",
-                "showlegend": "1",
-                "enablemultislicing": "1",
-                "slicingdistance": "15",
-                "showpercentvalues": "1",
-                "showpercentintooltip": "1",
-                "plottooltext": "Linguagem: $label, Acessos : $datavalue",
-                "theme": "zune"
-                },
-                "data": ["""
-    
-    i = 1
-    for linguagem in top_linguagens:
-        chart1 = chart1 + """ {"label": " """ + linguagem.nome +  """", "value":" """   +  str(i*100) + """"},"""
-        i = i+1
-    chart1 = chart1[:-1]    
-    chart1 = chart1 + """         ]
-        }"""
+    dataSource1 = OrderedDict()
+    dataSource2 = OrderedDict()
+    chartConfig1 = OrderedDict()
+    chartConfig2 = OrderedDict()
 
+    chartConfig1["caption"] = "Top 10 Linguagens com mais Frameworks"
+    chartConfig1["xAxisName"] = "Linguagens"
+    chartConfig1["yAxisName"] = "Frameworks"
+    chartConfig1["showBorder"] = "1"
+    chartConfig1["palettecolors"] = "8B008B,98FB98,FF0000,FF7F50,00BFFF,FF69B4,00FF7F,DAA520,FF4500,E0FFFF"
 
-    chart2 = """{ 
-                "chart": {
-                "caption": "Top 10 Frameworks com mais contribuintes",
-                "subcaption": "Total",
-                "startingangle": "120",
-                "showlabels": "1",
-                "showlegend": "1",
-                "enablemultislicing": "1",
-                "slicingdistance": "15",
-                "showpercentvalues": "1",
-                "showpercentintooltip": "1",
-                "plottooltext": "Framework: $label, Contribuintes : $datavalue",
-                "theme": "carbon"
-                },
-                "data": ["""
-    
-    for framework in frameworks:
-        chart2 = chart2 + """ {"label": " """ + framework.nome +  """", "value":" """   +  str(framework.total_contribuicoes) + """"},"""
-        i = i+1
-    chart2 = chart2[:-1]    
-    chart2 = chart2 + """         ]
-        }"""
+    chartConfig1["toolTipBorderColor"] = "#666666"
+    chartConfig1["toolTipBgColor"] = "#efefef"
+    chartConfig1["toolTipBgAlpha"] = "80"
+    chartConfig1["showToolTipShadow"] = "1"
+    chartConfig1["outCnvBaseFont"] = "Arial"
+    chartConfig1["placeValuesInside"] = "1"
+    chartConfig1["outCnvBaseFontSize"] = "13"
+    chartConfig1["outCnvBaseFontColor"] = "#343a40"
+    chartConfig1["showBorder"] = "1"
+    chartConfig1["canvasbgColor"] = "#ffffff"
+    chartConfig1["canvasbgAlpha"] = "10"
+    chartConfig1["showCanvasBase"] = "0"
+    chartConfig1["canvasBorderThickness"] = "1"
+    chartConfig1["showAlternateHGridColor"] = "0"
 
-    p1 = FusionCharts("pie3d", "ex1" , "100%", "400", "chart-1", "json", chart1)
-    p2 = FusionCharts("pie3d", "ex2" , "100%", "430", "chart-2", "json", chart2)
+    chartConfig2["caption"] = "Top 10 Frameworks com mais conteudo"
+    chartConfig2["xAxisName"] = "Frameworks"
+    chartConfig2["yAxisName"] = "Dados"
+    chartConfig2["palettecolors"] = "00FF00,FFD700,D2691E,9932CC,B22222,D8BFD8,FA8072,483D8B,0000FF,DC143C"
 
-    return  render(request, 'home.html', {'output1' : p1.render(),'output2' : p2.render(),'linguagens_combo':linguagens_combo})
+    chartConfig2["toolTipBorderColor"] = "#666666"
+    chartConfig2["toolTipBgColor"] = "#efefef"
+    chartConfig2["toolTipBgAlpha"] = "80"
+    chartConfig2["showToolTipShadow"] = "1"
+    chartConfig2["outCnvBaseFont"] = "Arial"
+    chartConfig2["placeValuesInside"] = "1"
+    chartConfig2["outCnvBaseFontSize"] = "13"
+    chartConfig2["outCnvBaseFontColor"] = "#343a40"
+    chartConfig2["showBorder"] = "1"
+    chartConfig2["canvasbgColor"] = "#ffffff"
+    chartConfig2["canvasbgAlpha"] = "10"
+    chartConfig2["showCanvasBase"] = "0"
+    chartConfig2["canvasBorderThickness"] = "1"
+    chartConfig2["showAlternateHGridColor"] = "0"
+
+    dataSource1["chart"] = chartConfig1
+    dataSource1["data"] = []
+    dataSource2["chart"] = chartConfig2
+    dataSource2["data"] = []
+
+    for l in top_linguagens:
+        data1 = {}
+        data1["label"] = l.nome
+        data1["value"] = l.total_fram
+        dataSource1["data"].append(data1)
+
+    for f in top_frameworks:
+        data2 = {}
+        data2["label"] = f.nome
+        data2["value"] = f.total_contribuicoes
+        dataSource2["data"].append(data2)
+
+    column3D_1 = FusionCharts("column3d", "ex1" , "100%", "300", "chart-1", "json", dataSource1)
+    column3D_2 = FusionCharts("column3d", "ex2" , "100%", "300", "chart-2", "json", dataSource2)
+
+    return  render(request, 'home.html', {'output1' : column3D_1.render(),'output2' : column3D_2.render(),'linguagens_combo':linguagens_combo})
 
 def login_view(request, *args, **kwargs):
     if request.method == "POST":
