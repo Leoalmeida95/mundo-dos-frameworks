@@ -136,7 +136,7 @@ class Linguagem(models.Model):
 
     @staticmethod
     def obter_linguagens_minimo_um_framework():
-        return Linguagem.objects.annotate(num_frameworks=Count('framework')).filter(num_frameworks__gt=0).all()
+        return Linguagem.objects.annotate(num_frameworks=Count('framework')).filter(num_frameworks__gt=0).all().order_by('nome')
     
     @staticmethod
     def obter_frameworks_linguagem(fm_id):
@@ -148,7 +148,7 @@ class Linguagem(models.Model):
     
     @staticmethod
     def obter_linguagens():
-        return Linguagem.objects.all()
+        return Linguagem.objects.all().order_by('nome')
 
     @staticmethod
     def obter_linguagem_por_id(id):
@@ -162,10 +162,6 @@ class Framework(models.Model):
 
     def __str__(self):
         return self.nome
-    
-    @staticmethod
-    def obter_mais_contribuidos():
-        return Framework.objects.all().order_by('nome')[:10]
 
     @staticmethod
     def obter_framework_por_id(id):
@@ -174,6 +170,26 @@ class Framework(models.Model):
     @staticmethod
     def verifica_nome(nome):
         return Framework.objects.filter(nome=nome).first()
+
+    @staticmethod
+    def obter_top10_constribuicoes():
+        return Framework.objects.raw('''SELECT 
+                                             fram.id
+                                            ,fram.nome
+                                            ,(count(v)  + count(fu)  + count(h)  + count(o)  + 
+                                            count(l)  + count(c)) as total_contribuicoes
+                                        FROM public.wofapp_framework as fram
+                                        LEFT JOIN public.wofapp_versao v on v.framework_id = fram.id
+                                        LEFT JOIN public.wofapp_funcionalidade fu on fu.versao_id = v.id
+                                        LEFT JOIN public.wofapp_helloworld h on h.versao_id = v.id
+                                        LEFT JOIN public.wofapp_opiniao o on o.versao_id = v.id
+                                        LEFT JOIN public.wofapp_link l on l.framework_id = fram.id
+                                        LEFT JOIN public.wofapp_comentario c on c.framework_id = fram.id
+                                        GROUP BY fram.id
+		                                        ,fram.nome
+                                        ORDER BY total_contribuicoes DESC
+                                        LIMIT 10 
+                                    ''')
 
 class Versao(models.Model):
     numero = models.DecimalField(default=0, max_digits=10, decimal_places=3)
@@ -236,11 +252,14 @@ class Comentario(models.Model):
         return Comentario.objects.get(id=id)
 
     @staticmethod
-    def obter_somente_comentarios():
+    def obter_somente_comentarios(fram_id):
         #pega os comentários excluindo-se os que são resposta.
-        respostas = Comentario.objects.raw('''SELECT to_comentario_id AS id FROM wofapp_comentario_respostas''')
+        respostas = Comentario.objects.raw('''SELECT 
+                                                    to_comentario_id AS id 
+                                            FROM wofapp_comentario_respostas
+                                            ''')
         respostas_ids = [resposta.pk for resposta in respostas]
-        return Comentario.objects.all().exclude(id__in=respostas_ids)
+        return Comentario.objects.filter(framework_id=fram_id).exclude(id__in=respostas_ids)
 
 class Voto(models.Model):
     link = models.ForeignKey(Link, on_delete=models.CASCADE, null = False)

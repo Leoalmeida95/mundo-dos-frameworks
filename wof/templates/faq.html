@@ -1,8 +1,5 @@
 {% extends "base.html" %} {% block titulo %}Perguntas Frequentes{% endblock %} {% block conteudo %} {% load staticfiles %}
 
-<head>
-
-</head>
 <body>
     <div class="container">
         <h1 class="font-weight-light mt-3">
@@ -40,7 +37,7 @@
                                             aria-expanded="false">
                                             Selecione uma Linguagem
                                         </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
+                                        <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdownMenuvs">
                                             {%for lg in linguagens %}
                                             <a class="dropdown-item" href="{% url 'wofapp:define_linguagem_adcframework' lg.id %}">{{lg.nome}}</a>
                                             {%endfor%}
@@ -53,12 +50,12 @@
                                 <input type="text" class="form-control mt-3" name="nome" placeholder="Ex: Angular JS" required>
                         </div>
                         <div class="card-footer text-muted">                
-                            <button type="submit" class="btn btn-info">Salvar</button>
+                            <button type="submit" class="btn btn-info" {%if lg_escolhida is None %}disabled{%endif%}>Salvar</button>
                             </div>
                             {%else%}
                             <p class="font-weight-light mt-1">Para poder Adicionar O Framework é preciso se autenticar! ;)</p>
                             {%endif%}
-                        </div>
+                        </div> 
                     </div>
                 </div>
         </form> 

@@ -51,26 +51,8 @@
     }
 }
 
-@media screen and (min-width: 576px) {
-    .has-mega-menu .container-sm {
-        width: 540px;
-    }
-}
-
-@media screen and (min-width: 768px) {
-    .has-mega-menu .container-md {
-        width: 720px;
-    }
-}
-
-@media screen and (min-width: 992px) {
-    .has-mega-menu .container-lg {
-        width: 960px;
-    }
-}
-
-@media screen and (min-width: 1200px) {
-    .has-mega-menu .container-xl {
-        width: 1140px;
-    }
+.scrollable-menu {
+    height: auto;
+    max-height: 350px;
+    overflow-x: hidden;
 }

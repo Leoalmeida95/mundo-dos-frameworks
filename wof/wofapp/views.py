@@ -16,11 +16,11 @@ from .forms import *
 from .models import *
 
 def chart_view(request):
-    #pega as linguagens que possuem pelo menos 1 framework
     linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
     top_linguagens = linguagens_combo[:5]
-    frameworks = Framework.obter_mais_contribuidos()
+    frameworks = Framework.obter_top10_constribuicoes()
 
+    
     chart1 = """{ 
                 "chart": {
                 "caption": "Top 5 linguagens mais acessadas",
@@ -63,7 +63,7 @@ def chart_view(request):
                 "data": ["""
     
     for framework in frameworks:
-        chart2 = chart2 + """ {"label": " """ + framework.nome +  """", "value":" """   +  str(i*100) + """"},"""
+        chart2 = chart2 + """ {"label": " """ + framework.nome +  """", "value":" """   +  str(framework.total_contribuicoes) + """"},"""
         i = i+1
     chart2 = chart2[:-1]    
     chart2 = chart2 + """         ]
@@ -233,7 +233,7 @@ def montar_framework(framework,versao):
     args['ultimo_helloworld'] = versao.helloworld_set.last() if versao is not None else None
     args['lista_frameworks'] = Linguagem.obter_frameworks_linguagem(framework.linguagem_id)
     args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
-    args['comentarios'] = Comentario.obter_somente_comentarios()
+    args['comentarios'] = Comentario.obter_somente_comentarios(framework.id)
  
     return args
 

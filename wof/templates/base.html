@@ -35,22 +35,13 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/"><i class="fa fa-home" aria-hidden="true"></i> Início</a>
 				</li>
-				<li class="nav-item dropdown has-mega-menu">
+				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
 					 aria-expanded="false"><i class="fa fa-code" aria-hidden="true"></i> Linguagens</a>
-					<div class="dropdown-menu dropdown-menu-left">
-						<div class="px-0 container container-sm">
-							<div class="row">
-								{%for lg in linguagens_combo %} {% if lg.id|divisibleby:"2" %}
-								<div class="col-sm-6 col-md-x">
-									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.framework_set.first.id %}">{{lg.nome}}</a>
-								</div>
-								{% else %}
-								<div class="col-sm-6 col-md-x">
-									<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.framework_set.first.id %}">{{lg.nome}}</a>
-								</div>
-								{%endif%} {% endfor %}
-							</div>
+						<div class="dropdown-menu scrollable-menu">
+							{%for lg in linguagens_combo %}
+							<a class="dropdown-item" href="{% url 'wofapp:frameworks' lg.framework_set.first.id %}">{{lg.nome}}</a>
+							{%endfor%}
 						</div>
 				</li>
 				<li class="nav-item">
