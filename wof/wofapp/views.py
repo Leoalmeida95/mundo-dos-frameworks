@@ -28,7 +28,7 @@ def chart_view(request):
 
     chartConfig1["caption"] = "Top 10 Linguagens com mais Frameworks"
     chartConfig1["xAxisName"] = "Linguagens"
-    chartConfig1["yAxisName"] = "Frameworks"
+    chartConfig1["yAxisName"] = "Quantidade de Frameworks"
     chartConfig1["showBorder"] = "1"
     chartConfig1["palettecolors"] = "8B008B,98FB98,FF0000,FF7F50,00BFFF,FF69B4,00FF7F,DAA520,FF4500,E0FFFF"
 
@@ -47,9 +47,9 @@ def chart_view(request):
     chartConfig1["canvasBorderThickness"] = "1"
     chartConfig1["showAlternateHGridColor"] = "0"
 
-    chartConfig2["caption"] = "Top 10 Frameworks com mais conteudo"
+    chartConfig2["caption"] = "Top 10 Frameworks com mais dados inseridos"
     chartConfig2["xAxisName"] = "Frameworks"
-    chartConfig2["yAxisName"] = "Dados"
+    chartConfig2["yAxisName"] = "Quantidade de Dados"
     chartConfig2["palettecolors"] = "00FF00,FFD700,D2691E,9932CC,B22222,D8BFD8,FA8072,483D8B,0000FF,DC143C"
 
     chartConfig2["toolTipBorderColor"] = "#666666"
@@ -428,3 +428,28 @@ def define_linguagem_adcframework_view(request,lg_id):
     args['exibe_modal_fram'] = "show"
 
     return render(request,'faq.html', args)
+
+@login_required
+def opiniao_view(request,fm_id,vs_id):
+    user = request.user
+    if request.method == 'POST':
+        form = HelloWorldForm(request.POST)
+        if form.is_valid():
+            try:
+                op = Opiniao(
+                    texto=request.POST['descricao'],
+                    eh_favoravel=request.POST['codigo_exemplo'],
+                    usuario_id=user.id,
+                    versao_id =vs_id
+                ) 
+                op.save()
+                messages.info(request, 'Edição realizada com sucesso!')
+            except Exception:
+                logger = logging.getLogger(__name__)
+                logger.exception("Erro ao atualizar vantagens e desvantagens.")
+                messages.error(request, 'Erro ao atualizar vantagens e desvantagens. Tente novamente mais tarde.')
+        else:
+            erroMsg = form.errors['__all__'].data[0].message
+            messages.warning(request, erroMsg)
+
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))

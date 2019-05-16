@@ -23,4 +23,5 @@ urlpatterns = [
     path('nova_linguagem/', views.nova_linguagem_view, name="nova_linguagem"),
     path('novo_framework/<int:lg_id>', views.novo_framework_view, name="novo_framework"),
     path('define_linguagem_adcframework/<int:lg_id>', views.define_linguagem_adcframework_view, name="define_linguagem_adcframework"),
+    path('opiniao/<int:fm_id>/<int:vs_id>', views.opiniao_view, name="opiniao"),
 ]
