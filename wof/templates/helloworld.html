@@ -22,7 +22,7 @@
                     {% endif %}</div>
             </div>
         </div>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion2">
             <div class="card-body" style="overflow-y:auto;">
                 <p class="font-weight-light">
                 {%if versao_selecionada is not None%} 
@@ -36,11 +36,15 @@
                             {%with "<pre id="|add:framework.linguagem.nome|add:">"|add:ultimo_helloworld.codigo_exemplo|add:"</pre>" as code %} {{code|pygmentize|safe}} {%endwith%} 
                         </div> 
                     {%else%}
-                        <p class="font-weight-light">{% if user.is_authenticated %} Esas versão do framework ainda não possui nenhum exemplo de Hello World. Clique no 'Editar'
-                            e seja o primeiro a fazer! {%else%} Esas versão do framework ainda não possui nenhum exemplo de Hello World. Cadastre-se
-                            e seja o primeiro a fazer! {%endif%}</p>
-                        <p class="font-weight-light">Veja um exemplo de um Hello World pronto no Framework
-                            <a href="{% url 'wofapp:frameworks' 145 %}">Django</a>, da linguagem Python.
+                        <p class="font-weight-light">
+                        Esas versão do framework ainda não possui nenhum exemplo de Hello World.
+                        {% if user.is_authenticated %} Clique no 'Editar' 
+                            {%else%} Cadastre-se 
+                            {%endif%}
+                            e seja o primeiro a fazer! 
+                            </p>
+                        {% comment %} <p class="font-weight-light">Veja um exemplo de um Hello World pronto no Framework
+                            <a href="{% url 'wofapp:frameworks' 145 %}">Django</a>, da linguagem Python. {% endcomment %}
                     {%endif%}</p>
                 {%else%} 
                     Esse hello world representa o básico necessário para iniciar um projeto com uma das versões do {{framework}}. Adicone uma versão antes de editá-lo!

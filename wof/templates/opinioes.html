@@ -4,7 +4,7 @@
             <div class="bg-default clearfix">
                 <div class="float-left">
                     <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Vantagens e Desvantaens
-                        <i class="fa fa-hand-o-up" aria-hidden="true"></i><i class="fa fa-hand-o-down" aria-hidden="true"></i>
+                        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
                     </h5>
                 </div>
                 <div class="float-right">{% if user.is_authenticated %}
@@ -20,12 +20,14 @@
                     {% endif %}</div>
             </div>
         </div>
-        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion2">
             <div class="card-body" style="overflow-y:auto;">
                 <p class="font-weight-light">
-                        {%if versao_selecionada is not None%} 
-                        Opiniões de prós e contras no ponto de vista dos usuários sobre o {{framework}} na versão {{versao_selecionada.numero|floatformat:3}}. {%else%} 
-                        Opiniões de prós e contras no ponto de vista dos usuários sobre o {{framework}} e suas versões. {%endif%}</p>
+                    Opiniões de vantagens e desvantagens no ponto de vista dos usuários sobre o {{framework}}
+                    {%if versao_selecionada is not None%} 
+                    na versão {{versao_selecionada.numero|floatformat:3}}. 
+                    {%else%} 
+                    e suas versões. {%endif%}</p>
                 <ul class="nav nav-pills" id="pills-tab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="pills-pros-tab" data-toggle="pill" href="#pills-pros" role="tab" aria-controls="pills-pros"
@@ -37,37 +39,46 @@
                     </li>
                 </ul>
                 {%if versao_selecionada is not None%} 
-                <div class="tab-content" id="pills-tabContent">
-                    {% for opiniao in versao_selecionada.opiniao_set.all %}
+                <div class="tab-content mt-2" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-pros" role="tabpanel" aria-labelledby="pills-pros-tab">
-                        <div class="card mt-3">
-                            <ul>
-                                <li class="mt-2">
-                                    {%if opiniao.eh_favoravel == True%} {{opiniao.texto}}
-                                </li>
-                            </ul>
-                        </div>
+                        {% for opiniao in vantagens %}
+                            <div class="card">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                    <div class=row>
+                                        <div class="col-md-11">
+                                            {{opiniao.texto}}
+                                        </div>
+                                        <div class="col-md-1">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    </li>
+                                </ul>
+                            </div>
+                                {% empty %}
+                                    <p class="font-weight-light mt-3">Ninguém adicionou vantagens sobre este framework.{% if user.is_authenticated %} Clique no 'Editar'
+                                    {%else%} Cadastre-se {%endif%}e seja o primeiro a fazer! </p>
+                        {%endfor%}
                     </div>
                     <div class="tab-pane fade" id="pills-contras" role="tabpanel" aria-labelledby="pills-contras-tab">
-                        <div class="card mt-3">
-                            <ul>
-                                <li class="mt-1">
-                                    {%else%} {{opiniao.texto}}{% endif %}
-                                </li>
-                            </ul>
-                        </div>
+                        {% for opiniao in desvantagens %}
+                            <div class="card">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        {{opiniao.texto}}
+                                    </li>
+                                </ul>
+                            </div>
+                                {% empty %}
+                                    <p class="font-weight-light mt-3">Ninguém adicionou desvantagens sobre este framework.{% if user.is_authenticated %} Clique no 'Editar'
+                                    {%else%} Cadastre-se {%endif%}e seja o primeiro a fazer! </p>
+                        {%endfor%}
                     </div>
-                    {% empty %}
-                    <li class="list-group-item mt-2 d-flex justify-content-between align-items-center">
-                    <p class="font-weight-light mt-3">{% if user.is_authenticated %} Ninguém adicionou opiniões sobre este framework. Clique no 'Adicionar'
-                        e seja o primeiro a fazer! {%else%} Ninguém adicionou opiniões sobre este framework. Cadastre-se
-                        e seja o primeiro a fazer! {%endif%}</p>
-                    </li>
-                    {%endfor%}
                 </div>
                 {%else%}
-                    <p class="font-weight-light mt-3">{% if user.is_authenticated %} Adicione uma Versão antes de adicionar Opiniões! {%else%} Cadastre-se e adicione uma Versão
-                    antes de adicionar suas Opiniões{%endif%}</p>
+                    <p class="font-weight-light mt-3">{% if user.is_authenticated %} Adicione {%else%} Cadastre-se e adicione {%endif%}uma Versão
+                    antes de adicionar suas Opiniões!</p>
                 {%endif%}
             </div>
         </div>
@@ -83,14 +94,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">
-                        <i class="fa fa-hand-o-up" aria-hidden="true"></i><i class="fa fa-hand-o-down" aria-hidden="true"></i> Edição Vantagens e Desvantagens </h5>
+                        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> <i class="fa fa-thumbs-o-down" aria-hidden="true"></i> 
+                        Edição das Vantagens e Desvantagens </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     {%if versao_selecionada is None%}
-                    <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, adicione a Versão do Framework a qual você deseja relacioná-las.</p>
+                    <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, 
+                    adicione a Versão do Framework a qual você deseja relacioná-las.</p>
                     {%else%}
                     <div class="form-group">
                         <label for="descricao" class="col-form-label">Descrição:</label>
@@ -101,11 +114,13 @@
                     </div>
                         <div class="col-md-5 mt-2">
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="vantagem" value="True" name="opiniao" class="custom-control-input">
+                                <input type="radio" id="vantagem" value="True" name="opiniao" class="custom-control-input" {%if opiniao%}
+                            checked {%endif%}>
                                 <label class="custom-control-label" for="vantagem">Vantagem</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="desvantagem" value="False" name="opiniao" class="custom-control-input">
+                                <input type="radio" id="desvantagem" value="False" name="opiniao" class="custom-control-input" {% if not opiniao%}
+                                checked{%endif%}>
                                 <label class="custom-control-label" for="desvantagem">Desvantagem</label>
                             </div>
                         </div>

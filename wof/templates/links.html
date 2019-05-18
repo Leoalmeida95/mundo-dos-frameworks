@@ -39,13 +39,14 @@
                         </li>
                         {% empty %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <p class="font-weight-light">
+                            Ninguém adicionou um link sobre este framework.
                             {% if user.is_authenticated %}
-                            <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Clique no 'Editar' e seja o primeiro a
-                                fazer!
-                            </p>
-                            {%else%}
-                            <p class="font-weight-light">Ninguém adicionou um link sobre este framework. Cadastre-se e seja o primeiro a fazer!</p>
+                             Clique no 'Editar' 
+                            {%else%} Cadastre-se 
                             {%endif%}
+                            e seja o primeiro a fazer!
+                        </p>
                         </li>
                         {%endfor%}
                 </div>

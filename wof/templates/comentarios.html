@@ -78,7 +78,13 @@
                         <div class="media-heading form-inline">
                             <h6>Mundo dos Frameworks</h6>
                         </div>
-                        <p class="font-weight-light">Ainda não há nenhum comentário. Use esse espaço para tirar suas dúvidas e fazer observações.</p>
+                        <p class="font-weight-light">Ainda não há nenhum comentário.
+                        {% if user.is_authenticated %} 
+                        Use 
+                        {%else%} 
+                        Cadastre-se e use 
+                        {%endif%}
+                        esse espaço para tirar suas dúvidas e fazer observações.</p>
                     </div>
                 </div>
                 {%endfor%}

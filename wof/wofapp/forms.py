@@ -28,13 +28,16 @@ class CustomUserCreationForm(UserCreationForm):
         widget=forms.TextInput(attrs={'id': 'primeiro_nome'}))
     ultimo_nome = forms.CharField(label='ultimo_nome',required=True, 
         widget=forms.TextInput(attrs={'id': 'ultimo_nome'}))
-    cpf = forms.CharField(label='cpf',required=True, widget=forms.TextInput(attrs={'id': 'cpf'}))
-    conta_publica = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, initial = True)
+    cpf = forms.CharField(label='cpf',required=True,
+     widget=forms.TextInput(attrs={'id': 'cpf'}))
+    conta_publica = forms.ChoiceField(choices=CHOICES,
+     widget=forms.RadioSelect, initial = True)
     formacao = forms.CharField(label='formacao',required=False, 
         widget=forms.TextInput(attrs={'id': 'formacao'}))
     profissao = forms.CharField(label='profissao',required=False, 
         widget=forms.TextInput(attrs={'id': 'profissao'}))
-    email = forms.CharField(label='email',required=True, widget=forms.TextInput(attrs={'id': 'email'}))
+    email = forms.CharField(label='email',required=True,
+     widget=forms.TextInput(attrs={'id': 'email'}))
     class Meta:
         model = Usuario
         fields = ['primeiro_nome','ultimo_nome','cpf','conta_publica','formacao','profissao', 'email','password1','password2']
@@ -92,13 +95,16 @@ class UserChangeForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'id': 'primeiro_nome'}))
     ultimo_nome = forms.CharField(label='ultimo_nome',required=True, 
         widget=forms.TextInput(attrs={'id': 'ultimo_nome'}))
-    cpf = forms.CharField(label='cpf',required=True, widget=forms.TextInput(attrs={'id': 'cpf'}))
-    conta_publica = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    cpf = forms.CharField(label='cpf',required=True,
+     widget=forms.TextInput(attrs={'id': 'cpf'}))
+    conta_publica = forms.ChoiceField(choices=CHOICES,
+     widget=forms.RadioSelect)
     formacao = forms.CharField(label='formacao',required=False, 
         widget=forms.TextInput(attrs={'id': 'formacao'}))
     profissao = forms.CharField(label='profissao',required=False, 
         widget=forms.TextInput(attrs={'id': 'profissao'}))
-    email = forms.CharField(label='email',required=True, widget=forms.TextInput(attrs={'id': 'email'}))
+    email = forms.CharField(label='email',required=True,
+     widget=forms.TextInput(attrs={'id': 'email'}))
     class Meta:
         model = Usuario
         fields = ['primeiro_nome','ultimo_nome','cpf','conta_publica','formacao','profissao', 'email','password']
@@ -319,3 +325,22 @@ class FrameworkForm(forms.ModelForm):
         elif Linguagem.obter_linguagem_por_id(linguagem_id) is None:
             raise forms.ValidationError('Escolha uma Linguagem válida para o Framework.')
         return self.cleaned_data
+
+class OpiniaoForm(forms.ModelForm):
+
+    opiniao = forms.ChoiceField(choices=CHOICES,
+     widget=forms.RadioSelect, initial = True) 
+    texto = forms.CharField(required=True, 
+        widget=forms.TextInput(attrs={'name': 'texto'}))
+
+    class Meta:
+        model = Opiniao
+        fields = ['texto','eh_favoravel']
+
+    def clean(self):        
+        texto = self.cleaned_data.get('texto')
+        if texto is None:
+            raise forms.ValidationError('Escreva algo na opinião.', code='texto')
+        
+        return self.cleaned_data
+

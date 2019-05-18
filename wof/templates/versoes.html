@@ -23,21 +23,24 @@
         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body" style="overflow-y:auto;">
                 <div class="form-inline">
-                    <p class="font-weight-light">O <b>Hello World</b>, as <b>Funcionalidades</b> e as <b>Opiniões</b> sobre esse Framework estão relacionadas a cada Versão que ele possui.</p>
+                    <p class="font-weight-light">O <b>Hello World</b>, as <b>Funcionalidades</b> além das <b>Vantagens e Desvantagens</b> sobre esse Framework estão relacionadas a cada Versão que ele possui.</p>
                 </div>
                 {% if versao_selecionada is not None%}
                 <div class="form-inline">
                     <p class="font-weight-light">
                         A Versão selecionada do {{framework}} é: <b>{{versao_selecionada.numero|floatformat:3}}</b></p>
                 </div>
-                {%else%} {% if user.is_authenticated %}
-                <p class="font-weight-light"> O
-                    <b>{{framework}}</b> ainda não possui versões cadastradas. Clique no 'Editar' e seja o primeiro a fazer!</p>
-                {%else%}
-                <p class="font-weight-light">O
-                    <b>{{framework}}</b> ainda não possui versões cadastradas. Cadastre-se e seja o primeiro a fazer!
+                {%else%} 
+                <p class="font-weight-light"> 
+                O <b>{{framework}}</b> ainda não possui versões.
+                {% if user.is_authenticated %} 
+                Clique no 'Editar' 
+                {%else%} 
+                Cadastre-se 
+                {%endif%}
+                e seja o primeiro a editá-las!
                 </p>
-                {%endif%} {%endif%} {% if framework.versao_set.count > 1 %}
+                {%endif%} {% if framework.versao_set.count > 1 %}
                 <div class="form-inline">
                     <p class="font-weight-light mt-3">Escolha uma das outras Versões disponíveis:</p>
                     <div class="btn-group dropright ml-2">
@@ -54,6 +57,18 @@
                 </div>
                 <p class="font-weight-light mt-3">Adicione novas Versões.</p>
                 {% endif %}
+
+                <div id="accordion2">
+                    <!--FUNCIONALIDADES-->
+                    {% include "funcionalidades.html" %}
+
+                    <!--HELLO WORLD-->
+                    {% include "helloworld.html" %}
+
+                    <!--OPINIÕES-->
+                    {% include "opinioes.html" %}
+                </div>
+
             </div>
         </div>
     </div>

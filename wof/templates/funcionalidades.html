@@ -21,17 +21,24 @@
                     {% endif %}</div>
             </div>
         </div>
-        <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+        <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion2">
             <div class="card-body" style="overflow-y:auto;">
                 <p class="font-weight-light">
-                {%if versao_selecionada is not None and versao_selecionada.funcionalidades is not None%}
-                Funcionalidades do {{framework}} na versão {{versao_selecionada.numero|floatformat:3}}.
+                {%if versao_selecionada is not None%}
+                    Funcionalidades do {{framework}} na versão {{versao_selecionada.numero|floatformat:3}}.
+                    <div class="font-weight-light">
+                        {%if versao_selecionada is not None and versao_selecionada.funcionalidades is not None%}
+                        xxxxx
+                        {%else%}
+                            Este framework ainda não possui funcionalidades registradas.
+                            {% if user.is_authenticated %} Clique no 'Editar' {%else%} Cadastre-se {%endif%}
+                            e seja o primeiro a fazer! 
+                        {%endif%}
+                    </div>
                 {%else%}
-                    {% if user.is_authenticated %} Este framework ainda não possui funcionalidades registradas. Clique no 'Editar' e seja
-                    o primeiro a fazer! {%else%} Este framework ainda não possui funcionalidades registradas. Cadastre-se
-                    e seja o primeiro a fazer! {%endif%}
-                </p>
+                    Essas Funcionalodades são relacionadas a uma das versões do {{framework}}. Adicone uma versão antes de editá-las!
                 {%endif%}
+                </p>
             </div>
         </div>
     </div>

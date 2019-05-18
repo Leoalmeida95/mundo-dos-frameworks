@@ -246,9 +246,12 @@ def montar_framework(framework,versao):
     args['framework'] = framework
     args['versao_selecionada'] = versao
     args['ultimo_helloworld'] = versao.helloworld_set.last() if versao is not None else None
+    args['vantagens'] = versao.opiniao_set.filter(eh_favoravel=True).all() if versao is not None else None
+    args['desvantagens'] = versao.opiniao_set.filter(eh_favoravel=False).all() if versao is not None else None
+    args['comentarios'] = Comentario.obter_somente_comentarios(framework.id)
+
     args['lista_frameworks'] = Linguagem.obter_frameworks_linguagem(framework.linguagem_id)
     args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
-    args['comentarios'] = Comentario.obter_somente_comentarios(framework.id)
  
     return args
 
@@ -329,7 +332,7 @@ def helloworld_view(request,fm_id,vs_id):
                     versao_id =vs_id
                 ) 
                 hello.save()
-                messages.info(request, 'Hello World editaco com sucesso!')
+                messages.info(request, 'Hello World editado com sucesso!')
             except Exception:
                 logger = logging.getLogger(__name__)
                 logger.exception("Erro ao atualizar Hello World.")
@@ -431,19 +434,24 @@ def define_linguagem_adcframework_view(request,lg_id):
 
 @login_required
 def opiniao_view(request,fm_id,vs_id):
+    args={}
     user = request.user
     if request.method == 'POST':
-        form = HelloWorldForm(request.POST)
+        opiniao = True if request.POST.get("opiniao","") == 'True' else False 
+        form = OpiniaoForm(request.POST)
         if form.is_valid():
             try:
                 op = Opiniao(
-                    texto=request.POST['descricao'],
-                    eh_favoravel=request.POST['codigo_exemplo'],
+                    texto=request.POST['texto'],
+                    eh_favoravel=opiniao,
                     usuario_id=user.id,
                     versao_id =vs_id
                 ) 
                 op.save()
-                messages.info(request, 'Edição realizada com sucesso!')
+                if opiniao == True: 
+                    messages.info(request, 'Vantagens editadas com sucesso!')
+                else:
+                    messages.info(request, 'Desvantagens editadas com sucesso!')
             except Exception:
                 logger = logging.getLogger(__name__)
                 logger.exception("Erro ao atualizar vantagens e desvantagens.")
@@ -451,5 +459,8 @@ def opiniao_view(request,fm_id,vs_id):
         else:
             erroMsg = form.errors['__all__'].data[0].message
             messages.warning(request, erroMsg)
+    else:
+        form = OpiniaoForm()
+        opiniao = 'True'
 
-    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id},args=(opiniao)))
