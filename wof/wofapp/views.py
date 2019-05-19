@@ -123,7 +123,7 @@ def faq_view(request):
 
 def favoritos_view(request):
     linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
-    favoritos = request.user.favoritado_por.all()
+    favoritos = request.user.favoritado_por.all().order_by('nome')
     return render(request,'favoritos.html',{'linguagens_combo':linguagens_combo,'favoritos':favoritos})
 
 def registrar_usuario_view(request):
@@ -260,19 +260,33 @@ def montar_framework(framework,versao,u_id):
     return args
 
 def frameworks_view(request,id):
+    args = {}
     framework = Framework.obter_framework_por_id(id)
-    versao = framework.versao_set.last()
+    args = montar_framework(framework,framework.versao_set.last(),request.user.id)
+    
+    return render(request,'frameworks.html', args)
+
+def trocar_versao_view(request,vs_id):
+    args = {}
+    versao = Versao.obter_versao_por_id(vs_id)
+    framework = versao.framework
     args = montar_framework(framework,versao,request.user.id)
     
     return render(request,'frameworks.html', args)
 
-def trocar_versao(request,vs_id):
-    versao = Versao.obter_versao_por_id(vs_id)
-    framework = versao.framework
-    args = {}
-    args = montar_framework(framework,versao,request.user.id)
-    
-    return render(request,'frameworks.html', args)
+def buscar_framework_view(request):
+    if request.method == 'POST':
+        pesquisa = request.POST['pesquisa']
+        framework = Framework.buscar_por_nome(pesquisa)
+        args = {}
+        if framework is None:
+            messages.warning(request, 'Não existe nenhum Framework que contenha \''+pesquisa+'\'.')
+            next = request.POST.get('next', '/')
+            return HttpResponseRedirect(next)
+
+        else:
+            args = montar_framework(framework,framework.versao_set.last(),request.user.id)
+            return render(request,'frameworks.html', args)
 
 @login_required
 def comentario_view(request,fm_id):

@@ -48,6 +48,11 @@
 				<a class="nav-link" href="/faq">FAQ</a>
 				</li>
 			</ul>
+			<form class="form-inline my-2 my-lg-0 mr-4" role="form" method="POST" action="/buscar_framework/"> 
+			{% csrf_token %}
+				<input class="form-control mr-sm-2" type="search" name="pesquisa" placeholder="Buscar Framework" aria-label="Pesquisar">
+				<button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Pesquisar</button>
+			</form>
 			{% if user.is_authenticated %}
 			<ul class="navbar-nav mr-3">
 				<li class="nav-item dropdown">
@@ -117,7 +122,7 @@
 			</span>
 			<ul class="navbar-nav mr-3">
 				<li class="nav-item dropdown">
-					<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+					<button type="button" class="btn btn-sm btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
 					 aria-expanded="false">
 						Login
 					</button>
@@ -140,7 +145,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<button type="submit" class="btn btn-primary btn-block mt-4">
+										<button type="submit" class="btn btn-info btn-block mt-4">
 											<i class="fa fa-sign-in" aria-hidden="true"></i> Entrar</button>
 									</div>
 									<input type="hidden" name="next" value="{{ request.path }}">

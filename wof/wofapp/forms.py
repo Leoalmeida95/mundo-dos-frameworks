@@ -54,7 +54,7 @@ class CustomUserCreationForm(UserCreationForm):
         email = self.cleaned_data.get('email')
         username = self.cleaned_data.get('primeiro_nome')
  
-        if email and Usuario.verifica_email_valido(email,username):
+        if email and Usuario.verificar_email_valido(email,username):
             raise forms.ValidationError('Este email já está em uso, por favor escolha outro.')
         return email
     
@@ -62,7 +62,7 @@ class CustomUserCreationForm(UserCreationForm):
         cpf = self.cleaned_data.get('cpf')
         username = self.cleaned_data.get('primeiro_nome')
 
-        if cpf and Usuario.verifica_cpf_valido(cpf,username):
+        if cpf and Usuario.verificar_cpf_valido(cpf,username):
             raise forms.ValidationError('Este CPF já está em uso, por favor verifique se foi digitado corretamente.')
         # elif CpfValido().validate(cpf):
         #     raise forms.ValidationError('Número de CPF inválido.')
@@ -285,7 +285,7 @@ class VersaoForm(forms.ModelForm):
 
         if numero_versao is None:
             raise forms.ValidationError('O Número da Versão é obrigatório.')
-        elif Versao.verifica_numero(numero_versao,fram_id):
+        elif Versao.verificar_numero_existente(numero_versao,fram_id):
             raise forms.ValidationError('O framework já possui essa versão.')
         return self.cleaned_data
 
@@ -303,7 +303,7 @@ class LinguagemForm(forms.ModelForm):
 
         if nome is None:
             raise forms.ValidationError('O nome é obrigatório.')
-        elif Linguagem.verifica_nome(nome):
+        elif Linguagem.verificar_nome_existente(nome):
             raise forms.ValidationError('Essa Linguagem já está registrada no sistema.')
         return self.cleaned_data
 
@@ -329,7 +329,7 @@ class FrameworkForm(forms.ModelForm):
 
         if nome is None or nome is '' or linguagem_id is None:
             raise forms.ValidationError('Os campos são obrigatórios.')
-        elif Framework.verifica_nome(nome):
+        elif Framework.verificar_nome_existente(nome):
             raise forms.ValidationError('Essa Framework já está registrada no sistema.')
         elif Linguagem.obter_linguagem_por_id(linguagem_id) is None:
             raise forms.ValidationError('Escolha uma Linguagem válida para o Framework.')

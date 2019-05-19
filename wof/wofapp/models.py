@@ -7,6 +7,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.db.models import Avg, Count
+from django.db import transaction
 
 class EmailUserManager(BaseUserManager):
     def create_user(self, email, password=None, primeiro_nome=None, ultimo_nome=None, cpf = None, **kwargs):
@@ -94,11 +95,11 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
         return Usuario.objects.get(pk=id)
 
     @staticmethod
-    def verifica_email_valido(email,primeiro_nome):
+    def verificar_email_valido(email,primeiro_nome):
         return Usuario.objects.filter(email=email).exclude(primeiro_nome=primeiro_nome).count()
 
     @staticmethod
-    def verifica_cpf_valido(cpf,primeiro_nome):
+    def verificar_cpf_valido(cpf,primeiro_nome):
         return Usuario.objects.filter(cpf=cpf).exclude(primeiro_nome=primeiro_nome).count()
 
     def adicionar(self):
@@ -159,7 +160,7 @@ class Linguagem(models.Model):
         return Linguagem.objects.filter(id=id).first().framework_set.all().order_by('nome')
 
     @staticmethod
-    def verifica_nome(nome):
+    def verificar_nome_existente(nome):
         return Linguagem.objects.filter(nome=nome).first()
     
     @staticmethod
@@ -194,35 +195,42 @@ class Framework(models.Model):
         return self.nome
 
     @staticmethod
+    def adicionar(nome,lg_id,user_id):
+        fram = Framework(
+            nome = nome,
+            linguagem_id = lg_id,
+            usuario_id = user_id,
+        ) 
+        fram.save()
+
+    @staticmethod
     def obter_framework_por_id(id):
         return Framework.objects.get(id=id)
 
     @staticmethod
-    def verifica_nome(nome):
+    def verificar_nome_existente(nome):
         return Framework.objects.filter(nome=nome).first()
 
     @staticmethod
+    def buscar_por_nome(nome):
+        return Framework.objects.filter(nome__icontains=nome).first()
+
+    @staticmethod
     def adicionar_favorito(id,user_id):
-        fram = Framework.objects.get(id=id)
-        user = Usuario.objects.get(id=user_id)
-        fram.favoritado_por.add(user)
-        fram.save()
+        with transaction.atomic():
+            fram = Framework.objects.select_for_update().get(id=id)
+            user = Usuario.objects.get(id=user_id)
+            fram.favoritado_por.add(user)
+            fram.save()
+
 
     @staticmethod
     def excluir_favorito(id,user_id):
-        fram = Framework.objects.get(id=id)
-        user = Usuario.objects.get(id=user_id)
-        fram.favoritado_por.remove(user)
-        fram.save()
-
-    @staticmethod
-    def adicionar(nome,lg_id,user_id):
-        fram = Framework(
-            nome=nome,
-            linguagem_id = lg_id,
-            usuario_id=user_id,
-        ) 
-        fram.save()
+        with transaction.atomic():
+            fram = Framework.objects.select_for_update().get(id=id)
+            user = Usuario.objects.get(id=user_id)
+            fram.favoritado_por.remove(user)
+            fram.save()
 
     @staticmethod
     def obter_top10_constribuicoes():
@@ -253,21 +261,21 @@ class Versao(models.Model):
         return str(self.numero)
 
     @staticmethod
+    def adicionar(numero,fram_id,user_id):
+        versao = Versao(
+            numero = numero,
+            framework_id = fram_id,
+            usuario_id = user_id,
+        ) 
+        versao.save() 
+
+    @staticmethod
     def obter_versao_por_id(id):
         return Versao.objects.get(id=id)
 
     @staticmethod
-    def verifica_numero(numero, fm_id):
+    def verificar_numero_existente(numero, fm_id):
         return Versao.objects.filter(numero=numero,framework_id=fm_id).first()
-
-    @staticmethod
-    def adicionar(numero,fram_id,user_id):
-        versao = Versao(
-            numero=numero,
-            framework_id=fram_id,
-            usuario_id=user_id,
-        ) 
-        versao.save() 
 
 class Funcionalidade(models.Model):
     descricao = models.CharField(max_length=5000)
@@ -289,10 +297,10 @@ class Helloworld(models.Model):
     @staticmethod
     def adicionar(descricao,codigo_exemplo,user_id,vs_id):
         hello = Helloworld(
-            descricao=descricao,
-            codigo_exemplo=codigo_exemplo,
-            usuario_id=user_id,
-            versao_id =vs_id
+            descricao = descricao,
+            codigo_exemplo = codigo_exemplo,
+            usuario_id = user_id,
+            versao_id = vs_id
         ) 
         hello.save()
 
@@ -350,7 +358,7 @@ class Comentario(models.Model):
     def obter_somente_comentarios(fram_id):
         #pega os comentários excluindo-se os que são resposta.
         respostas = Comentario.objects.raw('''SELECT 
-                                                    to_comentario_id AS id 
+                                            to_comentario_id AS id 
                                             FROM wofapp_comentario_respostas
                                             ''')
         respostas_ids = [resposta.pk for resposta in respostas]
