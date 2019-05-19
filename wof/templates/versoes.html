@@ -121,7 +121,8 @@
                         </tbody>
                     </table>
                     {%endif%} Adicione uma Versão do Framework:
-                    <input type="text" class="form-control" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required> 
+                    <input type="text" class="form-control" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required
+                    onKeyPress="return validaNumeros(event);" onpaste="return false" ondrop="return false"> 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>

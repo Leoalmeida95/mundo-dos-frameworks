@@ -121,6 +121,11 @@ def faq_view(request):
     linguagens = Linguagem.obter_linguagens()
     return render(request,'faq.html',{'linguagens_combo':linguagens_combo,'linguagens':linguagens})
 
+def favoritos_view(request):
+    linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
+    favoritos = request.user.favoritado_por.all()
+    return render(request,'favoritos.html',{'linguagens_combo':linguagens_combo,'favoritos':favoritos})
+
 def registrar_usuario_view(request):
     args = {}
     if request.method == "POST":

@@ -266,7 +266,7 @@ class HelloWorldForm(forms.ModelForm):
 
 class VersaoForm(forms.ModelForm):
     
-    numero_versao = forms.IntegerField(required=True, 
+    numero_versao = forms.CharField(required=True, 
         widget=forms.TextInput(attrs={'name': 'numero_versao'}))
     fram_id = forms.IntegerField(required=False, 
         widget=forms.TextInput())

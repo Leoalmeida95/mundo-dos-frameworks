@@ -155,8 +155,8 @@ class Linguagem(models.Model):
         return Linguagem.objects.annotate(num_frameworks=Count('framework')).filter(num_frameworks__gt=0).all().order_by('nome')
     
     @staticmethod
-    def obter_frameworks_linguagem(fm_id):
-        return Linguagem.objects.filter(id=fm_id).first().framework_set.all().order_by('nome')
+    def obter_frameworks_linguagem(id):
+        return Linguagem.objects.filter(id=id).first().framework_set.all().order_by('nome')
 
     @staticmethod
     def verifica_nome(nome):

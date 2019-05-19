@@ -13,7 +13,7 @@ urlpatterns = [
     path('ativar_conta/<slug:uidb64>/<slug:token>', views.ativar_conta_view, name="ativar_conta"),
     path('reset_senha/', views.reset_senha_view, name="reset_senha"),
     path('faq/', views.faq_view, name="faq"),
-
+    path('favoritos/', views.favoritos_view, name="favoritos"),
     path('frameworks/<int:id>', views.frameworks_view, name="frameworks"),
     path('trocar_versao/<int:vs_id>', views.trocar_versao, name="trocar_versao"),
     path('comentario/<int:fm_id>', views.comentario_view, name="comentario"),
