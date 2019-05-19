@@ -20,3 +20,15 @@ function enviarMensagem(msg,type,title) {
 
     toastr[type](msg,title)
 }
+
+function troca_campos(val){
+  var condicao1 = document.getElementById("condicao1"+val);
+  var condicao2 = document.getElementById("condicao2"+val);
+  var condicao3 = document.getElementById("condicao3"+val);
+  var condicao4 = document.getElementById("condicao4"+val);
+
+  condicao1.style.display = "none";
+  condicao2.style.display = "block";
+  condicao3.style.display = "none";
+  condicao4.style.display = "block";
+}

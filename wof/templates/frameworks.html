@@ -23,6 +23,7 @@
         <div class="col-md-11">
             <h1 class="display-4 ml-3 mt-2">{{framework}}</h1>
         </div>
+        {% if user.is_authenticated %}
         <div class="col-md-1">
         {%if favorito %}
             <a href="{% url 'wofapp:desfavoritar_framework' framework.id %}"><i class="fa fa-star fa-3x mt-4" title="Desfavoritar Framework" aria-hidden="true" style="color:#FFD700"></i><a/>
@@ -30,6 +31,7 @@
             <a href="{% url 'wofapp:favoritar_framework' framework.id %}"><i class="fa fa-star-o fa-3x mt-4" title="Favoritar Framework" aria-hidden="true" style="color:#FFD700"></i><a/>
         {%endif%}    
         </div>
+        {%endif%}
     </div>
     <div id="accordion">
         <!--VERSÕES-->

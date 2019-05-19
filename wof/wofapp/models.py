@@ -261,6 +261,14 @@ class Versao(models.Model):
         return str(self.numero)
 
     @staticmethod
+    def editar(numero, vs_id, user_id):
+        with transaction.atomic():
+            versao = Versao.objects.select_for_update().get(id=vs_id)
+            versao.numero = numero
+            versao.usuario_id = user_id
+            versao.save() 
+
+    @staticmethod
     def adicionar(numero,fram_id,user_id):
         versao = Versao(
             numero = numero,

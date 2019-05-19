@@ -25,36 +25,36 @@
                 <div class="row">
                     <div class="col">
                         <div class="collapse {{exibe_modal_fram}}" id="multiCollapseExample1">
-                        <div class="card-header">
-                            <i class="fa fa-laptop" aria-hidden="true"></i> Novo Framework</h5>
-                        </div>
-                        <div class="card-body">
-                            {% if user.is_authenticated %}
-                            <p class="font-weight-light mt-1">Escolha abaixo a Linguagem que o novo Framework pertence e seu nome:</p>
-                                <div class="form-inline">
-                                    <div class="btn-group">
-                                        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                            Selecione uma Linguagem
-                                        </button>
-                                        <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdownMenuvs">
-                                            {%for lg in linguagens %}
-                                            <a class="dropdown-item" href="{% url 'wofapp:define_linguagem_adcframework' lg.id %}">{{lg.nome}}</a>
-                                            {%endfor%}
+                            <div class="card-header">
+                                <i class="fa fa-laptop" aria-hidden="true"></i> Novo Framework</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if user.is_authenticated %}
+                                <p class="font-weight-light mt-1">Escolha abaixo a Linguagem que o novo Framework pertence e seu nome:</p>
+                                    <div class="form-inline">
+                                        <div class="btn-group">
+                                            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                Selecione uma Linguagem
+                                            </button>
+                                            <div class="dropdown-menu scrollable-menu" aria-labelledby="dropdownMenuvs">
+                                                {%for lg in linguagens %}
+                                                <a class="dropdown-item" href="{% url 'wofapp:define_linguagem_adcframework' lg.id %}">{{lg.nome}}</a>
+                                                {%endfor%}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div>
-                                    {%if lg_escolhida is not None %}<p value={{lg_escolhida.id}} class="font-weight-light mt-3">Linguagem selecionada: <b>{{lg_escolhida.nome}}</b> </p> {%endif%}
-                                </div>
-                                <input type="text" class="form-control mt-3" name="nome" placeholder="Ex: Angular JS" required>
-                        </div>
-                        <div class="card-footer text-muted">                
-                            <button type="submit" class="btn btn-info" {%if lg_escolhida is None %}disabled{%endif%}>Salvar</button>
+                                    <div>
+                                        {%if lg_escolhida is not None %}<p value={{lg_escolhida.id}} class="font-weight-light mt-3">Linguagem selecionada: <b>{{lg_escolhida.nome}}</b> </p> {%endif%}
+                                    </div>
+                                    <input type="text" class="form-control mt-3" name="nome" placeholder="Ex: Angular JS" required>
+                                {%else%}
+                                <p class="font-weight-light mt-1">Para poder Adicionar O Framework é preciso se autenticar! ;)</p>
+                                {%endif%}
                             </div>
-                            {%else%}
-                            <p class="font-weight-light mt-1">Para poder Adicionar O Framework é preciso se autenticar! ;)</p>
-                            {%endif%}
+                            <div class="card-footer text-muted">                
+                                <button type="submit" class="btn btn-info" {%if lg_escolhida is None %}disabled{%endif%}>Salvar</button>
+                            </div>
                         </div> 
                     </div>
                 </div>
@@ -73,20 +73,20 @@
                 <div class="row">
                     <div class="col">
                         <div class="collapse" id="multiCollapseExample2">
-                            {% if user.is_authenticated %}
                             <div class="card-header">
                                 <i class="fa fa-code" aria-hidden="true"></i> Nova Linguagem de Programação</h5>
                             </div>
                             <div class="card-body">
+                            {% if user.is_authenticated %}
                                 <p class="font-weight-light mt-1">Insira uma nova Linguagem que ainda não está no sistema, é só entrar com o nome! :)</p>
                                 <input type="text" class="form-control" name="nome" id="nome" placeholder="Ex: Go" required>
+                            {%else%}
+                            <p class="font-weight-light mt-1">Para poder Adicionar a Linguagem é preciso se autenticar! ;)</p>
+                            {%endif%}
                             </div>
                             <div class="card-footer text-muted">                
                                 <button type="submit" class="btn btn-info">Salvar</button>
                             </div>
-                            {%else%}
-                            <p class="font-weight-light mt-1">Para poder Adicionar a Linguagem é preciso se autenticar! ;)</p>
-                            {%endif%}
                         </div>
                     </div>
                 </div>

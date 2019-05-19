@@ -107,13 +107,15 @@ def login_view(request, *args, **kwargs):
         else:
             erroMsg = form.errors['__all__'].data[0].message
             messages.error(request, erroMsg)
-     
-    next = request.POST.get('next', '/')
+
+    path = request.POST.get('next', '/')
+    next = path if path != '/buscar_framework/' else '/'
     return HttpResponseRedirect(next)
 
 def logout_view(request):
     logout(request)
-    next = request.POST.get('next', '/')
+    path = request.POST.get('next', '/')
+    next = path if path != '/buscar_framework/' else '/'
     return HttpResponseRedirect(next)
 
 def faq_view(request):
@@ -281,7 +283,8 @@ def buscar_framework_view(request):
         args = {}
         if framework is None:
             messages.warning(request, 'Não existe nenhum Framework que contenha \''+pesquisa+'\'.')
-            next = request.POST.get('next', '/')
+            path = request.POST.get('next', '/')
+            next = path if path != '/buscar_framework/' else '/'
             return HttpResponseRedirect(next)
 
         else:
@@ -358,6 +361,25 @@ def versao_view(request,fm_id):
         if form.is_valid():
             try:
                 Versao.adicionar(request.POST['numero_versao'],fm_id,user.id)
+                messages.info(request, 'Versão editada com sucesso!')
+            except Exception:
+                logger = logging.getLogger(__name__)
+                logger.exception("Erro ao editar Versão.")
+                messages.error(request, 'Erro ao editar Versão. Tente novamente mais tarde.')
+        else:
+            erroMsg = form.errors['__all__'].data[0].message
+            messages.warning(request, erroMsg)
+
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
+@login_required
+def editar_versao_view(request,vs_id,fm_id):
+    user = request.user
+    if request.method == 'POST':
+        form = VersaoForm(fm_id, request.POST)
+        if form.is_valid():
+            try:
+                Versao.editar(request.POST['numero_versao'],vs_id,user.id)
                 messages.info(request, 'Versão editada com sucesso!')
             except Exception:
                 logger = logging.getLogger(__name__)

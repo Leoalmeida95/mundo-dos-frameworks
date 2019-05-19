@@ -1,16 +1,3 @@
-
-<head>
-    <script>
-    function troca_campos(val){
-        var condicao1 = document.getElementById("condicao1"+val);
-        var condicao2 = document.getElementById("condicao2"+val);
-
-        condicao1.style.display = "none";
-        condicao2.style.display = "block";
-    }
-    </script>
-</head>
-
 <body>
     <div class="col-md-12 mt-3">
         <div class="card mr-2 mt-2 ml-1">
@@ -56,9 +43,9 @@
                     </p>
                     {%endif%} {% if framework.versao_set.count > 1 %}
                     <div class="form-inline">
-                        <p class="font-weight-light mt-3">Escolha uma das outras Versões disponíveis:</p>
+                        <p class="font-weight-light mt-1">Escolha uma das outras Versões disponíveis:</p>
                         <div class="btn-group dropright ml-2">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
+                            <button class="btn btn-primary btn-sm dropdown-toggle mb-2" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                                 Selecione
                             </button>
@@ -69,7 +56,6 @@
                             </div>
                         </div>
                     </div>
-                    <p class="font-weight-light mt-3">Adicione novas Versões.</p>
                     {% endif %}
 
                     <div id="accordion2">
@@ -89,8 +75,6 @@
     </div>
 
     <!-- Modal -->
-    <form class="form" role="form" method="POST" action="/versao/{{framework.id}}">
-        {% csrf_token %}
         <div class="modal fade" id="edicaoVersoes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
@@ -111,41 +95,47 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {%for versao in framework.versao_set.all %}
-                                <tr>
-                                    <td>
-                                        <a id="condicao1{{versao.id}}" style="display:block">
-                                            {{versao.numero|floatformat:3}}
-                                        <a>
+                            {%for versao in framework.versao_set.all %}
+                                <form class="form" role="form" method="POST" action="/editar_versao/{{versao.id}}/{{framework.id}}">
+                                    {% csrf_token %}
+                                    <tr>
+                                        <td>
+                                            <a id="condicao1{{versao.id}}" style="display:block">
+                                                {{versao.numero|floatformat:3}}
+                                            <a>
 
-                                        <div id="condicao2{{versao.id}}" style="display:none" class="col-md-10">
-                                            <input type="text" class="form-control" value="{{versao.numero}}"> 
-                                        </div>
-                                    </td>
+                                            <div id="condicao2{{versao.id}}" style="display:none" class="col-md-10">
+                                                <input type="text" name="numero_versao" class="form-control" value="{{versao.numero}}" required> 
+                                            </div>
+                                        </td>
 
-                                    <td>
-                                        <a id="condicao1{{versao.id}}" style="display:block" href="#" onclick=""  >
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                        </a>
+                                        <td>
+                                            <a id="condicao3{{versao.id}}" style="display:block" href="#" >
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true" title="Editar número" onclick="troca_campos({{versao.id}})"></i>
+                                            </a>
 
-                                        <div id="condicao2{{versao.id}}" style="display:none" class="col-md-2">
-                                            <button type="submit" class="btn btn-info" value="#">Editar</button>
-                                        </div>                                       
-                                    </td>
-                                </tr>
-                                {%endfor%}
+                                            <div id="condicao4{{versao.id}}" style="display:none" class="col-md-2">
+                                                <button type="submit" class="btn btn-info" >Editar</button>
+                                            </div>                                       
+                                        </td>
+                                    </tr>
+                                </form>
+                            {%endfor%}
                             </tbody>
                         </table>
-                        {%endif%} Adicione uma Versão do Framework:
-                        <input type="text" class="form-control" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required
-                        onKeyPress="return validaNumeros(event);" onpaste="return false" ondrop="return false"> 
+                        {%endif%} 
+                        <form class="form" role="form" method="POST" action="/versao/{{framework.id}}">
+                            {% csrf_token %}
+                            Adicione uma Versão do Framework:
+                            <input type="text" class="form-control" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required
+                            onKeyPress="return validaNumeros(event);" onpaste="return false" ondrop="return false"> 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                         <button type="submit" class="btn btn-info">Salvar</button>
                     </div>
+                </form>
                 </div>
             </div>
         </div>
-    </form>
 <body>
