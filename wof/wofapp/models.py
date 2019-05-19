@@ -101,6 +101,17 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
     def verifica_cpf_valido(cpf,primeiro_nome):
         return Usuario.objects.filter(cpf=cpf).exclude(primeiro_nome=primeiro_nome).count()
 
+    def adicionar(self):
+        self.ativo = False
+        self.save()
+    
+    def ativar_conta(self):
+        self.ativo = True
+        self.save()
+
+    def email_user(self, subject, message, from_email=None):
+        send_mail(subject, message, from_email, [self.email])
+
     def has_module_perms(self, app_label):
         "O usuário tem permissão para visualizar o app `app_label`?"
         # Simplest possible answer: Yes, always
@@ -110,9 +121,6 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
         "O usuário possui uma permissão específica?"
         # Simplest possible answer: Yes, always
         return True
-
-    def email_user(self, subject, message, from_email=None):
-        send_mail(subject, message, from_email, [self.email])
 
     @property
     def is_staff(self):
@@ -135,12 +143,20 @@ class Linguagem(models.Model):
         return self.nome
 
     @staticmethod
+    def adicionar(nome,user_id):
+        linguagem = Linguagem(
+            nome=nome,
+            usuario_id=user_id,
+        ) 
+        linguagem.save()
+
+    @staticmethod
     def obter_linguagens_minimo_um_framework():
         return Linguagem.objects.annotate(num_frameworks=Count('framework')).filter(num_frameworks__gt=0).all().order_by('nome')
     
     @staticmethod
     def obter_frameworks_linguagem(fm_id):
-        return Linguagem.objects.filter(id=fm_id).first().framework_set.all()
+        return Linguagem.objects.filter(id=fm_id).first().framework_set.all().order_by('nome')
 
     @staticmethod
     def verifica_nome(nome):
@@ -186,6 +202,29 @@ class Framework(models.Model):
         return Framework.objects.filter(nome=nome).first()
 
     @staticmethod
+    def adicionar_favorito(id,user_id):
+        fram = Framework.objects.get(id=id)
+        user = Usuario.objects.get(id=user_id)
+        fram.favoritado_por.add(user)
+        fram.save()
+
+    @staticmethod
+    def excluir_favorito(id,user_id):
+        fram = Framework.objects.get(id=id)
+        user = Usuario.objects.get(id=user_id)
+        fram.favoritado_por.remove(user)
+        fram.save()
+
+    @staticmethod
+    def adicionar(nome,lg_id,user_id):
+        fram = Framework(
+            nome=nome,
+            linguagem_id = lg_id,
+            usuario_id=user_id,
+        ) 
+        fram.save()
+
+    @staticmethod
     def obter_top10_constribuicoes():
         return Framework.objects.raw('''SELECT 
                                              fram.id
@@ -217,6 +256,19 @@ class Versao(models.Model):
     def obter_versao_por_id(id):
         return Versao.objects.get(id=id)
 
+    @staticmethod
+    def verifica_numero(numero, fm_id):
+        return Versao.objects.filter(numero=numero,framework_id=fm_id).first()
+
+    @staticmethod
+    def adicionar(numero,fram_id,user_id):
+        versao = Versao(
+            numero=numero,
+            framework_id=fram_id,
+            usuario_id=user_id,
+        ) 
+        versao.save() 
+
 class Funcionalidade(models.Model):
     descricao = models.CharField(max_length=5000)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
@@ -234,6 +286,16 @@ class Helloworld(models.Model):
     def __str__(self):
         return self.descricao
 
+    @staticmethod
+    def adicionar(descricao,codigo_exemplo,user_id,vs_id):
+        hello = Helloworld(
+            descricao=descricao,
+            codigo_exemplo=codigo_exemplo,
+            usuario_id=user_id,
+            versao_id =vs_id
+        ) 
+        hello.save()
+
 class Opiniao(models.Model):
     texto = models.CharField(max_length=1000)
     eh_favoravel = models.BooleanField(default=True)
@@ -241,7 +303,17 @@ class Opiniao(models.Model):
     versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
 
     def __str__(self):
-        return self.nome    
+        return self.nome  
+
+    @staticmethod
+    def adicionar(texto,eh_favoravel,user_id,vs_id):
+        op = Opiniao(
+            texto=texto,
+            eh_favoravel=eh_favoravel,
+            usuario_id=user_id,
+            versao_id =vs_id
+        ) 
+        op.save()
 
 class Link(models.Model):
     caminho = models.CharField(max_length=800)
@@ -260,6 +332,15 @@ class Comentario(models.Model):
 
     def __str__(self):
         return self.texto
+
+    @staticmethod
+    def adicionar(texto,fm_id,user_id):
+        coment = Comentario(
+            texto=texto,
+            framework_id=fm_id,
+            usuario_id=user_id
+        )
+        coment.save()   
 
     @staticmethod
     def obter_comentario_por_id(id):

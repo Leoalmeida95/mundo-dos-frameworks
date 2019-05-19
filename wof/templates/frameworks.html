@@ -8,10 +8,8 @@
 <body>
     <h3>
         <span class="badge badge-primary ml-2 mt-3">{{framework.linguagem.nome}}</span>
-        <i class="fa fa-star" aria-hidden="true"></i>
-        <!-- <i class="fa fa-star-o" aria-hidden="true"></i> -->
     </h3>
-    <p class="font-weight-light ml-2 mt-2 mb-4">Escolha um dos Frameworks disponíveis abaixo:</p>
+    <p class="font-weight-light ml-2 mt-4">Escolha um dos Frameworks do {{framework.linguagem.nome}} disponíveis abaixo:</p>
 
     <div id="priorityscroll">
         <ul>
@@ -21,7 +19,18 @@
             </li> {%endfor%}
         </ul>
     </div>
-    <h1 class="display-4 ml-3 mt-2">{{framework}}</h1>
+    <div class="row"> 
+        <div class="col-md-11">
+            <h1 class="display-4 ml-3 mt-2">{{framework}}</h1>
+        </div>
+        <div class="col-md-1">
+        {%if favorito %}
+            <a href="{% url 'wofapp:desfavoritar_framework' framework.id %}"><i class="fa fa-star fa-3x mt-4" title="Desfavoritar Framework" aria-hidden="true" style="color:#FFD700"></i><a/>
+        {%else%}
+            <a href="{% url 'wofapp:favoritar_framework' framework.id %}"><i class="fa fa-star-o fa-3x mt-4" title="Favoritar Framework" aria-hidden="true" style="color:#FFD700"></i><a/>
+        {%endif%}    
+        </div>
+    </div>
     <div id="accordion">
         <!--VERSÕES-->
         {% include "versoes.html" %}

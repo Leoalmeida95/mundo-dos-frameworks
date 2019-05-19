@@ -64,8 +64,8 @@ class CustomUserCreationForm(UserCreationForm):
 
         if cpf and Usuario.verifica_cpf_valido(cpf,username):
             raise forms.ValidationError('Este CPF já está em uso, por favor verifique se foi digitado corretamente.')
-        elif CpfValido().validate(cpf):
-            raise forms.ValidationError('Número de CPF inválido.')
+        # elif CpfValido().validate(cpf):
+        #     raise forms.ValidationError('Número de CPF inválido.')
         return cpf
 
     def save(self, commit=True):
@@ -266,18 +266,27 @@ class HelloWorldForm(forms.ModelForm):
 
 class VersaoForm(forms.ModelForm):
     
-    numero_versao = forms.CharField(required=True, 
+    numero_versao = forms.IntegerField(required=True, 
         widget=forms.TextInput(attrs={'name': 'numero_versao'}))
+    fram_id = forms.IntegerField(required=False, 
+        widget=forms.TextInput())
 
     class Meta:
         model = Versao
         fields = ['numero_versao']
 
+    def __init__(self, fram_id, *args, **kwargs):
+        self.fram_id = fram_id
+        super(VersaoForm, self).__init__(*args, **kwargs)
+
     def clean(self):        
         numero_versao = self.cleaned_data.get('numero_versao')
+        fram_id = self.fram_id
 
         if numero_versao is None:
             raise forms.ValidationError('O Número da Versão é obrigatório.')
+        elif Versao.verifica_numero(numero_versao,fram_id):
+            raise forms.ValidationError('O framework já possui essa versão.')
         return self.cleaned_data
 
 class LinguagemForm(forms.ModelForm):
@@ -303,7 +312,7 @@ class FrameworkForm(forms.ModelForm):
     
     nome = forms.CharField(required=False, 
         widget=forms.TextInput(attrs={'name': 'nome'}))
-    linguagem_id = forms.CharField(required=False, 
+    linguagem_id = forms.IntegerField(required=False, 
         widget=forms.TextInput())
 
     class Meta:

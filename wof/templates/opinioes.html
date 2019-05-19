@@ -45,14 +45,14 @@
                             <div class="card">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                    <div class=row>
-                                        <div class="col-md-11">
-                                            {{opiniao.texto}}
+                                        <div class=row>
+                                            <div class="col-md-11">
+                                                {{opiniao.texto}}
+                                            </div>
+                                            <div class="col-md-1">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </div>
                                         </div>
-                                        <div class="col-md-1">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                        </div>
-                                    </div>
                                     </li>
                                 </ul>
                             </div>
@@ -66,7 +66,27 @@
                             <div class="card">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                        {{opiniao.texto}}
+                                        <div class=row>
+                                            <div class="col-md-11">
+                                                {%if True %} 
+                                                    {{opiniao.texto}}
+                                                {%else%}
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <input type="text" value="{{opiniao.texto}}" class="form-control" {% if not publica%}required{%endif%}> 
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <input type="submit" class="btn btn-info" >
+                                                        </div>
+                                                    </div>
+                                                {%endif%}
+                                            </div>
+                                            {%if user.is_authenticated %}
+                                            <div class="col-md-1">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true" href="{% url 'wofapp:opiniao' opiniao.id opiniao.id %}" ></i>
+                                            </div>
+                                            {%endif%}
+                                        </div>
                                     </li>
                                 </ul>
                             </div>

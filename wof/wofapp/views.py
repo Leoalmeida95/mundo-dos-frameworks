@@ -130,8 +130,7 @@ def registrar_usuario_view(request):
         if form.is_valid():
             try:
                 user = form.save(commit=False)
-                user.ativo = False
-                user.save()
+                user.adicionar()
                 form.enviar_email(user,request=request)
                 messages.info(request, 'Muito bem! Agora para concluir seu registro, por favor confirme sua conta no email que enviamos pra você.')
                 return HttpResponseRedirect(reverse('wofapp:home'))
@@ -156,8 +155,7 @@ def ativar_conta_view(request, uidb64=None, token=None):
         user = None
 
     if user is not None and account_activation_token.check_token(user, token):
-        user.ativo = True
-        user.save()
+        user.ativar_conta()
         login(request, user)
         messages.info(request, 'Parabéns, registro concluído com sucesso.')
         return HttpResponseRedirect(reverse('wofapp:home'))
@@ -241,9 +239,10 @@ def trocar_senha_view(request):
     linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
     return render(request, 'reset_senha_confirmacao.html', {'authorized':True,'form':form, 'linguagens_combo':linguagens_combo})
 
-def montar_framework(framework,versao):
+def montar_framework(framework,versao,u_id):
     args = {}
     args['framework'] = framework
+    args['favorito'] = framework.favoritado_por.filter(id=u_id).first()
     args['versao_selecionada'] = versao
     args['ultimo_helloworld'] = versao.helloworld_set.last() if versao is not None else None
     args['vantagens'] = versao.opiniao_set.filter(eh_favoravel=True).all() if versao is not None else None
@@ -258,7 +257,7 @@ def montar_framework(framework,versao):
 def frameworks_view(request,id):
     framework = Framework.obter_framework_por_id(id)
     versao = framework.versao_set.last()
-    args = montar_framework(framework,versao)
+    args = montar_framework(framework,versao,request.user.id)
     
     return render(request,'frameworks.html', args)
 
@@ -266,7 +265,7 @@ def trocar_versao(request,vs_id):
     versao = Versao.obter_versao_por_id(vs_id)
     framework = versao.framework
     args = {}
-    args = montar_framework(framework,versao)
+    args = montar_framework(framework,versao,request.user.id)
     
     return render(request,'frameworks.html', args)
 
@@ -277,12 +276,7 @@ def comentario_view(request,fm_id):
         form = ComentarioForm(request.POST)
         if form.is_valid():
             try:
-                coment = Comentario(
-                    texto=request.POST['texto'],
-                    framework_id =fm_id,
-                    usuario_id = user.id
-                )
-                coment.save()
+                Comentario.adicionar(request.POST['texto'],fm_id,user.id)
                 messages.info(request, 'Seu comentário foi enviado com sucesso.')
             except Exception:
                 logger = logging.getLogger(__name__)
@@ -325,13 +319,7 @@ def helloworld_view(request,fm_id,vs_id):
         form = HelloWorldForm(request.POST)
         if form.is_valid():
             try:
-                hello = Helloworld(
-                    descricao=request.POST['descricao'],
-                    codigo_exemplo=request.POST['codigo_exemplo'],
-                    usuario_id=user.id,
-                    versao_id =vs_id
-                ) 
-                hello.save()
+                Helloworld.adicionar(request.POST['descricao'],request.POST['codigo_exemplo'],user.id,vs_id)
                 messages.info(request, 'Hello World editado com sucesso!')
             except Exception:
                 logger = logging.getLogger(__name__)
@@ -347,15 +335,10 @@ def helloworld_view(request,fm_id,vs_id):
 def versao_view(request,fm_id):
     user = request.user
     if request.method == 'POST':
-        form = VersaoForm(request.POST)
+        form = VersaoForm(fm_id, request.POST)
         if form.is_valid():
             try:
-                versao = Versao(
-                    numero=request.POST['numero_versao'],
-                    framework_id=fm_id,
-                    usuario_id=user.id,
-                ) 
-                versao.save()
+                Versao.adicionar(request.POST['numero_versao'],fm_id,user.id)
                 messages.info(request, 'Versão editada com sucesso!')
             except Exception:
                 logger = logging.getLogger(__name__)
@@ -376,11 +359,7 @@ def nova_linguagem_view(request):
         args['form'] = form
         if form.is_valid():
             try:
-                linguagem = Linguagem(
-                    nome=request.POST['nome'],
-                    usuario_id=user.id,
-                ) 
-                linguagem.save()
+                Linguagem.adicionar(request.POST['nome'],user.id)
                 messages.info(request, 'Linguagem registrada com sucesso!')
             except Exception:
                 logger = logging.getLogger(__name__)
@@ -403,12 +382,7 @@ def novo_framework_view(request,lg_id):
         args['form'] = form
         if form.is_valid():
             try:
-                fram = Framework(
-                    nome=request.POST['nome'],
-                    linguagem_id = lg_id,
-                    usuario_id=user.id,
-                ) 
-                fram.save()
+                Framework.adicionar(request.POST['nome'],lg_id,user.id)
                 messages.info(request, 'Framwork registrado com sucesso!')
             except Exception:
                 logger = logging.getLogger(__name__)
@@ -441,13 +415,7 @@ def opiniao_view(request,fm_id,vs_id):
         form = OpiniaoForm(request.POST)
         if form.is_valid():
             try:
-                op = Opiniao(
-                    texto=request.POST['texto'],
-                    eh_favoravel=opiniao,
-                    usuario_id=user.id,
-                    versao_id =vs_id
-                ) 
-                op.save()
+                Opiniao.adicionar(request.POST['texto'],opiniao,user.id,vs_id)
                 if opiniao == True: 
                     messages.info(request, 'Vantagens editadas com sucesso!')
                 else:
@@ -464,3 +432,27 @@ def opiniao_view(request,fm_id,vs_id):
         opiniao = 'True'
 
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id},args=(opiniao)))
+
+@login_required
+def favoritar_framework_view(request,fm_id):
+    try:
+        Framework.adicionar_favorito(fm_id,request.user.id)
+        messages.info(request, 'Framework adicionado aos favoritos!')
+    except Exception:
+        logger = logging.getLogger(__name__)
+        logger.exception("Erro ao adicionar framework favorito.")
+        messages.error(request, 'Erro ao adicionar framework favorito. Tente novamente mais tarde.')
+                
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
+@login_required
+def desfavoritar_framework_view(request,fm_id):
+    try:
+        Framework.excluir_favorito(fm_id,request.user.id)
+        messages.info(request, 'Framework retirado dos favoritos!')
+    except Exception:
+        logger = logging.getLogger(__name__)
+        logger.exception("Erro ao excluir framework favorito.")
+        messages.error(request, 'Erro ao excluir framework favorito. Tente novamente mais tarde.')
+
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))

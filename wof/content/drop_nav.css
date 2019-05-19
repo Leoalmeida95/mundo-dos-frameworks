@@ -56,3 +56,7 @@
     max-height: 350px;
     overflow-x: hidden;
 }
+
+body {
+    overflow-X: hidden;
+    }

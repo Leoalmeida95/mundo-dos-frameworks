@@ -99,16 +99,29 @@
                         <tbody>
                             {%for versao in framework.versao_set.all %}
                             <tr>
-                                <td>{{versao.numero|floatformat:3}}</td>
+                                <td>
+                                {%if False %} 
+                                    {{versao.numero|floatformat:3}}
+                                </td>
                                 <td>
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                {%else%}
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <input type="text" value="{{versao.numero}}" class="form-control" {% if not publica%}required{%endif%}> 
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-info" value="#">Editar</button>
+                                        </div>
+                                    </div>
+                                {%endif%}
                                 </td>
                             </tr>
                             {%endfor%}
                         </tbody>
                     </table>
                     {%endif%} Adicione uma Versão do Framework:
-                    <input type="text" class="form-control" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required>
+                    <input type="text" class="form-control" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required> 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
