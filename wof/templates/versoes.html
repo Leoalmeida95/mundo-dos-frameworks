@@ -1,134 +1,151 @@
-<div class="col-md-12 mt-3">
-    <div class="card mr-2 mt-2 ml-1">
-        <div class="card-header" id="headingOne">
-            <div class="bg-default clearfix">
-                <div class="float-left">
-                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Versões
-                        <i class="fa fa-shield" aria-hidden="true"></i>
-                    </h5>
+
+<head>
+    <script>
+    function troca_campos(val){
+        var condicao1 = document.getElementById("condicao1"+val);
+        var condicao2 = document.getElementById("condicao2"+val);
+
+        condicao1.style.display = "none";
+        condicao2.style.display = "block";
+    }
+    </script>
+</head>
+
+<body>
+    <div class="col-md-12 mt-3">
+        <div class="card mr-2 mt-2 ml-1">
+            <div class="card-header" id="headingOne">
+                <div class="bg-default clearfix">
+                    <div class="float-left">
+                        <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Versões
+                            <i class="fa fa-shield" aria-hidden="true"></i>
+                        </h5>
+                    </div>
+                    <div class="float-right">{% if user.is_authenticated %}
+                            <label class="mr-1">[
+                            <a data-toggle="modal" data-target="#edicaoVersoes" href="#">
+                                <small title="editar versões">editar
+                                    <i class="fa fa-pencil fa-fw"></i>
+                                </small>
+                            </a>]</label>
+                        <a href="#">
+                            <i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i>
+                        </a>
+                        {% endif %}</div>
                 </div>
-                <div class="float-right">{% if user.is_authenticated %}
-                        <label class="mr-1">[
-                        <a data-toggle="modal" data-target="#edicaoVersoes" href="#">
-                            <small title="editar versões">editar
-                                <i class="fa fa-pencil fa-fw"></i>
-                            </small>
-                        </a>]</label>
-                    <a href="#">
-                        <i class="fa fa-ban  text-dark" title="Denunciar conteúdo"></i>
-                    </a>
-                    {% endif %}</div>
             </div>
-        </div>
-        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-            <div class="card-body" style="overflow-y:auto;">
-                <div class="form-inline">
-                    <p class="font-weight-light">O <b>Hello World</b>, as <b>Funcionalidades</b> além das <b>Vantagens e Desvantagens</b> sobre esse Framework estão relacionadas a cada Versão que ele possui.</p>
-                </div>
-                {% if versao_selecionada is not None%}
-                <div class="form-inline">
-                    <p class="font-weight-light">
-                        A Versão selecionada do {{framework}} é: <b>{{versao_selecionada.numero|floatformat:3}}</b></p>
-                </div>
-                {%else%} 
-                <p class="font-weight-light"> 
-                O <b>{{framework}}</b> ainda não possui versões.
-                {% if user.is_authenticated %} 
-                Clique no 'Editar' 
-                {%else%} 
-                Cadastre-se 
-                {%endif%}
-                e seja o primeiro a editá-las!
-                </p>
-                {%endif%} {% if framework.versao_set.count > 1 %}
-                <div class="form-inline">
-                    <p class="font-weight-light mt-3">Escolha uma das outras Versões disponíveis:</p>
-                    <div class="btn-group dropright ml-2">
-                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            Selecione
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
-                            {%for versao in framework.versao_set.all %}
-                            <a class="dropdown-item" href="{% url 'wofapp:trocar_versao' versao.id %}">{{versao.numero|floatformat:3}}</a>
-                            {%endfor%}
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body" style="overflow-y:auto;">
+                    <div class="form-inline">
+                        <p class="font-weight-light">O <b>Hello World</b>, as <b>Funcionalidades</b> além das <b>Vantagens e Desvantagens</b> sobre esse Framework estão relacionadas a cada Versão que ele possui.</p>
+                    </div>
+                    {% if versao_selecionada is not None%}
+                    <div class="form-inline">
+                        <p class="font-weight-light">
+                            A Versão selecionada do {{framework}} é: <b>{{versao_selecionada.numero|floatformat:3}}</b></p>
+                    </div>
+                    {%else%} 
+                        <p class="font-weight-light"> 
+                        O <b>{{framework}}</b> ainda não possui versões.
+                    {% if user.is_authenticated %} 
+                        Clique no 'Editar' 
+                    {%else%} 
+                        Cadastre-se 
+                    {%endif%}
+                        e seja o primeiro a editá-las!
+                    </p>
+                    {%endif%} {% if framework.versao_set.count > 1 %}
+                    <div class="form-inline">
+                        <p class="font-weight-light mt-3">Escolha uma das outras Versões disponíveis:</p>
+                        <div class="btn-group dropright ml-2">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                Selecione
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
+                                {%for versao in framework.versao_set.all %}
+                                <a class="dropdown-item" href="{% url 'wofapp:trocar_versao' versao.id %}">{{versao.numero|floatformat:3}}</a>
+                                {%endfor%}
+                            </div>
                         </div>
                     </div>
+                    <p class="font-weight-light mt-3">Adicione novas Versões.</p>
+                    {% endif %}
+
+                    <div id="accordion2">
+                        <!--FUNCIONALIDADES-->
+                        {% include "funcionalidades.html" %}
+
+                        <!--HELLO WORLD-->
+                        {% include "helloworld.html" %}
+
+                        <!--OPINIÕES-->
+                        {% include "opinioes.html" %}
+                    </div>
+
                 </div>
-                <p class="font-weight-light mt-3">Adicione novas Versões.</p>
-                {% endif %}
-
-                <div id="accordion2">
-                    <!--FUNCIONALIDADES-->
-                    {% include "funcionalidades.html" %}
-
-                    <!--HELLO WORLD-->
-                    {% include "helloworld.html" %}
-
-                    <!--OPINIÕES-->
-                    {% include "opinioes.html" %}
-                </div>
-
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal -->
-<form class="form" role="form" method="POST" action="/versao/{{framework.id}}">
-    {% csrf_token %}
-    <div class="modal fade" id="edicaoVersoes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">
-                        <i class="fa fa-shield" aria-hidden="true"></i> Edição das Versões</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    {% if framework.versao_set.count > 0 %}
-                    <table class="table text-center">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col">Versão</th>
-                                <th scope="col">Alterar Número</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {%for versao in framework.versao_set.all %}
-                            <tr>
-                                <td>
-                                {%if False %} 
-                                    {{versao.numero|floatformat:3}}
-                                </td>
-                                <td>
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                {%else%}
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <input type="text" value="{{versao.numero}}" class="form-control" {% if not publica%}required{%endif%}> 
+    <!-- Modal -->
+    <form class="form" role="form" method="POST" action="/versao/{{framework.id}}">
+        {% csrf_token %}
+        <div class="modal fade" id="edicaoVersoes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">
+                            <i class="fa fa-shield" aria-hidden="true"></i> Edição das Versões</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% if framework.versao_set.count > 0 %}
+                        <table class="table text-center">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Versão</th>
+                                    <th scope="col">Alterar Número</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {%for versao in framework.versao_set.all %}
+                                <tr>
+                                    <td>
+                                        <a id="condicao1{{versao.id}}" style="display:block">
+                                            {{versao.numero|floatformat:3}}
+                                        <a>
+
+                                        <div id="condicao2{{versao.id}}" style="display:none" class="col-md-10">
+                                            <input type="text" class="form-control" value="{{versao.numero}}"> 
                                         </div>
-                                        <div class="col-md-2">
+                                    </td>
+
+                                    <td>
+                                        <a id="condicao1{{versao.id}}" style="display:block" href="#" onclick=""  >
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </a>
+
+                                        <div id="condicao2{{versao.id}}" style="display:none" class="col-md-2">
                                             <button type="submit" class="btn btn-info" value="#">Editar</button>
-                                        </div>
-                                    </div>
-                                {%endif%}
-                                </td>
-                            </tr>
-                            {%endfor%}
-                        </tbody>
-                    </table>
-                    {%endif%} Adicione uma Versão do Framework:
-                    <input type="text" class="form-control" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required
-                    onKeyPress="return validaNumeros(event);" onpaste="return false" ondrop="return false"> 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-info">Salvar</button>
+                                        </div>                                       
+                                    </td>
+                                </tr>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+                        {%endif%} Adicione uma Versão do Framework:
+                        <input type="text" class="form-control" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required
+                        onKeyPress="return validaNumeros(event);" onpaste="return false" ondrop="return false"> 
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-info">Salvar</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+<body>

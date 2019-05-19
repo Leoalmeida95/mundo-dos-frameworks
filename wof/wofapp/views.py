@@ -430,12 +430,12 @@ def opiniao_view(request,fm_id,vs_id):
     args={}
     user = request.user
     if request.method == 'POST':
-        opiniao = True if request.POST.get("opiniao","") == 'True' else False 
+        eh_favoravel = True if request.POST.get("opiniao","") == 'True' else False 
         form = OpiniaoForm(request.POST)
         if form.is_valid():
             try:
-                Opiniao.adicionar(request.POST['texto'],opiniao,user.id,vs_id)
-                if opiniao == True: 
+                Opiniao.adicionar(request.POST['texto'], eh_favoravel, user.id,vs_id)
+                if eh_favoravel == True: 
                     messages.info(request, 'Vantagens editadas com sucesso!')
                 else:
                     messages.info(request, 'Desvantagens editadas com sucesso!')
@@ -448,9 +448,8 @@ def opiniao_view(request,fm_id,vs_id):
             messages.warning(request, erroMsg)
     else:
         form = OpiniaoForm()
-        opiniao = 'True'
 
-    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id},args=(opiniao)))
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
 
 @login_required
 def favoritar_framework_view(request,fm_id):
