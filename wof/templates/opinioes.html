@@ -30,28 +30,23 @@
                     e suas versões. {%endif%}</p>
                 <ul class="nav nav-pills" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="pills-pros-tab" data-toggle="pill" href="#pills-pros" role="tab" aria-controls="pills-pros"
+                        <a class="nav-link active" id="pills-pros1-tab" data-toggle="pill" href="#pills-pros1" role="tab" aria-controls="pills-pros1"
                             aria-selected="true">Vantagens</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="pills-contras-tab" data-toggle="pill" href="#pills-contras" role="tab" aria-controls="pills-contras"
+                        <a class="nav-link" id="pills-contras1-tab" data-toggle="pill" href="#pills-contras1" role="tab" aria-controls="pills-contras1"
                             aria-selected="false">Desvantaens</a>
                     </li>
                 </ul>
                 {%if versao_selecionada is not None%} 
                 <div class="tab-content mt-2" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-pros" role="tabpanel" aria-labelledby="pills-pros-tab">
+                    <div class="tab-pane fade show active" id="pills-pros1" role="tabpanel" aria-labelledby="pills-pros1-tab">
                         {% for opiniao in vantagens %}
                             <div class="card">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
                                         <div class=row>
-                                            <div class="col-md-11">
-                                                {{opiniao.texto}}
-                                            </div>
-                                            <div class="col-md-1">
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            </div>
+                                            {{opiniao.texto}}
                                         </div>
                                     </li>
                                 </ul>
@@ -61,25 +56,14 @@
                                     {%else%} Cadastre-se {%endif%}e seja o primeiro a fazer! </p>
                         {%endfor%}
                     </div>
-                    <div class="tab-pane fade" id="pills-contras" role="tabpanel" aria-labelledby="pills-contras-tab">
+                    <div class="tab-pane fade" id="pills-contras1" role="tabpanel" aria-labelledby="pills-contras1-tab">
                         {% for opiniao in desvantagens %}
                             <div class="card">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
                                         <div class=row>
                                             <div class="col-md-11">
-                                                {%if True %} 
-                                                    {{opiniao.texto}}
-                                                {%else%}
-                                                    <div class="row">
-                                                        <div class="col-md-9">
-                                                            <input type="text" value="{{opiniao.texto}}" class="form-control" {% if not publica%}required{%endif%}> 
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <input type="submit" class="btn btn-info" >
-                                                        </div>
-                                                    </div>
-                                                {%endif%}
+                                                {{opiniao.texto}}
                                             </div>
                                             {%if user.is_authenticated %}
                                             <div class="col-md-1">
@@ -105,51 +89,171 @@
     </div>
 </div>
 
+
 <!-- Modal -->
-<form class="form" role="form" method="POST" action="/opiniao/{{framework.id}}/{{versao_selecionada.id}}">
-    {% csrf_token %}
-    <div class="modal fade" id="edicaoOpinaio" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">
-                        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> <i class="fa fa-thumbs-o-down" aria-hidden="true"></i> 
-                        Edição das Vantagens e Desvantagens </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    {%if versao_selecionada is None%}
-                    <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, 
-                    adicione a Versão do Framework a qual você deseja relacioná-las.</p>
-                    {%else%}
-                    <div class="form-group">
-                        <label for="descricao" class="col-form-label">Descrição:</label>
-                        <div class="col-12">
-                            <textarea rows="7" class="form-control" name="texto" id="texto" placeholder="Adicione com o texto aqui."
-                                required></textarea>
-                        </div>
+<div class="modal fade" id="edicaoOpinaio" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 
+                    <i class="fa fa-thumbs-o-down" aria-hidden="true"></i> 
+                    Edição das Vantagens e Desvantagens </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#pills-new1" data-toggle="pill" href="#pills-new1" role="tab" aria-controls="pills-new1"
+                    aria-selected="true">Novo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pills-edit1" data-toggle="pill" href="#pills-edit1" role="tab" aria-controls="pills-edit1"
+                    aria-selected="true">Existentes</a>
+                    </li>
+                </ul>
+                <div class="tab-content mt-2" id="pills-tabContent mt-2">
+                    <div class="tab-pane fade show active" id="pills-new1" role="tabpanel" aria-labelledby="pills-new1-tab">
+                        {%if versao_selecionada is None%}
+                        <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, 
+                        adicione a Versão do Framework a qual você deseja relacioná-las.</p>
+                        {%else%}
+                        <form class="form" role="form" method="POST" action="/opiniao/{{framework.id}}/{{versao_selecionada.id}}">
+                        {% csrf_token %}
+                            <div class="form-group">
+                                <label for="descricao" class="col-form-label">Descrição:</label>
+                                <div class="col-12">
+                                    <textarea rows="7" class="form-control" name="texto" id="texto" placeholder="Adicione com o texto aqui."
+                                        required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-5 mt-2">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="vantagem" value="True" name="opiniao" class="custom-control-input" checked>
+                                    <label class="custom-control-label" for="vantagem">Vantagem</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="desvantagem" value="False" name="opiniao" class="custom-control-input">
+                                    <label class="custom-control-label" for="desvantagem">Desvantagem</label>
+                                </div>
+                            </div>
+                            <div class="bg-default clearfix mb-3">
+                                <button type="submit" class="btn btn-info float-right" {%if versao_selecionada is None%}disabled{%endif%}>Salvar</button>
+                            </div>        
+                        </form>
+                        {%endif%}
                     </div>
-                        <div class="col-md-5 mt-2">
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="vantagem" value="True" name="opiniao" class="custom-control-input" checked>
-                                <label class="custom-control-label" for="vantagem">Vantagem</label>
+                    <div class="tab-pane fade" id="pills-edit1" role="tabpanel" aria-labelledby="pills-edit1-tab">
+                    
+
+
+
+
+
+                            {%if versao_selecionada is not None%} 
+                            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="pills-pros2-tab" data-toggle="pill" href="#pills-pros2" role="tab" aria-controls="pills-pros2"
+                                        aria-selected="true">Vantagens</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="pills-contras2-tab" data-toggle="pill" href="#pills-contras2" role="tab" aria-controls="pills-contras2"
+                                        aria-selected="false">Desvantaens</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content mt-2" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-pros2" role="tabpanel" aria-labelledby="pills-pros2-tab">
+                                {% if vantagens.count > 0 %}
+                                    <table class="table text-center mt-2">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Vantagem</th>
+                                            <th scope="col">Alterar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for opiniao in vantagens %}
+                                        <form class="form" role="form" method="POST" action="/editar_versao/{{versao.id}}/{{framework.id}}">
+                                        {% csrf_token %}
+                                            <tr>
+                                                <td>
+                                                    <a id="condicao1{{opiniao.id}}" style="display:block">
+                                                        {{opiniao.texto}}
+                                                    <a>
+                                                    <div id="condicao2{{opiniao.id}}" style="display:none" class="col-md-10">
+                                                        <input type="text" name="texto" class="form-control" value="{{opiniao.texto}}" required> 
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <a id="condicao3{{opiniao.id}}" style="display:block" href="#" >
+                                                        <i class="fa fa-pencil-square-o" aria-hidden="true" title="Editar número" onclick="troca_campos({{opiniao.id}})"></i>
+                                                    </a>
+                                                    <div id="condicao4{{opiniao.id}}" style="display:none" class="col-md-2">
+                                                        <button type="submit" class="btn btn-info" >Editar</button>
+                                                    </div>                                       
+                                                </td>
+                                            </tr>
+                                        </form>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                                {%else%}
+                                    <a class="mt-5">Ainda não há vantagens registradas.</a>
+                                {%endif%} 
+                                </div>
+                                <div class="tab-pane fade" id="pills-contras2" role="tabpanel" aria-labelledby="pills-contras2-tab">
+                                    {% comment %} {% for opiniao in desvantagens %}
+                                        <div class="card">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item">
+                                                    <div class=row>
+                                                        <div class="col-md-11">
+                                                            {%if True %} 
+                                                                {{opiniao.texto}}
+                                                            {%else%}
+                                                                <div class="row">
+                                                                    <div class="col-md-9">
+                                                                        <input type="text" value="{{opiniao.texto}}" class="form-control" {% if not publica%}required{%endif%}> 
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <input type="submit" class="btn btn-info" >
+                                                                    </div>
+                                                                </div>
+                                                            {%endif%}
+                                                        </div>
+                                                        {%if user.is_authenticated %}
+                                                        <div class="col-md-1">
+                                                            <i class="fa fa-pencil-square-o" aria-hidden="true" href="{% url 'wofapp:opiniao' opiniao.id opiniao.id %}" ></i>
+                                                        </div>
+                                                        {%endif%}
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                            {% empty %}
+                                                <a>Ainda não há desvantagens.</a>
+                                    {%endfor%} {% endcomment %}
+                                </div>
                             </div>
-                            <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="desvantagem" value="False" name="opiniao" class="custom-control-input">
-                                <label class="custom-control-label" for="desvantagem">Desvantagem</label>
-                            </div>
-                        </div>
-                    {%endif%}
+                            {%else%}
+                                <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, 
+                                    adicione a Versão do Framework a qual você deseja relacioná-las.</p>
+                            {%endif%}
+
+
+
+
+
+
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-info" {%if versao_selecionada is None%}disabled{%endif%}>Salvar</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
             </div>
         </div>
     </div>
-</form>
+</div>
 <!-- EndModal -->

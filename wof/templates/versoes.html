@@ -74,71 +74,86 @@
         </div>
     </div>
 
-    <!-- Modal -->
-        <div class="modal fade" id="edicaoVersoes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">
-                            <i class="fa fa-shield" aria-hidden="true"></i> Edição das Versões</h5>
-                        <form class="form" role="form" method="POST" action="/clean/{{framework.id}}"> 
-                            <button type="submit" class="close">
+<!-- Modal -->
+<div class="modal fade" id="edicaoVersoes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    <i class="fa fa-shield" aria-hidden="true"></i> Edição das Versões</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <a aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#pills-new2" data-toggle="pill" href="#pills-new2" role="tab" aria-controls="pills-new2"
+                    aria-selected="true">Novo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pills-edit2" data-toggle="pill" href="#pills-edit2" role="tab" aria-controls="pills-edit2"
+                    aria-selected="true">Existentes</a>
+                    </li>
+                </ul>
+                <div class="tab-content mt-2" id="pills-tabContent mt-2">
+                    <div class="tab-pane fade show active" id="pills-new2" role="tabpanel" aria-labelledby="pills-new2-tab">
+                        <a class="mt-5">Adicione uma Versão do Framework:</a>
+                        <form class="form-inline mt-2" role="form" method="POST" action="/versao/{{framework.id}}">
                             {% csrf_token %}
-                                <a aria-hidden="true">&times;</span>
-                            </button>
+                            <input type="text" class="form-control col-md-8" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required
+                            onKeyPress="return validaNumeros(event);" onpaste="return false" ondrop="return false"> 
+                            <button type="submit" class="btn btn-info col-md-4">Salvar</button>
                         </form>
                     </div>
-                    <div class="modal-body">
+                    <div class="tab-pane fade" id="pills-edit2" role="tabpanel" aria-labelledby="pills-edit2-tab">
                         {% if framework.versao_set.count > 0 %}
-                        <table class="table text-center">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Versão</th>
-                                    <th scope="col">Alterar Número</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {%for versao in framework.versao_set.all %}
-                                <form class="form" role="form" method="POST" action="/editar_versao/{{versao.id}}/{{framework.id}}">
-                                    {% csrf_token %}
+                            <table class="table text-center mt-2">
+                                <thead class="thead-light">
                                     <tr>
-                                        <td>
-                                            <a id="condicao1{{versao.id}}" style="display:block">
-                                                {{versao.numero|floatformat:3}}
-                                            <a>
-
-                                            <div id="condicao2{{versao.id}}" style="display:none" class="col-md-10">
-                                                <input type="text" name="numero_versao" class="form-control" value="{{versao.numero}}" required> 
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <a id="condicao3{{versao.id}}" style="display:block" href="#" >
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true" title="Editar número" onclick="troca_campos({{versao.id}})"></i>
-                                            </a>
-
-                                            <div id="condicao4{{versao.id}}" style="display:none" class="col-md-2">
-                                                <button type="submit" class="btn btn-info" >Editar</button>
-                                            </div>                                       
-                                        </td>
+                                        <th scope="col">Versão</th>
+                                        <th scope="col">Alterar Número</th>
                                     </tr>
-                                </form>
-                            {%endfor%}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                {%for versao in framework.versao_set.all %}
+                                    <form class="form" role="form" method="POST" action="/editar_versao/{{versao.id}}/{{framework.id}}">
+                                        {% csrf_token %}
+                                        <tr>
+                                            <td>
+                                                <a id="condicao1{{versao.id}}" style="display:block">
+                                                    {{versao.numero|floatformat:3}}
+                                                <a>
+
+                                                <div id="condicao2{{versao.id}}" style="display:none" class="col-md-10">
+                                                    <input type="text" name="numero_versao" class="form-control" value="{{versao.numero}}" required> 
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <a id="condicao3{{versao.id}}" style="display:block" href="#" >
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true" title="Editar número" onclick="troca_campos({{versao.id}})"></i>
+                                                </a>
+
+                                                <div id="condicao4{{versao.id}}" style="display:none" class="col-md-2">
+                                                    <button type="submit" class="btn btn-info" >Editar</button>
+                                                </div>                                       
+                                            </td>
+                                        </tr>
+                                    </form>
+                                {%endfor%}
+                                </tbody>
+                            </table>
+                        {%else%}
+                            <a class="mt-5">Ainda não há versões registradas.</a>
                         {%endif%} 
-                        <form class="form" role="form" method="POST" action="/versao/{{framework.id}}">
-                            {% csrf_token %}
-                            Adicione uma Versão do Framework:
-                            <input type="text" class="form-control" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required
-                            onKeyPress="return validaNumeros(event);" onpaste="return false" ondrop="return false"> 
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="submit" class="btn btn-info">Salvar</button>
-                    </div>
-                </form>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
         </div>
+    </div>
+</div>
 <body>

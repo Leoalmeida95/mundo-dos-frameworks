@@ -58,7 +58,7 @@
 <!-- Modal -->
 <form class="form" role="form" method="POST" action="/helloworld/{{framework.id}}/{{versao_selecionada.id}}">
     {% csrf_token %}
-    <div class="modal fade" id="edicaoHelloWorld" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    <div class="modal fade" id="edicaoHelloWorld" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" data-backdrop="static" data-keyboard="false"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">

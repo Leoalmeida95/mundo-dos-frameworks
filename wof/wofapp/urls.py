@@ -31,5 +31,4 @@ urlpatterns = [
     path('opiniao/<int:fm_id>/<int:vs_id>', views.opiniao_view, name="opiniao"),
     path('favoritar_framework/<int:fm_id>', views.favoritar_framework_view, name="favoritar_framework"),
     path('desfavoritar_framework/<int:fm_id>', views.desfavoritar_framework_view, name="desfavoritar_framework"),
-    path('clean/<int:fm_id>', views.clean_view, name="clean"),
 ]
