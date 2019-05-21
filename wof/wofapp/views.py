@@ -291,6 +291,11 @@ def buscar_framework_view(request):
             args = montar_framework(framework,framework.versao_set.last(),request.user.id)
             return render(request,'frameworks.html', args)
 
+def clean_view(request,fm_id):
+    path = request.POST.get('next', '/')
+    next = path if path != '/buscar_framework/' else '/'
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
 @login_required
 def comentario_view(request,fm_id):
     user = request.user

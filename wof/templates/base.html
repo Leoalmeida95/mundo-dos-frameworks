@@ -50,7 +50,7 @@
 			</ul>
 			<form class="form-inline my-2 my-lg-0 mr-4" role="form" method="POST" action="/buscar_framework/"> 
 			{% csrf_token %}
-				<input class="form-control mr-sm-2" type="search" name="pesquisa" placeholder="Buscar Framework" aria-label="Pesquisar">
+				<input class="form-control mr-sm-2" type="search" name="pesquisa" placeholder="Buscar Framework" aria-label="Pesquisar" required>
 				<button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Pesquisar</button>
 			</form>
 			{% if user.is_authenticated %}
