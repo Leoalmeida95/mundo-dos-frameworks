@@ -519,15 +519,15 @@ def funcionalidade_view(request,fm_id,vs_id):
 def editar_funcionalidade_view(request,fun_id,fm_id):
     user = request.user
     if request.method == 'POST':
-        form = OpiniaoForm(request.POST)
+        form = FuncionalidadeForm(request.POST)
         if form.is_valid():
             try:
-                Opiniao.editar(request.POST['texto'],op_id,user.id)
-                messages.info(request, 'Edição das Vantagens e Desvantagens realizada com sucesso!')
+                Funcionalidade.editar(request.POST['descricao'],fun_id,user.id)
+                messages.info(request, 'Funcionalidade editada com sucesso!')
             except Exception:
                 logger = logging.getLogger(__name__)
-                logger.exception("Erro ao atualizar vantagens e desvantagens.")
-                messages.error(request, 'Erro ao atualizar vantagens e desvantagens. Tente novamente mais tarde.')
+                logger.exception("Erro ao atualizar funcionalidade.")
+                messages.error(request, 'Erro ao atualizar funcionalidade. Tente novamente mais tarde.')
         else:
             erroMsg = form.errors['__all__'].data[0].message
             messages.warning(request, erroMsg)

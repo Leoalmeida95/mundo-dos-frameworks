@@ -234,11 +234,13 @@ class Framework(models.Model):
 
     @staticmethod
     def obter_top10_constribuicoes():
-        return Framework.objects.raw('''SELECT 
-                                             fram.id
+        return Framework.objects.raw('''SELECT
+                                            fram.id
                                             ,fram.nome
-                                            ,(count(v)  + count(fu)  + count(h)  + count(o)  + 
-                                            count(l)  + count(c)) as total_contribuicoes
+                                            ,(count(distinct v.id)  + count(distinct fu.id)  +
+                                            count(distinct h.id)  + count(distinct o.id)  + 
+                                            count(distinct l.id)  + count(distinct c.id))
+                                            as total_contribuicoes
                                         FROM public.wofapp_framework as fram
                                         LEFT JOIN public.wofapp_versao v on v.framework_id = fram.id
                                         LEFT JOIN public.wofapp_funcionalidade fu on fu.versao_id = v.id
@@ -247,9 +249,9 @@ class Framework(models.Model):
                                         LEFT JOIN public.wofapp_link l on l.framework_id = fram.id
                                         LEFT JOIN public.wofapp_comentario c on c.framework_id = fram.id
                                         GROUP BY fram.id
-		                                        ,fram.nome
+                                                ,fram.nome
                                         ORDER BY total_contribuicoes DESC
-                                        LIMIT 10 
+                                        LIMIT 10
                                     ''')
 
 class Versao(models.Model):
@@ -320,6 +322,14 @@ class Funcionalidade(models.Model):
             versao_id =vs_id
         ) 
         fun.save()
+
+    @staticmethod
+    def editar(desc, fun_id, user_id):
+        with transaction.atomic():
+            fun = Funcionalidade.objects.select_for_update().get(id=fun_id)
+            fun.descricao = desc
+            fun.usuario_id = user_id
+            fun.save() 
 
 class Opiniao(models.Model):
     texto = models.CharField(max_length=1000)
