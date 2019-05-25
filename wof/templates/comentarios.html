@@ -6,7 +6,7 @@
             </h5>
         </div>
         <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
-            <div class="card-body">
+            <div class="card-body max-y">
                 {% for comentario in comentarios %}
                 <form class="form" role="form" method="POST" action="/resposta/{{framework.id}}/{{comentario.id}}">
                     {% csrf_token %}
@@ -19,7 +19,7 @@
                             <div class="media-heading text-dark">
                                 <div class="bg-default clearfix">
                                     <div class="float-left">
-                                    <a href="#">
+                                    <a href="#" class="text-dark">
                                         <h6 class="text-dark">{{comentario.usuario.obter_nome_exibicao}}</h6>
                                     </a>
                                     <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="media-body">
                                         <div class="media-heading form-inline">
-                                        <a href="#">
+                                        <a href="#" class="text-dark">
                                             <h6 class="text-dark">{{resposta.usuario.obter_nome_exibicao}}</h6>
                                         </a>
                                             <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>

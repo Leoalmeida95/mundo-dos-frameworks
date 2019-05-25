@@ -21,7 +21,7 @@
             </div>
         </div>
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion2">
-            <div class="card-body" style="overflow-y:auto;">
+            <div class="card-body max-y">
                 <p class="font-weight-light">
                     Opiniões de Vantagens e Desvantagens do usuários sobre o {{framework}}
                     {%if versao_selecionada is not None%} 
@@ -45,6 +45,8 @@
                             <div class="card">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
+                                        <a href="#" class="text-dark"><b>{{opiniao.usuario.obter_nome_exibicao}}</b></a>
+                                        <i class="fa fa-comment-o" aria-hidden="true"></i> :
                                         <i class="fa fa-quote-left fa-fw" aria-hidden="true"></i>
                                         {{opiniao.texto}}
                                         <i class="fa fa-quote-right fa-fw" aria-hidden="true"></i>
@@ -61,6 +63,8 @@
                             <div class="card">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
+                                        <a href="#" class="text-dark"><b>{{opiniao.usuario.obter_nome_exibicao}}</b></a>
+                                        <i class="fa fa-comment-o" aria-hidden="true"></i> :
                                         <i class="fa fa-quote-left fa-fw" aria-hidden="true"></i>
                                         {{opiniao.texto}}
                                         <i class="fa fa-quote-right fa-fw" aria-hidden="true"></i>
@@ -96,7 +100,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body modal-y">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
                         <a class="nav-link active" href="#pills-new1" data-toggle="pill" href="#pills-new1" role="tab" aria-controls="pills-new1"
@@ -120,7 +124,7 @@
                                 <div class="form-group mt-3 ml-2">
                                     <label for="descricao" class="col-form-label">Descrição:</label>
                                     <div class="col-12">
-                                        <textarea rows="7" class="form-control" name="texto" id="texto" placeholder="Adicione o texto aqui."
+                                        <textarea rows="7" class="form-control" name="texto" id="texto" placeholder="Adicione com o texto aqui."
                                             required></textarea>
                                     </div>
                                 </div>
@@ -134,7 +138,7 @@
                                         <span class="checkmark2"></span>
                                     </label>
                                 </div>
-                                <div class="bg-default clearfix mt-4 mb-2 mr-3">
+                                <div class="bg-default clearfix ml-4 mt-4">
                                     <button type="submit" class="btn btn-info float-right" {%if versao_selecionada is None%}disabled{%endif%}>Salvar</button>
                                 </div>        
                             </form>
@@ -164,7 +168,7 @@
                                                 <th class="col-md-2" scope="col">Alterar</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="max-y">
                                             {% for opiniao in vantagens %}
                                             <form class="form" role="form" method="POST" action="/editar_opiniao/{{opiniao.id}}/{{framework.id}}">
                                             {% csrf_token %}

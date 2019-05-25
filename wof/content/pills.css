@@ -19,3 +19,15 @@
     background-color: rgba(255, 0, 0, 0.589);
     color: white;
 }
+
+.max-y {
+    height: auto;
+    max-height: 450px;
+    overflow-x: hidden;
+}
+
+.modal-y {
+    height: auto;
+    max-height: 550px;
+    overflow-x: hidden;
+}

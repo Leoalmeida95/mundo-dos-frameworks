@@ -22,7 +22,7 @@
             </div>
         </div>
         <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion2">
-            <div class="card-body" style="overflow-y:auto;">
+            <div class="card-body max-y">
                 <p class="font-weight-light">
                 {%if versao_selecionada is not None%}
                     Funcionalidades do {{framework}} na versão <b>{{versao_selecionada.numero|floatformat:3}}</b>.
@@ -61,7 +61,7 @@
                         <a aria-hidden="true">&times;</span>
                     </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body modal-y">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
                         <a class="nav-link active" href="#pills-new3" data-toggle="pill" href="#pills-new3" role="tab" aria-controls="pills-new3"
