@@ -336,18 +336,16 @@ class FrameworkForm(forms.ModelForm):
         return self.cleaned_data
 
 class OpiniaoForm(forms.ModelForm):
-
-    opiniao = forms.ChoiceField(choices=CHOICES,
-     widget=forms.RadioSelect, initial = True) 
     texto = forms.CharField(required=True, 
         widget=forms.TextInput(attrs={'name': 'texto'}))
 
     class Meta:
         model = Opiniao
-        fields = ['texto','eh_favoravel']
+        fields = ['texto']
 
     def clean(self):        
         texto = self.cleaned_data.get('texto')
+        
         if texto is None:
             raise forms.ValidationError('Escreva algo na opinião.', code='texto')
         

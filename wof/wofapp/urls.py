@@ -29,6 +29,7 @@ urlpatterns = [
     path('novo_framework/<int:lg_id>', views.novo_framework_view, name="novo_framework"),
     path('define_linguagem_adcframework/<int:lg_id>', views.define_linguagem_adcframework_view, name="define_linguagem_adcframework"),
     path('opiniao/<int:fm_id>/<int:vs_id>', views.opiniao_view, name="opiniao"),
+    path('editar_opiniao/<int:op_id>/<int:fm_id>', views.editar_opiniao_view, name="editar_opiniao"),
     path('favoritar_framework/<int:fm_id>', views.favoritar_framework_view, name="favoritar_framework"),
     path('desfavoritar_framework/<int:fm_id>', views.desfavoritar_framework_view, name="desfavoritar_framework"),
 ]

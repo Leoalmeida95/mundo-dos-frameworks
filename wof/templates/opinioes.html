@@ -23,7 +23,7 @@
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion2">
             <div class="card-body" style="overflow-y:auto;">
                 <p class="font-weight-light">
-                    Opiniões de vantagens e desvantagens no ponto de vista dos usuários sobre o {{framework}}
+                    Vantagens e desvantagens do {{framework}}
                     {%if versao_selecionada is not None%} 
                     na versão {{versao_selecionada.numero|floatformat:3}}. 
                     {%else%} 
@@ -46,7 +46,7 @@
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
                                         <div class=row>
-                                            {{opiniao.texto}}
+                                            <a class="ml-2">{{opiniao.texto}}</a>
                                         </div>
                                     </li>
                                 </ul>
@@ -62,14 +62,7 @@
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
                                         <div class=row>
-                                            <div class="col-md-11">
-                                                {{opiniao.texto}}
-                                            </div>
-                                            {%if user.is_authenticated %}
-                                            <div class="col-md-1">
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true" href="{% url 'wofapp:opiniao' opiniao.id opiniao.id %}" ></i>
-                                            </div>
-                                            {%endif%}
+                                            <a class="ml-2">{{opiniao.texto}}</a>
                                         </div>
                                     </li>
                                 </ul>
@@ -115,44 +108,40 @@
                     </li>
                 </ul>
                 <div class="tab-content mt-2" id="pills-tabContent mt-2">
+                    {% comment %} Form para novas opiniões {% endcomment %}
                     <div class="tab-pane fade show active" id="pills-new1" role="tabpanel" aria-labelledby="pills-new1-tab">
                         {%if versao_selecionada is None%}
-                        <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, 
-                        adicione a Versão do Framework a qual você deseja relacioná-las.</p>
+                            <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, 
+                            adicione a Versão do Framework a qual você deseja relacioná-las.</p>
                         {%else%}
-                        <form class="form" role="form" method="POST" action="/opiniao/{{framework.id}}/{{versao_selecionada.id}}">
-                        {% csrf_token %}
-                            <div class="form-group">
-                                <label for="descricao" class="col-form-label">Descrição:</label>
-                                <div class="col-12">
-                                    <textarea rows="7" class="form-control" name="texto" id="texto" placeholder="Adicione com o texto aqui."
-                                        required></textarea>
+                            <form class="form" role="form" method="POST" action="/opiniao/{{framework.id}}/{{versao_selecionada.id}}">
+                            {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="descricao" class="col-form-label">Descrição:</label>
+                                    <div class="col-12">
+                                        <textarea rows="7" class="form-control" name="texto" id="texto" placeholder="Adicione com o texto aqui."
+                                            required></textarea>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-5 mt-2">
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" id="vantagem" value="True" name="opiniao" class="custom-control-input" checked>
-                                    <label class="custom-control-label" for="vantagem">Vantagem</label>
+                                <div class="col-md-5 mt-2">
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="vantagem" value="True" name="opiniao" class="custom-control-input" checked>
+                                        <label class="custom-control-label" for="vantagem">Vantagem</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" id="desvantagem" value="False" name="opiniao" class="custom-control-input">
+                                        <label class="custom-control-label" for="desvantagem">Desvantagem</label>
+                                    </div>
                                 </div>
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" id="desvantagem" value="False" name="opiniao" class="custom-control-input">
-                                    <label class="custom-control-label" for="desvantagem">Desvantagem</label>
-                                </div>
-                            </div>
-                            <div class="bg-default clearfix mb-3">
-                                <button type="submit" class="btn btn-info float-right" {%if versao_selecionada is None%}disabled{%endif%}>Salvar</button>
-                            </div>        
-                        </form>
+                                <div class="bg-default clearfix mb-3">
+                                    <button type="submit" class="btn btn-info float-right" {%if versao_selecionada is None%}disabled{%endif%}>Salvar</button>
+                                </div>        
+                            </form>
                         {%endif%}
                     </div>
+                    {% comment %} Form para a edição das opiniões existentes {% endcomment %}
                     <div class="tab-pane fade" id="pills-edit1" role="tabpanel" aria-labelledby="pills-edit1-tab">
-                    
-
-
-
-
-
-                            {%if versao_selecionada is not None%} 
+                        {%if versao_selecionada is not None%} 
                             <ul class="nav nav-pills" id="pills-tab" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" id="pills-pros2-tab" data-toggle="pill" href="#pills-pros2" role="tab" aria-controls="pills-pros2"
@@ -164,89 +153,92 @@
                                 </li>
                             </ul>
                             <div class="tab-content mt-2" id="pills-tabContent">
+
                                 <div class="tab-pane fade show active" id="pills-pros2" role="tabpanel" aria-labelledby="pills-pros2-tab">
-                                {% if vantagens.count > 0 %}
-                                    <table class="table text-center mt-2">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col">Vantagem</th>
-                                            <th scope="col">Alterar</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for opiniao in vantagens %}
-                                        <form class="form" role="form" method="POST" action="/editar_versao/{{versao.id}}/{{framework.id}}">
-                                        {% csrf_token %}
+                                    {% if vantagens.count > 0 %}
+                                        <table class="table text-center mt-2">
+                                        <thead class="thead-light">
                                             <tr>
-                                                <td>
-                                                    <a id="condicao1{{opiniao.id}}" style="display:block">
-                                                        {{opiniao.texto}}
-                                                    <a>
-                                                    <div id="condicao2{{opiniao.id}}" style="display:none" class="col-md-10">
-                                                        <input type="text" name="texto" class="form-control" value="{{opiniao.texto}}" required> 
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a id="condicao3{{opiniao.id}}" style="display:block" href="#" >
-                                                        <i class="fa fa-pencil-square-o" aria-hidden="true" title="Editar número" onclick="troca_campos({{opiniao.id}})"></i>
-                                                    </a>
-                                                    <div id="condicao4{{opiniao.id}}" style="display:none" class="col-md-2">
-                                                        <button type="submit" class="btn btn-info" >Editar</button>
-                                                    </div>                                       
-                                                </td>
+                                                <th scope="col">Vantagem</th>
+                                                <th scope="col">Alterar</th>
                                             </tr>
-                                        </form>
-                                        {%endfor%}
-                                    </tbody>
-                                </table>
-                                {%else%}
-                                    <a class="mt-5">Ainda não há vantagens registradas.</a>
-                                {%endif%} 
+                                        </thead>
+                                        <tbody>
+                                            {% for opiniao in vantagens %}
+                                            <form class="form" role="form" method="POST" action="/editar_opiniao/{{opiniao.id}}/{{framework.id}}">
+                                            {% csrf_token %}
+                                                <tr>
+                                                    <td>
+                                                        <a id="condicao1{{opiniao.id}}" style="display:block">
+                                                            {{opiniao.texto}}
+                                                        <a>
+                                                        <div id="condicao2{{opiniao.id}}" style="display:none" class="col-md-10">
+                                                            <input type="text" name="texto" class="form-control" value="{{opiniao.texto}}" required> 
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <a id="condicao3{{opiniao.id}}" style="display:block">
+                                                            <i class="fa fa-pencil-square-o" style="cursor: pointer"  aria-hidden="true" title="Editar texto" onclick="troca_campos({{opiniao.id}})"></i>
+                                                        </a>
+                                                        <div id="condicao4{{opiniao.id}}" style="display:none" class="col-md-2">
+                                                            <button type="submit" class="btn btn-info" >Editar</button>
+                                                        </div>                                       
+                                                    </td>
+                                                </tr>
+                                            </form>
+                                            {%endfor%}
+                                        </tbody>
+                                    </table>
+                                    {%else%}
+                                        <a class="mt-5">Ainda não há vantagens registradas.</a>
+                                    {%endif%} 
                                 </div>
+
                                 <div class="tab-pane fade" id="pills-contras2" role="tabpanel" aria-labelledby="pills-contras2-tab">
-                                    {% comment %} {% for opiniao in desvantagens %}
-                                        <div class="card">
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item">
-                                                    <div class=row>
-                                                        <div class="col-md-11">
-                                                            {%if True %} 
-                                                                {{opiniao.texto}}
-                                                            {%else%}
-                                                                <div class="row">
-                                                                    <div class="col-md-9">
-                                                                        <input type="text" value="{{opiniao.texto}}" class="form-control" {% if not publica%}required{%endif%}> 
-                                                                    </div>
-                                                                    <div class="col-md-2">
-                                                                        <input type="submit" class="btn btn-info" >
-                                                                    </div>
-                                                                </div>
-                                                            {%endif%}
+                                    {% if desvantagens.count > 0 %}
+                                        <table class="table text-center mt-2">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col">Desvantagem</th>
+                                                <th scope="col">Alterar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for opiniao in desvantagens %}
+                                            <form class="form" role="form" method="POST" action="/editar_opiniao/{{opiniao.id}}/{{framework.id}}">
+                                            {% csrf_token %}
+                                                <tr>
+                                                    <td>
+                                                        <a id="condicao1{{opiniao.id}}" style="display:block">
+                                                            {{opiniao.texto}}
+                                                        <a>
+                                                        <div id="condicao2{{opiniao.id}}" style="display:none" class="col-md-10">
+                                                            <input type="text" name="texto" class="form-control" value="{{opiniao.texto}}" required> 
                                                         </div>
-                                                        {%if user.is_authenticated %}
-                                                        <div class="col-md-1">
-                                                            <i class="fa fa-pencil-square-o" aria-hidden="true" href="{% url 'wofapp:opiniao' opiniao.id opiniao.id %}" ></i>
-                                                        </div>
-                                                        {%endif%}
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                            {% empty %}
-                                                <a>Ainda não há desvantagens.</a>
-                                    {%endfor%} {% endcomment %}
+                                                    </td>
+                                                    <td>
+                                                        <a id="condicao3{{opiniao.id}}" style="display:block">
+                                                            <i class="fa fa-pencil-square-o" style="cursor: pointer;" aria-hidden="true" title="Editar texto" onclick="troca_campos({{opiniao.id}})"></i>
+                                                        </a>
+                                                        <div id="condicao4{{opiniao.id}}" style="display:none" class="col-md-2">
+                                                            <button type="submit" class="btn btn-info" >Editar</button>
+                                                        </div>                                       
+                                                    </td>
+                                                </tr>
+                                            </form>
+                                            {%endfor%}
+                                        </tbody>
+                                    </table>
+                                    {%else%}
+                                        <a class="mt-5">Ainda não há desvantagens registradas.</a>
+                                    {%endif%} 
                                 </div>
+
                             </div>
-                            {%else%}
-                                <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, 
-                                    adicione a Versão do Framework a qual você deseja relacioná-las.</p>
-                            {%endif%}
-
-
-
-
-
-
+                        {%else%}
+                            <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, 
+                                adicione a Versão do Framework a qual você deseja relacioná-las.</p>
+                        {%endif%}
                     </div>
                 </div>
             </div>

@@ -474,6 +474,25 @@ def opiniao_view(request,fm_id,vs_id):
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
 
 @login_required
+def editar_opiniao_view(request,op_id,fm_id):
+    user = request.user
+    if request.method == 'POST':
+        form = OpiniaoForm(request.POST)
+        if form.is_valid():
+            try:
+                Opiniao.editar(request.POST['texto'],op_id,user.id)
+                messages.info(request, 'Edição das Vantagens e Desvantagens realizada com sucesso!')
+            except Exception:
+                logger = logging.getLogger(__name__)
+                logger.exception("Erro ao atualizar vantagens e desvantagens.")
+                messages.error(request, 'Erro ao atualizar vantagens e desvantagens. Tente novamente mais tarde.')
+        else:
+            erroMsg = form.errors['__all__'].data[0].message
+            messages.warning(request, erroMsg)
+
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
+@login_required
 def favoritar_framework_view(request,fm_id):
     try:
         Framework.adicionar_favorito(fm_id,request.user.id)

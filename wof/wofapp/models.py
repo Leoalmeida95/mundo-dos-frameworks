@@ -213,7 +213,7 @@ class Framework(models.Model):
 
     @staticmethod
     def buscar_por_nome(nome):
-        return Framework.objects.filter(nome__icontains=nome).first()
+        return Framework.objects.filter(nome__iexact=nome).first()
 
     @staticmethod
     def adicionar_favorito(id,user_id):
@@ -261,14 +261,6 @@ class Versao(models.Model):
         return str(self.numero)
 
     @staticmethod
-    def editar(numero, vs_id, user_id):
-        with transaction.atomic():
-            versao = Versao.objects.select_for_update().get(id=vs_id)
-            versao.numero = numero
-            versao.usuario_id = user_id
-            versao.save() 
-
-    @staticmethod
     def adicionar(numero,fram_id,user_id):
         versao = Versao(
             numero = numero,
@@ -276,6 +268,14 @@ class Versao(models.Model):
             usuario_id = user_id,
         ) 
         versao.save() 
+
+    @staticmethod
+    def editar(numero, vs_id, user_id):
+        with transaction.atomic():
+            versao = Versao.objects.select_for_update().get(id=vs_id)
+            versao.numero = numero
+            versao.usuario_id = user_id
+            versao.save() 
 
     @staticmethod
     def obter_versao_por_id(id):
@@ -330,6 +330,14 @@ class Opiniao(models.Model):
             versao_id =vs_id
         ) 
         op.save()
+
+    @staticmethod
+    def editar(texto, op_id, user_id):
+        with transaction.atomic():
+            opiniao = Opiniao.objects.select_for_update().get(id=op_id)
+            opiniao.texto = texto
+            opiniao.usuario_id = user_id
+            opiniao.save() 
 
 class Link(models.Model):
     caminho = models.CharField(max_length=800)
