@@ -285,14 +285,6 @@ class Versao(models.Model):
     def verificar_numero_existente(numero, fm_id):
         return Versao.objects.filter(numero=numero,framework_id=fm_id).first()
 
-class Funcionalidade(models.Model):
-    descricao = models.CharField(max_length=5000)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
-    versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
-
-    def __str__(self):
-        return self.descricao
-
 class Helloworld(models.Model):
     codigo_exemplo = models.CharField(max_length=50000)
     descricao = models.CharField(max_length=50000)
@@ -311,6 +303,23 @@ class Helloworld(models.Model):
             versao_id = vs_id
         ) 
         hello.save()
+
+class Funcionalidade(models.Model):
+    descricao = models.CharField(max_length=5000)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
+    versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
+
+    def __str__(self):
+        return self.descricao
+
+    @staticmethod
+    def adicionar(descricao,user_id,vs_id):
+        fun = Funcionalidade(
+            descricao=descricao,
+            usuario_id=user_id,
+            versao_id =vs_id
+        ) 
+        fun.save()
 
 class Opiniao(models.Model):
     texto = models.CharField(max_length=1000)

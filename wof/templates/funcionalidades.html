@@ -9,7 +9,7 @@
                 </div>
                 <div class="float-right">{% if user.is_authenticated %}
                     <label class="mr-1">[
-                        <a href="#">
+                        <a data-toggle="modal" data-target="#edicaoFuncionalidades" href="#">
                             <small title="editar funcionalidades">editar
                                 <i class="fa fa-pencil fa-fw"></i>
                             </small>
@@ -25,20 +25,120 @@
             <div class="card-body" style="overflow-y:auto;">
                 <p class="font-weight-light">
                 {%if versao_selecionada is not None%}
-                    Funcionalidades do {{framework}} na versão {{versao_selecionada.numero|floatformat:3}}.
+                    Funcionalidades do {{framework}} na versão <b>{{versao_selecionada.numero|floatformat:3}}</b>.
                     <div class="font-weight-light">
-                        {%if versao_selecionada is not None and versao_selecionada.funcionalidades is not None%}
-                        xxxxx
-                        {%else%}
-                            Este framework ainda não possui funcionalidades registradas.
-                            {% if user.is_authenticated %} Clique no 'Editar' {%else%} Cadastre-se {%endif%}
-                            e seja o primeiro a fazer! 
-                        {%endif%}
+                        {%for funcionalidade in versao_selecionada.funcionalidade_set.all %}
+                        <div class="card">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    {{funcionalidade.descricao}}
+                                </li>
+                            </ul>
+                        </div>
+                            {% empty %}
+                                Este framework ainda não possui funcionalidades registradas.
+                                {% if user.is_authenticated %} Clique no 'Editar' {%else%} Cadastre-se {%endif%}
+                                e seja o primeiro a fazer! 
+                        {%endfor%}
                     </div>
                 {%else%}
                     Essas Funcionalodades são relacionadas a uma das versões do {{framework}}. Adicone uma versão antes de editá-las!
                 {%endif%}
                 </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="edicaoFuncionalidades" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    <i class="fa fa-cubes" aria-hidden="true"></i> Edição das Funcionalidades</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <a aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#pills-new3" data-toggle="pill" href="#pills-new3" role="tab" aria-controls="pills-new3"
+                    aria-selected="true">Novo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pills-edit3" data-toggle="pill" href="#pills-edit3" role="tab" aria-controls="pills-edit3"
+                    aria-selected="true">Existentes</a>
+                    </li>
+                </ul>
+                <div class="tab-content mt-2" id="pills-tabContent mt-2">
+                    <div class="tab-pane fade show active" id="pills-new3" role="tabpanel" aria-labelledby="pills-new3-tab">
+                        {%if versao_selecionada is None%}
+                            <p class="font-weight-light mt-3">Antes de adicionar as funcionalidades, 
+                            adicione a Versão do Framework a qual você deseja relacioná-las.</p>
+                        {%else%}
+                        <a class="mt-5">Adicione uma Funcionalidade da Versão do Framework:</a>
+                            <form class="form-inline mt-2 mb-3" role="form" method="POST" action="/funcionalidade/{{framework.id}}/{{versao_selecionada.id}}">
+                                {% csrf_token %}
+                                <input type="text" class="form-control col-md-10" name="descricao" id="descricao" 
+                                placeholder="Ex: Um novo método que o Framework passou a disponibilizar nessa versão" required> 
+                                <button type="submit" class="btn btn-info col-md-2">Salvar</button>
+                            </form>
+                        {%endif%}
+                    </div>
+                    <div class="tab-pane fade" id="pills-edit3" role="tabpanel" aria-labelledby="pills-edit3-tab">
+                        {% if versao_selecionada is None %}
+                            <p class="font-weight-light mt-3">Antes de editar as funcionalidades, 
+                            adicione a Versão do Framework a qual você deseja relacioná-las.</p>
+                        {%else%}
+                        {% if versao_selecionada.funcionalidade_set.count > 0 %}
+                            <table class="table text-center mt-2">
+                                <thead class="thead-light">
+                                    <tr class="row">
+                                        <th class="col-md-10" scope="col">Funcionalidade</th>
+                                        <th class="col-md-2" scope="col">Alterar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {%for funcionalidade in versao_selecionada.funcionalidade_set.all %}
+                                    <form class="form" role="form" method="POST" action="/editar_funcionalidade/{{funcionalidade.id}}/{{framework.id}}">
+                                        {% csrf_token %}
+                                        <tr class="row">
+                                            <td class="col-md-10">
+                                                <a id="condicao1-fu-{{funcionalidade.id}}" style="display:block">
+                                                    {{funcionalidade.descricao}}
+                                                <a>
+
+                                                <div id="condicao2-fu-{{funcionalidade.id}}" style="display:none">
+                                                    <input type="text" name="descricao" class="form-control" value="{{funcionalidade.descricao}}" required> 
+                                                </div>
+                                            </td>
+
+                                            <td class="col-md-2">
+                                                <a id="condicao3-fu-{{funcionalidade.id}}" style="display:block">
+                                                    <i class="fa fa-pencil-square-o" style="cursor: pointer" aria-hidden="true" title="Editar funcionalidade"
+                                                    onclick="troca_campos('fu',{{funcionalidade.id}})"></i>
+                                                </a>
+
+                                                <div id="condicao4-fu-{{funcionalidade.id}}" style="display:none">
+                                                    <button type="submit" class="btn btn-info" >Editar</button>
+                                                </div>                                       
+                                            </td>
+                                        </tr>
+                                    </form>
+                                {% empty %}
+                                    <p class="font-weight-light mt-3 mb-3">Ninguém adicionou funcionalidades do framework.{% if user.is_authenticated %} Clique no 'Editar'
+                                    {%else%} Cadastre-se {%endif%}e seja o primeiro a fazer! </p>
+                                {%endfor%}
+                                </tbody>
+                            </table>
+                        {%else%}
+                            <a class="mt-5 mb-3">Ainda não há funcionalidades registradas.</a>
+                        {%endif%} 
+                        {%endif%} 
+                    </div>
+                </div>
             </div>
         </div>
     </div>

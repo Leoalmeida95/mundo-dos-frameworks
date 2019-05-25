@@ -351,3 +351,19 @@ class OpiniaoForm(forms.ModelForm):
         
         return self.cleaned_data
 
+class FuncionalidadeForm(forms.ModelForm):
+    descricao = forms.CharField(required=True, 
+        widget=forms.TextInput(attrs={'name': 'descricao'}))
+
+    class Meta:
+        model = Funcionalidade
+        fields = ['descricao']
+
+    def clean(self):        
+        descricao = self.cleaned_data.get('descricao')
+        
+        if descricao is None:
+            raise forms.ValidationError('Escreva algo na descrição.')
+        
+        return self.cleaned_data
+

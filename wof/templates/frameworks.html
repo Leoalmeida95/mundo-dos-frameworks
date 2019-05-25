@@ -1,8 +1,15 @@
 {% extends "base.html" %} {% block titulo %}{{framework.linguagem.nome}} - {{framework}}{%endblock%} {%block conteudo%}
-{%load staticfiles%} {%load filters%}
+{%load staticfiles%} {%load filters%}{% load compress %}
 
 <head>
+{% compress css %}
     <link href="{% static 'priorityscrolling.css' %}" rel="stylesheet">
+    <link href="{% static 'pills.css' %}" rel="stylesheet">
+    <link href="{% static 'check.css' %}" rel="stylesheet">
+{% endcompress %}
+{% compress js %}
+<script src="{% static 'troca_campos.js' %}"></script> 
+{% endcompress %}
 </head>
 
 <body class="font-weight-light">
@@ -45,4 +52,4 @@
     </div>
 </body>
 
-<script src="{% static 'validacao.js' %}"></script> {% endblock %}
+{% endblock %}

@@ -3,7 +3,7 @@
         <div class="card-header">
             <div class="bg-default clearfix">
                 <div class="float-left">
-                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Vantagens e Desvantaens
+                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Vantagens e Desvantagens
                         <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
                     </h5>
                 </div>
@@ -23,19 +23,19 @@
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion2">
             <div class="card-body" style="overflow-y:auto;">
                 <p class="font-weight-light">
-                    Vantagens e desvantagens do {{framework}}
+                    Opiniões de Vantagens e Desvantagens do usuários sobre o {{framework}}
                     {%if versao_selecionada is not None%} 
-                    na versão {{versao_selecionada.numero|floatformat:3}}. 
+                    na versão <b>{{versao_selecionada.numero|floatformat:3}}</b>. 
                     {%else%} 
                     e suas versões. {%endif%}</p>
                 <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                    <li class="nav-item">
+                    <li class="nav-item pill-1">
                         <a class="nav-link active" id="pills-pros1-tab" data-toggle="pill" href="#pills-pros1" role="tab" aria-controls="pills-pros1"
                             aria-selected="true">Vantagens</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item pill-2">
                         <a class="nav-link" id="pills-contras1-tab" data-toggle="pill" href="#pills-contras1" role="tab" aria-controls="pills-contras1"
-                            aria-selected="false">Desvantaens</a>
+                            aria-selected="false">Desvantagens</a>
                     </li>
                 </ul>
                 {%if versao_selecionada is not None%} 
@@ -45,9 +45,9 @@
                             <div class="card">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                        <div class=row>
-                                            <a class="ml-2">{{opiniao.texto}}</a>
-                                        </div>
+                                        <i class="fa fa-quote-left fa-fw" aria-hidden="true"></i>
+                                        {{opiniao.texto}}
+                                        <i class="fa fa-quote-right fa-fw" aria-hidden="true"></i>
                                     </li>
                                 </ul>
                             </div>
@@ -61,9 +61,9 @@
                             <div class="card">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                        <div class=row>
-                                            <a class="ml-2">{{opiniao.texto}}</a>
-                                        </div>
+                                        <i class="fa fa-quote-left fa-fw" aria-hidden="true"></i>
+                                        {{opiniao.texto}}
+                                        <i class="fa fa-quote-right fa-fw" aria-hidden="true"></i>
                                     </li>
                                 </ul>
                             </div>
@@ -84,7 +84,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="edicaoOpinaio" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="edicaoOpinaio" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -114,26 +114,27 @@
                             <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, 
                             adicione a Versão do Framework a qual você deseja relacioná-las.</p>
                         {%else%}
+                            <a class="mt-2">Adicione uma Vantagem ou Desvantagem da Versão do Framework:</a>
                             <form class="form" role="form" method="POST" action="/opiniao/{{framework.id}}/{{versao_selecionada.id}}">
                             {% csrf_token %}
-                                <div class="form-group">
+                                <div class="form-group mt-3 ml-2">
                                     <label for="descricao" class="col-form-label">Descrição:</label>
                                     <div class="col-12">
-                                        <textarea rows="7" class="form-control" name="texto" id="texto" placeholder="Adicione com o texto aqui."
+                                        <textarea rows="7" class="form-control" name="texto" id="texto" placeholder="Adicione o texto aqui."
                                             required></textarea>
                                     </div>
                                 </div>
-                                <div class="col-md-5 mt-2">
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="vantagem" value="True" name="opiniao" class="custom-control-input" checked>
-                                        <label class="custom-control-label" for="vantagem">Vantagem</label>
-                                    </div>
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="desvantagem" value="False" name="opiniao" class="custom-control-input">
-                                        <label class="custom-control-label" for="desvantagem">Desvantagem</label>
-                                    </div>
+                                <div class="bg-default clearfix row ml-4">
+                                    <label class="container float-left col-md-3" for="vantagem">Vantagem
+                                        <input type="radio" id="vantagem" value="True" name="opiniao" checked>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container2 float-right col-md-9" for="desvantagem">Desvantagem
+                                        <input type="radio" id="desvantagem" value="False" name="opiniao">
+                                        <span class="checkmark2"></span>
+                                    </label>
                                 </div>
-                                <div class="bg-default clearfix mb-3">
+                                <div class="bg-default clearfix mt-4 mb-2 mr-3">
                                     <button type="submit" class="btn btn-info float-right" {%if versao_selecionada is None%}disabled{%endif%}>Salvar</button>
                                 </div>        
                             </form>
@@ -142,45 +143,46 @@
                     {% comment %} Form para a edição das opiniões existentes {% endcomment %}
                     <div class="tab-pane fade" id="pills-edit1" role="tabpanel" aria-labelledby="pills-edit1-tab">
                         {%if versao_selecionada is not None%} 
-                            <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                                <li class="nav-item">
+                            <ul class="nav nav-pills mt-3" id="pills-tab" role="tablist">
+                                <li class="nav-item pill-1">
                                     <a class="nav-link active" id="pills-pros2-tab" data-toggle="pill" href="#pills-pros2" role="tab" aria-controls="pills-pros2"
                                         aria-selected="true">Vantagens</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item pill-2">
                                     <a class="nav-link" id="pills-contras2-tab" data-toggle="pill" href="#pills-contras2" role="tab" aria-controls="pills-contras2"
-                                        aria-selected="false">Desvantaens</a>
+                                        aria-selected="false">Desvantagens</a>
                                 </li>
                             </ul>
                             <div class="tab-content mt-2" id="pills-tabContent">
 
                                 <div class="tab-pane fade show active" id="pills-pros2" role="tabpanel" aria-labelledby="pills-pros2-tab">
                                     {% if vantagens.count > 0 %}
-                                        <table class="table text-center mt-2">
+                                    <table class="table text-center mt-2">
                                         <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col">Vantagem</th>
-                                                <th scope="col">Alterar</th>
+                                            <tr class="row">
+                                                <th class="col-md-10" scope="col">Vantagem</th>
+                                                <th class="col-md-2" scope="col">Alterar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for opiniao in vantagens %}
                                             <form class="form" role="form" method="POST" action="/editar_opiniao/{{opiniao.id}}/{{framework.id}}">
                                             {% csrf_token %}
-                                                <tr>
-                                                    <td>
-                                                        <a id="condicao1{{opiniao.id}}" style="display:block">
+                                                <tr class="row">
+                                                    <td class="col-md-10">
+                                                        <a id="condicao1-op-{{opiniao.id}}" style="display:block">
                                                             {{opiniao.texto}}
                                                         <a>
-                                                        <div id="condicao2{{opiniao.id}}" style="display:none" class="col-md-10">
+                                                        <div id="condicao2-op-{{opiniao.id}}" style="display:none">
                                                             <input type="text" name="texto" class="form-control" value="{{opiniao.texto}}" required> 
                                                         </div>
                                                     </td>
-                                                    <td>
-                                                        <a id="condicao3{{opiniao.id}}" style="display:block">
-                                                            <i class="fa fa-pencil-square-o" style="cursor: pointer"  aria-hidden="true" title="Editar texto" onclick="troca_campos({{opiniao.id}})"></i>
+                                                    <td class="col-md-2">
+                                                        <a id="condicao3-op-{{opiniao.id}}" style="display:block">
+                                                            <i class="fa fa-pencil-square-o" style="cursor: pointer"  aria-hidden="true" title="Editar texto" 
+                                                            onclick="troca_campos('op',{{opiniao.id}})"></i>
                                                         </a>
-                                                        <div id="condicao4{{opiniao.id}}" style="display:none" class="col-md-2">
+                                                        <div id="condicao4-op-{{opiniao.id}}" style="display:none">
                                                             <button type="submit" class="btn btn-info" >Editar</button>
                                                         </div>                                       
                                                     </td>
@@ -198,29 +200,30 @@
                                     {% if desvantagens.count > 0 %}
                                         <table class="table text-center mt-2">
                                         <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col">Desvantagem</th>
-                                                <th scope="col">Alterar</th>
+                                            <tr class="row">
+                                                <th class="col-md-10" scope="col">Desvantagem</th>
+                                                <th class="col-md-2" scope="col">Alterar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for opiniao in desvantagens %}
                                             <form class="form" role="form" method="POST" action="/editar_opiniao/{{opiniao.id}}/{{framework.id}}">
                                             {% csrf_token %}
-                                                <tr>
-                                                    <td>
-                                                        <a id="condicao1{{opiniao.id}}" style="display:block">
+                                                <tr class="row">
+                                                    <td class="col-md-10">
+                                                        <a id="condicao1-op-{{opiniao.id}}" style="display:block">
                                                             {{opiniao.texto}}
                                                         <a>
-                                                        <div id="condicao2{{opiniao.id}}" style="display:none" class="col-md-10">
+                                                        <div id="condicao2-op-{{opiniao.id}}" style="display:none">
                                                             <input type="text" name="texto" class="form-control" value="{{opiniao.texto}}" required> 
                                                         </div>
                                                     </td>
-                                                    <td>
-                                                        <a id="condicao3{{opiniao.id}}" style="display:block">
-                                                            <i class="fa fa-pencil-square-o" style="cursor: pointer;" aria-hidden="true" title="Editar texto" onclick="troca_campos({{opiniao.id}})"></i>
+                                                    <td class="col-md-2">
+                                                        <a id="condicao3-op-{{opiniao.id}}" style="display:block">
+                                                            <i class="fa fa-pencil-square-o" style="cursor: pointer;" aria-hidden="true" title="Editar texto" 
+                                                            onclick="troca_campos('op',{{opiniao.id}})"></i>
                                                         </a>
-                                                        <div id="condicao4{{opiniao.id}}" style="display:none" class="col-md-2">
+                                                        <div id="condicao4-op-{{opiniao.id}}" style="display:none">
                                                             <button type="submit" class="btn btn-info" >Editar</button>
                                                         </div>                                       
                                                     </td>
@@ -236,14 +239,11 @@
 
                             </div>
                         {%else%}
-                            <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, 
+                            <p class="font-weight-light mt-3">Antes de editar as vantagens e desvantagens, 
                                 adicione a Versão do Framework a qual você deseja relacioná-las.</p>
                         {%endif%}
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
             </div>
         </div>
     </div>

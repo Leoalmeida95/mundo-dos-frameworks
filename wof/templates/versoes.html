@@ -45,7 +45,7 @@
                     <div class="form-inline">
                         <p class="font-weight-light mt-1">Escolha uma das outras Versões disponíveis:</p>
                         <div class="btn-group dropright ml-2">
-                            <button class="btn btn-primary btn-sm dropdown-toggle mb-2" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
+                            <button class="btn btn-info btn-sm dropdown-toggle mb-2" type="button" id="dropdownMenuvs" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                                 Selecione
                             </button>
@@ -75,7 +75,7 @@
     </div>
 
 <!-- Modal -->
-<div class="modal fade" id="edicaoVersoes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="edicaoVersoes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -98,8 +98,8 @@
                 </ul>
                 <div class="tab-content mt-2" id="pills-tabContent mt-2">
                     <div class="tab-pane fade show active" id="pills-new2" role="tabpanel" aria-labelledby="pills-new2-tab">
-                        <a class="mt-5">Adicione uma Versão do Framework:</a>
-                        <form class="form-inline mt-2" role="form" method="POST" action="/versao/{{framework.id}}">
+                        <a class="mt-5 mb-5">Adicione uma Versão do Framework:</a>
+                        <form class="form-inline mt-4 mb-3" role="form" method="POST" action="/versao/{{framework.id}}">
                             {% csrf_token %}
                             <input type="text" class="form-control col-md-8" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required
                             onKeyPress="return validaNumeros(event);" onpaste="return false" ondrop="return false"> 
@@ -112,7 +112,7 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th scope="col">Versão</th>
-                                        <th scope="col">Alterar Número</th>
+                                        <th scope="col">Alterar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -121,21 +121,22 @@
                                         {% csrf_token %}
                                         <tr>
                                             <td>
-                                                <a id="condicao1{{versao.id}}" style="display:block">
+                                                <a id="condicao1-vs-{{versao.id}}" style="display:block">
                                                     {{versao.numero|floatformat:3}}
                                                 <a>
 
-                                                <div id="condicao2{{versao.id}}" style="display:none" class="col-md-10">
+                                                <div id="condicao2-vs-{{versao.id}}" style="display:none" class="col-md-11">
                                                     <input type="text" name="numero_versao" class="form-control" value="{{versao.numero}}" required> 
                                                 </div>
                                             </td>
 
                                             <td>
-                                                <a id="condicao3{{versao.id}}" style="display:block">
-                                                    <i class="fa fa-pencil-square-o" style="cursor: pointer" aria-hidden="true" title="Editar número" onclick="troca_campos({{versao.id}})"></i>
+                                                <a id="condicao3-vs-{{versao.id}}" style="display:block">
+                                                    <i class="fa fa-pencil-square-o" style="cursor: pointer" aria-hidden="true" title="Editar número" 
+                                                    onclick="troca_campos('vs',{{versao.id}})"></i>
                                                 </a>
 
-                                                <div id="condicao4{{versao.id}}" style="display:none" class="col-md-2">
+                                                <div id="condicao4-vs-{{versao.id}}" style="display:none" class="col-md-1">
                                                     <button type="submit" class="btn btn-info" >Editar</button>
                                                 </div>                                       
                                             </td>
@@ -145,13 +146,10 @@
                                 </tbody>
                             </table>
                         {%else%}
-                            <a class="mt-5">Ainda não há versões registradas.</a>
+                            <a class="mt-5 mb-3">Ainda não há versões registradas.</a>
                         {%endif%} 
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
             </div>
         </div>
     </div>

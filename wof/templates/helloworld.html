@@ -26,7 +26,7 @@
             <div class="card-body" style="overflow-y:auto;">
                 <p class="font-weight-light">
                 {%if versao_selecionada is not None%} 
-                    Esse hello world representa o básico necessário para iniciar um projeto com o {{framework}} na versão {{versao_selecionada.numero|floatformat:3}}. 
+                    Esse hello world representa o básico necessário para iniciar um projeto com o {{framework}} na versão <b>{{versao_selecionada.numero|floatformat:3}}</b>.
                         
                     {%if ultimo_helloworld is not None %}
                         <div class="col-md-12 mt-2">
@@ -58,8 +58,7 @@
 <!-- Modal -->
 <form class="form" role="form" method="POST" action="/helloworld/{{framework.id}}/{{versao_selecionada.id}}">
     {% csrf_token %}
-    <div class="modal fade" id="edicaoHelloWorld" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" data-backdrop="static" data-keyboard="false"
-        aria-hidden="true">
+    <div class="modal fade" id="edicaoHelloWorld" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" data-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -85,11 +84,10 @@
                         <textarea rows="7" class="form-control" name="codigo_exemplo" id="codigo_exemplo" placeholder="Entre com um código de exemplo do Hello World."
                             required>{%if ultimo_helloworld is not None%}{{ultimo_helloworld.codigo_exemplo}}{%endif%}</textarea>
                     </div>
+                    <div class="bg-default clearfix mt-3 mr-3">
+                        <button type="submit" class="btn btn-info float-right" {%if versao_selecionada is None%}disabled{%endif%}>Salvar</button>
+                    </div>     
                     {%endif%}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-info" {%if versao_selecionada is None%}disabled{%endif%}>Salvar</button>
                 </div>
             </div>
         </div>
