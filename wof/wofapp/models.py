@@ -431,6 +431,18 @@ class Voto(models.Model):
     link = models.ForeignKey(Link, on_delete=models.CASCADE, null = False)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
+    @staticmethod
+    def verifica_voto(li_id,user_id):
+        return Voto.objects.filter(link_id=li_id,usuario_id=user_id).first()
+
+    @staticmethod
+    def adicionar(li_id,user_id):
+        voto = Voto(
+            link_id=li_id,
+            usuario_id=user_id
+        )
+        voto.save()   
+
 class Denuncia(models.Model):
     data = models.DateTimeField(default=timezone.now)
     motivo = models.CharField(max_length=500)

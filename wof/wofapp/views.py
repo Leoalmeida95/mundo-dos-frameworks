@@ -602,3 +602,18 @@ def editar_link_view(request,li_id,fm_id):
             messages.warning(request, erroMsg)
 
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
+@login_required
+def votar_link_view(request,li_id,fm_id):
+    try:
+        if Voto.verifica_voto(li_id,request.user.id):
+            messages.warning(request, 'Você já votou nesse link!')
+        else:
+            Voto.adicionar(li_id,request.user.id)
+            messages.info(request, 'Voto computado com sucesso!')
+    except Exception:
+        logger = logging.getLogger(__name__)
+        logger.exception("Erro ao excluir framework favorito.")
+        messages.error(request, 'Erro ao excluir framework favorito. Tente novamente mais tarde.')
+
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
