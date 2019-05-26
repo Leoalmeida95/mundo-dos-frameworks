@@ -370,9 +370,9 @@ class Link(models.Model):
     @staticmethod
     def adicionar(caminho,user_id,fm_id):
         link = Link(
-            descricao=caminho,
+            caminho=caminho,
             usuario_id=user_id,
-            versao_id =fm_id
+            framework_id=fm_id
         ) 
         link.save()
 

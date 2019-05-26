@@ -18,9 +18,10 @@
                     {% endif %}</div>
             </div>
         </div>
+
         <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
             <div class="card-body max-y">
-                <p class="font-weight-light">Os melhores sites eleitos pelos usuários para aprendizado sobre o {{framework}}.</p>
+                <p class="font-weight-light">Os melhores sites eleitos pelos usuários para tutoriais e materiais de aprendizado sobre o {{framework}}.</p>
                 <div class="col-md-12">
                     <p class="font-weight-light mt-4 mb-4">
                     <i class="fa fa-trophy fa-border" aria-hidden="true" style="color:#FFD700"></i>
@@ -29,7 +30,7 @@
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div class="col-10 text-truncate">
-                                <a href={{link.caminho}}>{{link.caminho}}</a>
+                                <a href={{link.caminho}} target="_blank" >{{link.caminho}}</a>
                             </div>
                             <span class="btn btn-primary">
                                 <i class="fa fa-thumbs-up" aria-hidden="true"></i> 14</i>
@@ -90,7 +91,7 @@
                         <table class="table text-center mt-2">
                             <thead class="thead-light">
                                 <tr class="row">
-                                    <th class="col-md-10" scope="col">Link</th>
+                                    <th class="col-md-10" scope="col">Links</th>
                                     <th class="col-md-2" scope="col">Alterar</th>
                                 </tr>
                             </thead>
@@ -99,23 +100,23 @@
                                 <form class="form" role="form" method="POST" action="/editar_link/{{link.id}}/{{framework.id}}">
                                     {% csrf_token %}
                                     <tr class="row">
-                                        <td class="col-md-10">
-                                            <a id="condicao1-fu-{{link.id}}" style="display:block">
+                                        <td class="col-md-10 text-truncate"> 
+                                            <a id="condicao1-li-{{link.id}}" style="display:block">
                                                 {{link.caminho}}
                                             <a>
 
-                                            <div id="condicao2-fu-{{link.id}}" style="display:none">
+                                            <div id="condicao2-li-{{link.id}}" style="display:none">
                                                 <input type="text" name="caminho" class="form-control" value="{{link.caminho}}" required> 
                                             </div>
                                         </td>
 
                                         <td class="col-md-2">
-                                            <a id="condicao3-fu-{{link.id}}" style="display:block">
+                                            <a id="condicao3-li-{{link.id}}" style="display:block">
                                                 <i class="fa fa-pencil-square-o" style="cursor: pointer" aria-hidden="true" title="Editar link"
-                                                onclick="troca_campos('fu',{{link.id}})"></i>
+                                                onclick="troca_campos('li',{{link.id}})"></i>
                                             </a>
 
-                                            <div id="condicao4-fu-{{link.id}}" style="display:none">
+                                            <div id="condicao4-li-{{link.id}}" style="display:none">
                                                 <button type="submit" class="btn btn-info" >Editar</button>
                                             </div>                                       
                                         </td>
