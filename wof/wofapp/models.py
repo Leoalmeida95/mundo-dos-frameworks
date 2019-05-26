@@ -144,14 +144,6 @@ class Linguagem(models.Model):
         return self.nome
 
     @staticmethod
-    def adicionar(nome,user_id):
-        linguagem = Linguagem(
-            nome=nome,
-            usuario_id=user_id,
-        ) 
-        linguagem.save()
-
-    @staticmethod
     def obter_linguagens_minimo_um_framework():
         return Linguagem.objects.annotate(num_frameworks=Count('framework')).filter(num_frameworks__gt=0).all().order_by('nome')
     
@@ -185,6 +177,15 @@ class Linguagem(models.Model):
                                         LIMIT 10 
                                     ''')
 
+    @staticmethod
+    def adicionar(nome,user_id):
+        linguagem = Linguagem(
+            nome=nome,
+            usuario_id=user_id,
+        ) 
+        linguagem.save()
+
+
 class Framework(models.Model):
     nome = models.CharField(max_length=30)
     linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, null = False)
@@ -193,15 +194,6 @@ class Framework(models.Model):
 
     def __str__(self):
         return self.nome
-
-    @staticmethod
-    def adicionar(nome,lg_id,user_id):
-        fram = Framework(
-            nome = nome,
-            linguagem_id = lg_id,
-            usuario_id = user_id,
-        ) 
-        fram.save()
 
     @staticmethod
     def obter_framework_por_id(id):
@@ -214,23 +206,6 @@ class Framework(models.Model):
     @staticmethod
     def buscar_por_nome(nome):
         return Framework.objects.filter(nome__iexact=nome).first()
-
-    @staticmethod
-    def adicionar_favorito(id,user_id):
-        with transaction.atomic():
-            fram = Framework.objects.select_for_update().get(id=id)
-            user = Usuario.objects.get(id=user_id)
-            fram.favoritado_por.add(user)
-            fram.save()
-
-
-    @staticmethod
-    def excluir_favorito(id,user_id):
-        with transaction.atomic():
-            fram = Framework.objects.select_for_update().get(id=id)
-            user = Usuario.objects.get(id=user_id)
-            fram.favoritado_por.remove(user)
-            fram.save()
 
     @staticmethod
     def obter_top10_constribuicoes():
@@ -254,6 +229,32 @@ class Framework(models.Model):
                                         LIMIT 10
                                     ''')
 
+    @staticmethod
+    def adicionar(nome,lg_id,user_id):
+        fram = Framework(
+            nome = nome,
+            linguagem_id = lg_id,
+            usuario_id = user_id,
+        ) 
+        fram.save()
+
+    @staticmethod
+    def adicionar_favorito(id,user_id):
+        with transaction.atomic():
+            fram = Framework.objects.select_for_update().get(id=id)
+            user = Usuario.objects.get(id=user_id)
+            fram.favoritado_por.add(user)
+            fram.save()
+
+
+    @staticmethod
+    def excluir_favorito(id,user_id):
+        with transaction.atomic():
+            fram = Framework.objects.select_for_update().get(id=id)
+            user = Usuario.objects.get(id=user_id)
+            fram.favoritado_por.remove(user)
+            fram.save()
+
 class Versao(models.Model):
     numero = models.DecimalField(default=0, max_digits=10, decimal_places=3)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
@@ -261,6 +262,14 @@ class Versao(models.Model):
 
     def __str__(self):
         return str(self.numero)
+
+    @staticmethod
+    def obter_versao_por_id(id):
+        return Versao.objects.get(id=id)
+
+    @staticmethod
+    def verificar_numero_existente(numero, fm_id):
+        return Versao.objects.filter(numero=numero,framework_id=fm_id).first()
 
     @staticmethod
     def adicionar(numero,fram_id,user_id):
@@ -278,14 +287,6 @@ class Versao(models.Model):
             versao.numero = numero
             versao.usuario_id = user_id
             versao.save() 
-
-    @staticmethod
-    def obter_versao_por_id(id):
-        return Versao.objects.get(id=id)
-
-    @staticmethod
-    def verificar_numero_existente(numero, fm_id):
-        return Versao.objects.filter(numero=numero,framework_id=fm_id).first()
 
 class Helloworld(models.Model):
     codigo_exemplo = models.CharField(max_length=50000)
@@ -371,10 +372,18 @@ class Comentario(models.Model):
     data = models.DateTimeField(default=timezone.now)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, null = False)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
-    respostas = models.ManyToManyField("self",symmetrical=False)
+    respostas = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.texto
+
+    @staticmethod
+    def obter_somente_comentarios(fram_id):
+        return Comentario.objects.filter(framework_id=fram_id).exclude(texto__exact='').exclude(respostas_id__isnull=False)
+
+    @staticmethod
+    def obter_comentario_por_id(id):
+        return Comentario.objects.get(id=id)
 
     @staticmethod
     def adicionar(texto,fm_id,user_id):
@@ -386,18 +395,20 @@ class Comentario(models.Model):
         coment.save()   
 
     @staticmethod
-    def obter_comentario_por_id(id):
-        return Comentario.objects.get(id=id)
+    def adicionar_resposta(cm_id,texto,fm_id,user_id):
+        with transaction.atomic():
+            coment = Comentario.objects.select_for_update().get(id=cm_id)
+            coment.comentario_set.create(
+                texto=texto,
+                framework_id= fm_id,
+                usuario_id=user_id
+                )
 
     @staticmethod
-    def obter_somente_comentarios(fram_id):
-        #pega os comentários excluindo-se os que são resposta.
-        respostas = Comentario.objects.raw('''SELECT 
-                                            to_comentario_id AS id 
-                                            FROM wofapp_comentario_respostas
-                                            ''')
-        respostas_ids = [resposta.pk for resposta in respostas]
-        return Comentario.objects.filter(framework_id=fram_id).exclude(id__in=respostas_ids)
+    def excluir(rs_id):
+        with transaction.atomic():
+            coment = Comentario.objects.select_for_update().get(id=rs_id)
+            coment.delete()
 
 class Voto(models.Model):
     link = models.ForeignKey(Link, on_delete=models.CASCADE, null = False)
@@ -407,13 +418,10 @@ class Denuncia(models.Model):
     data = models.DateTimeField(default=timezone.now)
     motivo = models.CharField(max_length=500)
     quem_denunciou = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
+    resolvida = models.BooleanField(default=False)
     linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, blank=True, null=True)
     framework = models.ForeignKey(Framework, on_delete=models.CASCADE, blank=True, null=True)
-    versao = models.ForeignKey(Versao, on_delete=models.CASCADE, blank=True, null=True)
-    helloworld = models.ForeignKey(Helloworld, on_delete=models.CASCADE, blank=True, null=True)
-    funcionalidade = models.ForeignKey(Funcionalidade, on_delete=models.CASCADE, blank=True, null=True)
     opiniao = models.ForeignKey(Opiniao, on_delete=models.CASCADE, blank=True, null=True)
-    link = models.ForeignKey(Link, on_delete=models.CASCADE, blank=True, null=True)
     Comentario = models.ForeignKey(Comentario, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):

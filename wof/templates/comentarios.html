@@ -8,68 +8,104 @@
         <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
             <div class="card-body max-y">
                 {% for comentario in comentarios %}
-                <form class="form" role="form" method="POST" action="/resposta/{{framework.id}}/{{comentario.id}}">
-                    {% csrf_token %}
                     <div class="media comment-box">
                         <div class="media-left">
                             <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
                         </div>
                         <div class="media-body">
-
                             <div class="media-heading text-dark">
                                 <div class="bg-default clearfix">
-                                    <div class="float-left">
-                                    <a href="#" class="text-dark">
-                                        <h6 class="text-dark">{{comentario.usuario.obter_nome_exibicao}}</h6>
-                                    </a>
-                                    <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
+                                    <div class="float-left form-inline">
+                                        <a href="#" class="text-dark">
+                                            <h6 class="text-dark">{{comentario.usuario.obter_nome_exibicao}}</h6>
+                                        </a>
+                                        <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
                                     </div>
                                     {% if user.is_authenticated %}
-                                    <div class="float-right">
-                                        <a data-toggle="collapse" href="#{{comentario.id}}" aria-expanded="false" data-target="#collapse{{comentario.id}}" aria-controls="collapse{{comentario.id}}" role="button">
-                                            <i class="fa fa-reply"> responder</i>
-                                        </a>
-                                    </div>
+                                        <div class="float-right">
+                                            <div class="row">
+                                                <a class="mr-3" data-toggle="collapse" href="#{{comentario.id}}" aria-expanded="false" data-target="#collapse{{comentario.id}}" aria-controls="collapse{{comentario.id}}" role="button">
+                                                    <i class="fa fa-reply text-dark"> Responder</i>  
+                                                </a>
+                                                <div class="dropright mr-2">
+                                                    <i class="fa fa-ellipsis-v mr-2" style="cursor:pointer" id="dropdownDenuncia" 
+                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="fa fa-flag text-secondary" aria-hidden="true"> Denunciar</i> 
+                                                        </a>
+                                                        {%if user.id is comentario.usuario.id %}
+                                                        <a class="dropdown-item" href="{% url 'wofapp:excluir_comentario' comentario.id framework.id %}" onclick="return confirm('Tem certeza que deseja excluir este comentário?');">
+                                                            <i class="fa fa-trash text-secondary ml-1" aria-hidden="true"> Excluir</i> 
+                                                        </a>
+                                                        {%endif%}
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                        </div>
                                     {%endif%}
                                 </div>
                             </div>
 
                             <p>{{comentario.texto}}</p>
-                            <div id="collapse{{comentario.id}}" class="collapse" >
-                                <div class="form-inline">
-                                    <input type="text" name="texto" id="texto{{comentario.id}}" class="form-control form-control-sm col-md-9" placeholder="Responder comentário..."
-                                        required />
-                                    <button type="submit" class="btn btn-outline-dark btn-sm ml-2">Responder
-                                        <i class="fa fa-reply" aria-hidden="true"></i>
-                                        </i>
-                                    </button>
-                                </div>
-                            </div>
 
-                            {%if comentario.respostas %}
-                            <div class="col-md-5">
-                                {% for resposta in comentario.respostas.all %}
-                                <div class="media comment-box">
-                                    <div class="media-left">
-                                        <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
+                            <form class="form" role="form" method="POST" action="/resposta/{{framework.id}}/{{comentario.id}}">
+                                {% csrf_token %}
+                                <div id="collapse{{comentario.id}}" class="collapse" >
+                                    <div class="form-inline">
+                                        <input type="text" name="texto" id="texto{{comentario.id}}" class="form-control form-control-sm col-md-9" placeholder="Responder comentário..."
+                                            required />
+                                        <button type="submit" class="btn btn-outline-dark btn-sm ml-2">Responder
+                                            <i class="fa fa-reply" aria-hidden="true"></i>
+                                            </i>
+                                        </button>
                                     </div>
-                                    <div class="media-body">
-                                        <div class="media-heading form-inline">
-                                        <a href="#" class="text-dark">
-                                            <h6 class="text-dark">{{resposta.usuario.obter_nome_exibicao}}</h6>
-                                        </a>
-                                            <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
+                                </div>
+                            </form>
+
+                            {%if comentario.respostas_id is None %}
+                                <div class="col-md-7">
+                                    {% for resposta in comentario.comentario_set.all %}
+                                    <div class="media comment-box">
+                                        <div class="media-left">
+                                            <i class="fa fa-user-o fa-3x ml-3" aria-hidden="true"></i>
                                         </div>
-                                        <p>{{resposta.texto}}</p>
+                                        <div class="media-body">
+                                            <div class="media-heading">
+                                                <div class="bg-default clearfix">
+                                                    <div class="float-left">
+                                                        <div class="row ml-1">
+                                                            <a href="#" class="text-dark">
+                                                                <h6 class="text-dark">{{resposta.usuario.obter_nome_exibicao}}</h6>
+                                                            </a>
+                                                                <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="float-right">
+                                                        <div class="dropright">
+                                                            <i class="fa fa-ellipsis-v mr-2" style="cursor:pointer" id="dropdownDenuncia" data-toggle="dropdown" 
+                                                            aria-haspopup="true" aria-expanded="false"></i>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
+                                                                <a class="dropdown-item" href="#"><i class="fa fa-flag text-secondary" aria-hidden="true"></i> Denunciar</a>
+                                                                {%if user.id is comentario.usuario.id %}
+                                                                    <a class="dropdown-item" href="{% url 'wofapp:excluir_comentario' resposta.id framework.id %}" onclick="return confirm('Tem certeza que deseja excluir esta resposta?');">
+                                                                    <i class="fa fa-trash text-secondary ml-1" aria-hidden="true"></i> Excluir
+                                                                    </a>
+                                                                {%endif%}
+                                                            </div>
+                                                        </div> 
+                                                    </div> 
+                                                </div>                                         
+                                            </div>
+                                            <p>{{resposta.texto}}</p>
+                                        </div>
                                     </div>
+                                    {%endfor%}
                                 </div>
-                                {%endfor%}
-                            </div>
-
+                            {%endif%} 
                         </div>
                     </div>
-                </form>
-                {%endif%} {% empty %}
+                {% empty %}
                 <div class="media comment-box">
                     <div class="media-left">
                         <i class="fa fa-user fa-3x ml-3" aria-hidden="true"></i>
@@ -90,23 +126,23 @@
                 {%endfor%}
             </div>
             {% if user.is_authenticated %}
-            <div class="card-footer">
-                <form class="form" role="form" method="POST" action="/comentario/{{framework.id}}">
-                    {% csrf_token %}
-                    <div class="row mr-1">
-                        <div class="col-md-10">
-                            <input type="text" name="texto" id="texto" class="form-control" placeholder="Tire dúvidas, dê explicações, faça comentários..."
-                                required />
+                <div class="card-footer">
+                    <form class="form" role="form" method="POST" action="/comentario/{{framework.id}}">
+                        {% csrf_token %}
+                        <div class="row mr-1">
+                            <div class="col-md-10">
+                                <input type="text" name="texto" id="texto" class="form-control" placeholder="Tire dúvidas, dê explicações, faça comentários..."
+                                    required />
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <button type="submit" class="btn btn-outline-dark">Enviar
+                                    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    </i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="col-md-2 text-right">
-                            <button type="submit" class="btn btn-outline-dark">Enviar
-                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                                </i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
             {%endif%}
         </div>
     </div>

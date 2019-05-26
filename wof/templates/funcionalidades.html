@@ -22,7 +22,7 @@
             <div class="card-body max-y">
                 <p class="font-weight-light">
                 {%if versao_selecionada is not None%}
-                    Funcionalidades do {{framework}} na versão <b>{{versao_selecionada.numero|floatformat:3}}</b>.
+                    Funcionalidades implementadas no {{framework}} na versão <b>{{versao_selecionada.numero|floatformat:3}}</b>.
                     <div class="font-weight-light">
                         {%for funcionalidade in versao_selecionada.funcionalidade_set.all %}
                         <div class="card">

@@ -114,9 +114,7 @@ def login_view(request, *args, **kwargs):
 
 def logout_view(request):
     logout(request)
-    path = request.POST.get('next', '/')
-    next = path if path != '/buscar_framework/' else '/'
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect('/')
 
 def faq_view(request):
     linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
@@ -255,7 +253,6 @@ def montar_framework(framework,versao,u_id):
     args['vantagens'] = versao.opiniao_set.filter(eh_favoravel=True).all() if versao is not None else None
     args['desvantagens'] = versao.opiniao_set.filter(eh_favoravel=False).all() if versao is not None else None
     args['comentarios'] = Comentario.obter_somente_comentarios(framework.id)
-
     args['lista_frameworks'] = Linguagem.obter_frameworks_linguagem(framework.linguagem_id)
     args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
  
@@ -317,12 +314,7 @@ def resposta_view(request,fm_id,cm_id):
         form = ComentarioForm(request.POST)
         if form.is_valid():
             try:
-                coment = Comentario.obter_comentario_por_id(cm_id)
-                coment.respostas.create(
-                    texto=request.POST['texto'],
-                    framework_id= fm_id,
-                    usuario_id=user.id
-                )
+                Comentario.adicionar_resposta(cm_id,request.POST['texto'],fm_id,user.id)
                 messages.info(request, 'Sua resposta foi enviada com sucesso.')
             except Exception:
                 logger = logging.getLogger(__name__)
@@ -555,5 +547,17 @@ def desfavoritar_framework_view(request,fm_id):
         logger = logging.getLogger(__name__)
         logger.exception("Erro ao excluir framework favorito.")
         messages.error(request, 'Erro ao excluir framework favorito. Tente novamente mais tarde.')
+
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
+@login_required
+def excluir_comentario_view(request,rs_id,fm_id):
+    try:
+        Comentario.excluir(rs_id)
+        messages.info(request, 'Comentário excluído com sucesso!')
+    except Exception:
+        logger = logging.getLogger(__name__)
+        logger.exception("Erro ao excluir comentário.")
+        messages.error(request, 'Erro ao excluir comentário. Tente novamente mais tarde.')
 
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))

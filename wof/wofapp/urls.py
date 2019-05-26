@@ -34,4 +34,5 @@ urlpatterns = [
     path('editar_funcionalidade/<int:fun_id>/<int:fm_id>', views.editar_funcionalidade_view, name="editar_funcionalidade"),
     path('favoritar_framework/<int:fm_id>', views.favoritar_framework_view, name="favoritar_framework"),
     path('desfavoritar_framework/<int:fm_id>', views.desfavoritar_framework_view, name="desfavoritar_framework"),
+    path('excluir_comentario/<int:rs_id>/<int:fm_id>', views.excluir_comentario_view, name="excluir_comentario"),
 ]
