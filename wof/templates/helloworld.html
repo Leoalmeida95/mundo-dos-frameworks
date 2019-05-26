@@ -5,8 +5,8 @@
         <div class="card-header">
             <div class="bg-default clearfix">
                 <div class="float-left">
-                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Hello World
-                        <i class="fa fa-globe" aria-hidden="true"></i>
+                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <i class="fa fa-globe fa-border" aria-hidden="true"></i> Hello World
                     </h5>
                 </div>
                 <div class="float-right">{% if user.is_authenticated %}
@@ -67,7 +67,7 @@
                 </div>
                 <div class="modal-body">
                     {%if versao_selecionada is None%}
-                    <p class="font-weight-light mt-3">Antes de adicionar o Hello world, adicione a Versão do Framework a qual você deseja relacioná-lo.</p>
+                    <p class="font-weight-light mt-3">Antes de adicionar o Hello world, adicione a Versão do {{framework}} a qual você deseja relacioná-lo.</p>
                     {%else%}
                     <div class="form-group">
                         <label for="descricao" class="col-form-label">Descrição:</label>

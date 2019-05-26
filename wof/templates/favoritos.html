@@ -2,7 +2,7 @@
 
 <body>
     <div class="container">
-    <h3 class="display-5 mt-2 mb-3">Sua lista de Frameworks Favoritos <i class="fa fa-star mt-4" title="Desfavoritar Framework" aria-hidden="true" style="color:#FFD700"></i></h3>
+    <h3 class="display-5 mt-2 mb-3">Sua lista de Frameworks Favoritos <i class="fa fa-star mt-4" aria-hidden="true" style="color:#FFD700"></i></h3>
         {% if favoritos.count > 0 %}
         <table class="table text-center">
             <thead class="thead-light">
@@ -23,7 +23,7 @@
                     </td>
                     <td>
                         <a href="{% url 'wofapp:frameworks' favorito.id %}">
-                        <i class="fa fa-share-square-o" aria-hidden="true"></i>
+                        <i class="fa fa-share-square-o" title="ver o {{favorito.nome}}" aria-hidden="true"></i>
                         </a>
                     </td>
                 </tr>

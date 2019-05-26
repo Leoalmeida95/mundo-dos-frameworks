@@ -1,8 +1,8 @@
 <div class="col-md-12 mt-3">
     <div class="card mr-2 mt-2 ml-1">
         <div class="card-header">
-            <h5 class="card-title" data-toggle="collapse" style="cursor:pointer" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Comentários
-                <i class="fa fa-comments-o" aria-hidden="true"></i>
+            <h5 class="card-title" data-toggle="collapse" style="cursor:pointer" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+            <i class="fa fa-comments-o fa-border" aria-hidden="true"></i> Comentários
             </h5>
         </div>
         <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
@@ -17,7 +17,7 @@
                                 <div class="bg-default clearfix">
                                     <div class="float-left form-inline">
                                         <a href="#" class="text-dark">
-                                            <h6 class="text-dark">{{comentario.usuario.obter_nome_exibicao}}</h6>
+                                            <h6 class="text-dark text-truncate">{{comentario.usuario.obter_nome_exibicao}}</h6>
                                         </a>
                                         <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
                                     </div>
@@ -28,8 +28,10 @@
                                                     <i class="fa fa-reply text-dark"> Responder</i>  
                                                 </a>
                                                 <div class="dropright mr-2">
-                                                    <i class="fa fa-ellipsis-v mr-2" style="cursor:pointer" id="dropdownDenuncia" 
-                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                                    <a style="cursor:pointer" id="dropdownDenuncia" data-toggle="dropdown" 
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fa fa-ellipsis-v fa-align-right mx-2" ></i>
+                                                    </a>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
                                                         <a class="dropdown-item" href="#">
                                                             <i class="fa fa-flag text-secondary" aria-hidden="true"> Denunciar</i> 
@@ -76,15 +78,17 @@
                                                     <div class="float-left">
                                                         <div class="row ml-1">
                                                             <a href="#" class="text-dark">
-                                                                <h6 class="text-dark">{{resposta.usuario.obter_nome_exibicao}}</h6>
+                                                                <h6 class="text-dark text-truncate">{{resposta.usuario.obter_nome_exibicao}}</h6>
                                                             </a>
                                                                 <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
                                                         </div>
                                                     </div>
                                                     <div class="float-right">
                                                         <div class="dropright">
-                                                            <i class="fa fa-ellipsis-v mr-2" style="cursor:pointer" id="dropdownDenuncia" data-toggle="dropdown" 
-                                                            aria-haspopup="true" aria-expanded="false"></i>
+                                                            <a style="cursor:pointer" id="dropdownDenuncia" data-toggle="dropdown" 
+                                                            aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fa fa-ellipsis-v fa-align-right mx-2" ></i>
+                                                            </a>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
                                                                 <a class="dropdown-item" href="#"><i class="fa fa-flag text-secondary" aria-hidden="true"></i> Denunciar</a>
                                                                 {%if user.id is comentario.usuario.id %}

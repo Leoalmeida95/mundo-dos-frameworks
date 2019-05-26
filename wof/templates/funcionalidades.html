@@ -3,8 +3,8 @@
         <div class="card-header">
             <div class="bg-default clearfix">
                 <div class="float-left">
-                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">Funcionalidades
-                        <i class="fa fa-cubes" aria-hidden="true"></i>
+                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                    <i class="fa fa-cubes fa-border" aria-hidden="true"></i> Funcionalidades
                     </h5>
                 </div>
                 <div class="float-right">{% if user.is_authenticated %}
@@ -74,13 +74,13 @@
                     <div class="tab-pane fade show active" id="pills-new3" role="tabpanel" aria-labelledby="pills-new3-tab">
                         {%if versao_selecionada is None%}
                             <p class="font-weight-light mt-3">Antes de adicionar as funcionalidades, 
-                            adicione a Versão do Framework a qual você deseja relacioná-las.</p>
+                            adicione a Versão do {{framework}} a qual você deseja relacioná-las.</p>
                         {%else%}
-                        <a class="mt-5">Adicione uma Funcionalidade da Versão do Framework:</a>
+                        <a class="mt-5">Adicione uma Funcionalidade da Versão {{versao_selecionada.numero|floatformat:3}} do {{framework}}:</a>
                             <form class="form-inline mt-2 mb-3" role="form" method="POST" action="/funcionalidade/{{framework.id}}/{{versao_selecionada.id}}">
                                 {% csrf_token %}
                                 <input type="text" class="form-control col-md-10" name="descricao" id="descricao" 
-                                placeholder="Ex: Um novo método que o Framework passou a disponibilizar nessa versão" required> 
+                                placeholder="Ex: Um novo método que o {{framework}} passou a disponibilizar nessa versão" required> 
                                 <button type="submit" class="btn btn-info col-md-2">Salvar</button>
                             </form>
                         {%endif%}
@@ -88,7 +88,7 @@
                     <div class="tab-pane fade" id="pills-edit3" role="tabpanel" aria-labelledby="pills-edit3-tab">
                         {% if versao_selecionada is None %}
                             <p class="font-weight-light mt-3">Antes de editar as funcionalidades, 
-                            adicione a Versão do Framework a qual você deseja relacioná-las.</p>
+                            adicione a Versão do {{framework}} a qual você deseja relacioná-las.</p>
                         {%else%}
                         {% if versao_selecionada.funcionalidade_set.count > 0 %}
                             <table class="table text-center mt-2">
@@ -99,7 +99,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {%for funcionalidade in versao_selecionada.funcionalidade_set.all %}
+                            {%for funcionalidade in versao_selecionada.funcionalidade_set.all %}
                                     <form class="form" role="form" method="POST" action="/editar_funcionalidade/{{funcionalidade.id}}/{{framework.id}}">
                                         {% csrf_token %}
                                         <tr class="row">
@@ -125,9 +125,6 @@
                                             </td>
                                         </tr>
                                     </form>
-                                {% empty %}
-                                    <p class="font-weight-light mt-3 mb-3">Ninguém adicionou funcionalidades do framework.{% if user.is_authenticated %} Clique no 'Editar'
-                                    {%else%} Cadastre-se {%endif%}e seja o primeiro a fazer! </p>
                                 {%endfor%}
                                 </tbody>
                             </table>

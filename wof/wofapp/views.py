@@ -561,3 +561,44 @@ def excluir_comentario_view(request,rs_id,fm_id):
         messages.error(request, 'Erro ao excluir comentário. Tente novamente mais tarde.')
 
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
+@login_required
+def link_view(request,fm_id):
+    args={}
+    user = request.user
+    if request.method == 'POST':
+        form = LinkForm(request.POST)
+        if form.is_valid():
+            try:
+                Link.adicionar(request.POST['caminho'],user.id,fm_id)
+                messages.info(request, 'Links editados com sucesso!')
+            except Exception:
+                logger = logging.getLogger(__name__)
+                logger.exception("Erro ao atualizar os Links.")
+                messages.error(request, 'Erro ao atualizar os links. Tente novamente mais tarde.')
+        else:
+            erroMsg = form.errors['__all__'].data[0].message
+            messages.warning(request, erroMsg)
+    else:
+        form = LinkForm()
+
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
+@login_required
+def editar_link_view(request,li_id,fm_id):
+    user = request.user
+    if request.method == 'POST':
+        form = LinkForm(request.POST)
+        if form.is_valid():
+            try:
+                Link.editar(request.POST['caminho'],li_id,user.id)
+                messages.info(request, 'Links editados com sucesso!')
+            except Exception:
+                logger = logging.getLogger(__name__)
+                logger.exception("Erro ao atualizar os Links.")
+                messages.error(request, 'Erro ao atualizar os links. Tente novamente mais tarde.')
+        else:
+            erroMsg = form.errors['__all__'].data[0].message
+            messages.warning(request, erroMsg)
+
+    return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))

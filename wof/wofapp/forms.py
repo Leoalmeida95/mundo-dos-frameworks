@@ -367,3 +367,19 @@ class FuncionalidadeForm(forms.ModelForm):
         
         return self.cleaned_data
 
+class LinkForm(forms.ModelForm):
+    caminho = forms.CharField(required=True, 
+        widget=forms.TextInput(attrs={'name': 'caminho'}))
+
+    class Meta:
+        model = Link
+        fields = ['caminho']
+
+    def clean(self):        
+        caminho = self.cleaned_data.get('caminho')
+        
+        if caminho is None:
+            raise forms.ValidationError('Entre com algum Link.')
+        
+        return self.cleaned_data
+

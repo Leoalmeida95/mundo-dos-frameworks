@@ -3,8 +3,8 @@
         <div class="card-header">
             <div class="bg-default clearfix">
                 <div class="float-left">
-                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Vantagens e Desvantagens
-                        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    <i class="fa fa-thumbs-o-up fa-border" aria-hidden="true"></i><i class="fa fa-thumbs-o-down fa-border" aria-hidden="true"></i> Vantagens e Desvantagens    
                     </h5>
                 </div>
                 <div class="float-right">{% if user.is_authenticated %}
@@ -42,7 +42,7 @@
                             <div class="card">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                        <a href="#" class="text-dark"><b>{{opiniao.usuario.obter_nome_exibicao}}</b></a>
+                                        <a href="#" class="text-dark text-truncate"><b>{{opiniao.usuario.obter_nome_exibicao}}</b></a>
                                         <i class="fa fa-comment-o" aria-hidden="true"></i> :
                                         <i class="fa fa-quote-left fa-fw" aria-hidden="true"></i>
                                         {{opiniao.texto}}
@@ -90,9 +90,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">
-                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 
-                    <i class="fa fa-thumbs-o-down" aria-hidden="true"></i> 
-                    Edição das Vantagens e Desvantagens </h5>
+                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i><i class="fa fa-thumbs-o-down" aria-hidden="true"></i> Edição das Vantagens e Desvantagens</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -113,9 +111,9 @@
                     <div class="tab-pane fade show active" id="pills-new1" role="tabpanel" aria-labelledby="pills-new1-tab">
                         {%if versao_selecionada is None%}
                             <p class="font-weight-light mt-3">Antes de adicionar as vantagens e desvantagens, 
-                            adicione a Versão do Framework a qual você deseja relacioná-las.</p>
+                            adicione a Versão do {{framework}} a qual você deseja relacioná-las.</p>
                         {%else%}
-                            <a class="mt-2">Adicione uma Vantagem ou Desvantagem da Versão do Framework:</a>
+                            <a class="mt-2">Adicione uma Vantagem ou Desvantagem da Versão {{versao_selecionada.numero|floatformat:3}} do {{framework}}:</a>
                             <form class="form" role="form" method="POST" action="/opiniao/{{framework.id}}/{{versao_selecionada.id}}">
                             {% csrf_token %}
                                 <div class="form-group mt-3 ml-2">
@@ -191,8 +189,10 @@
                                                         </div>  
                                                     {%else%}
                                                         <div class="dropright">
-                                                                <i class="fa fa-ellipsis-v" style="cursor:pointer" id="dropdownDenuncia" 
-                                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                                            <a style="cursor:pointer" id="dropdownDenuncia" data-toggle="dropdown" 
+                                                            aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fa fa-ellipsis-v fa-align-right mx-2" ></i>
+                                                            </a>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
                                                                 <a class="dropdown-item" href="#">
                                                                 <i class="fa fa-flag text-secondary" aria-hidden="true"> Denunciar</i> 
@@ -244,8 +244,10 @@
                                                         </div>   
                                                     {%else%}
                                                         <div class="dropright">
-                                                                <i class="fa fa-ellipsis-v" style="cursor:pointer" id="dropdownDenuncia" 
-                                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                                            <a style="cursor:pointer" id="dropdownDenuncia" data-toggle="dropdown" 
+                                                            aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fa fa-ellipsis-v fa-align-right mx-2" ></i>
+                                                            </a>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
                                                                 <a class="dropdown-item" href="#">
                                                                 <i class="fa fa-flag text-secondary" aria-hidden="true"> Denunciar</i> 
@@ -267,7 +269,7 @@
                             </div>
                         {%else%}
                             <p class="font-weight-light mt-3">Antes de editar as vantagens e desvantagens, 
-                                adicione a Versão do Framework a qual você deseja relacioná-las.</p>
+                                adicione a Versão do {{framework}} a qual você deseja relacioná-las.</p>
                         {%endif%}
                     </div>
                 </div>

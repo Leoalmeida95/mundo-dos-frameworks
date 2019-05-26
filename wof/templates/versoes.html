@@ -4,8 +4,8 @@
             <div class="card-header" id="headingOne">
                 <div class="bg-default clearfix">
                     <div class="float-left">
-                        <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Versões
-                            <i class="fa fa-shield" aria-hidden="true"></i>
+                        <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <i class="fa fa-shield fa-border" aria-hidden="true"></i> Versões
                         </h5>
                     </div>
                     <div class="float-right">{% if user.is_authenticated %}
@@ -21,7 +21,7 @@
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body" style="overflow-y:auto;">
                     <div class="form-inline">
-                        <p class="font-weight-light">O <b>Hello World</b>, as <b>Funcionalidades</b> além das <b>Vantagens e Desvantagens</b> sobre esse Framework estão relacionadas a cada Versão que ele possui.</p>
+                        <p class="font-weight-light">O <b>Hello World</b>, as <b>Funcionalidades</b> além das <b>Vantagens e Desvantagens</b> sobre o {{framework}} estão relacionadas a cada Versão que ele possui.</p>
                     </div>
                     {% if versao_selecionada is not None%}
                     <div class="form-inline">
@@ -95,7 +95,7 @@
                 </ul>
                 <div class="tab-content mt-2" id="pills-tabContent mt-2">
                     <div class="tab-pane fade show active" id="pills-new2" role="tabpanel" aria-labelledby="pills-new2-tab">
-                        <a class="mt-5 mb-5">Adicione uma Versão do Framework:</a>
+                        <a class="mt-5 mb-5">Adicione uma Versão do {{framework}}:</a>
                         <form class="form-inline mt-4 mb-3" role="form" method="POST" action="/versao/{{framework.id}}">
                             {% csrf_token %}
                             <input type="text" class="form-control col-md-8" name="numero_versao" id="numero_versao" placeholder="Ex: 1.0" required

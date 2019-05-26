@@ -3,13 +3,13 @@
         <div class="card-header">
             <div class="bg-default clearfix">
                 <div class="float-left">
-                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Links
-                        <i class="fa fa-external-link" aria-hidden="true"></i>
+                    <h5 class="card-title" style="cursor:pointer" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    <i class="fa fa-external-link fa-border" aria-hidden="true"></i> Links      
                     </h5>
                 </div>
                 <div class="float-right">{% if user.is_authenticated %}
                     <label class="mr-1">[
-                        <a href="#">
+                        <a data-toggle="modal" data-target="#edicaoLinks" href="#">
                             <small title="editar links">editar
                                 <i class="fa fa-pencil fa-fw"></i>
                             </small>
@@ -20,16 +20,16 @@
         </div>
         <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
             <div class="card-body max-y">
-                <p class="font-weight-light">Os melhores sites eleitos pelos usuários para aprendizado sobre o {{framework}}</p>
+                <p class="font-weight-light">Os melhores sites eleitos pelos usuários para aprendizado sobre o {{framework}}.</p>
                 <div class="col-md-12">
                     <p class="font-weight-light mt-4 mb-4">
                     <i class="fa fa-trophy fa-border" aria-hidden="true" style="color:#FFD700"></i>
                     Ranking:</p>
-                  {% for link in framework.links.all %}
+                  {% for link in framework.link_set.all %}
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div class="col-10 text-truncate">
-                                <a href={{link.path}}>{{link.path}}</a>
+                                <a href={{link.caminho}}>{{link.caminho}}</a>
                             </div>
                             <span class="btn btn-primary">
                                 <i class="fa fa-thumbs-up" aria-hidden="true"></i> 14</i>
@@ -47,6 +47,87 @@
                         </p>
                         </li>
                         {%endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="edicaoLinks" style="height:100%" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    <i class="fa fa-external-link" aria-hidden="true"></i> Edição dos Links</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <a aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body modal-y">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#pills-new4" data-toggle="pill" href="#pills-new4" role="tab" aria-controls="pills-new4"
+                    aria-selected="true">Novo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pills-edit4" data-toggle="pill" href="#pills-edit4" role="tab" aria-controls="pills-edit4"
+                    aria-selected="true">Existentes</a>
+                    </li>
+                </ul>
+                <div class="tab-content mt-2" id="pills-tabContent mt-2">
+                    <div class="tab-pane fade show active" id="pills-new4" role="tabpanel" aria-labelledby="pills-new4-tab">
+                        <a class="mt-5">Adicione um Link de um tutorial ou material de estudo sobre o {{framework}}:</a>
+                        <form class="form-inline mt-2 mb-3" role="form" method="POST" action="/link/{{framework.id}}">
+                            {% csrf_token %}
+                            <input type="text" class="form-control col-md-10" name="caminho" id="caminho" 
+                                placeholder="Entre aqui com o link externo" required> 
+                            <button type="submit" class="btn btn-info col-md-2">Salvar</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="pills-edit4" role="tabpanel" aria-labelledby="pills-edit4-tab">
+                    {% if framework.link_set.count > 0 %}
+                        <table class="table text-center mt-2">
+                            <thead class="thead-light">
+                                <tr class="row">
+                                    <th class="col-md-10" scope="col">Link</th>
+                                    <th class="col-md-2" scope="col">Alterar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {%for link in framework.link_set.all %}
+                                <form class="form" role="form" method="POST" action="/editar_link/{{link.id}}/{{framework.id}}">
+                                    {% csrf_token %}
+                                    <tr class="row">
+                                        <td class="col-md-10">
+                                            <a id="condicao1-fu-{{link.id}}" style="display:block">
+                                                {{link.caminho}}
+                                            <a>
+
+                                            <div id="condicao2-fu-{{link.id}}" style="display:none">
+                                                <input type="text" name="caminho" class="form-control" value="{{link.caminho}}" required> 
+                                            </div>
+                                        </td>
+
+                                        <td class="col-md-2">
+                                            <a id="condicao3-fu-{{link.id}}" style="display:block">
+                                                <i class="fa fa-pencil-square-o" style="cursor: pointer" aria-hidden="true" title="Editar link"
+                                                onclick="troca_campos('fu',{{link.id}})"></i>
+                                            </a>
+
+                                            <div id="condicao4-fu-{{link.id}}" style="display:none">
+                                                <button type="submit" class="btn btn-info" >Editar</button>
+                                            </div>                                       
+                                        </td>
+                                    </tr>
+                                </form>
+                            {%endfor%}
+                            </tbody>
+                        </table>
+                        {%else%}
+                            <p class="font-weight-light mt-3 mb-3">Ainda não há links registrados sobre o {{framework}}.</p>
+                        {%endif%}
+                    </div>
                 </div>
             </div>
         </div>

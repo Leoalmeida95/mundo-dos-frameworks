@@ -60,8 +60,8 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
     ativo = models.BooleanField(default=True)
     administrador = models.BooleanField(default=False)
     conta_publica = models.BooleanField(default=False)
-    formacao = models.CharField(max_length=80,null = True)
-    profissao = models.CharField(max_length=80,null = True)
+    formacao = models.CharField(max_length=150,null = True)
+    profissao = models.CharField(max_length=150,null = True)
     data_cadastro = models.DateTimeField(default=timezone.now)
 
     objects = EmailUserManager()
@@ -137,7 +137,7 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
         return self.ativo
 
 class Linguagem(models.Model):
-    nome = models.CharField(max_length=30)
+    nome = models.CharField(max_length=60)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     
     def __str__(self):
@@ -187,7 +187,7 @@ class Linguagem(models.Model):
 
 
 class Framework(models.Model):
-    nome = models.CharField(max_length=30)
+    nome = models.CharField(max_length=60)
     linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, null = False)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     favoritado_por = models.ManyToManyField(Usuario, blank=True, related_name="favoritado_por")
@@ -366,6 +366,23 @@ class Link(models.Model):
 
     def __str__(self):
         return self.path
+
+    @staticmethod
+    def adicionar(caminho,user_id,fm_id):
+        link = Link(
+            descricao=caminho,
+            usuario_id=user_id,
+            versao_id =fm_id
+        ) 
+        link.save()
+
+    @staticmethod
+    def editar(caminho, li_id, user_id):
+        with transaction.atomic():
+            link = Link.objects.select_for_update().get(id=li_id)
+            link.caminho = caminho
+            link.usuario_id = user_id
+            link.save() 
 
 class Comentario(models.Model):
     texto = models.CharField(max_length=1000)
