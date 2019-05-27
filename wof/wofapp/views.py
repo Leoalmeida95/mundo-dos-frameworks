@@ -30,7 +30,7 @@ def chart_view(request):
     chartConfig1["xAxisName"] = "Linguagens"
     chartConfig1["yAxisName"] = "Quantidade de Frameworks"
     chartConfig1["showBorder"] = "1"
-    chartConfig1["palettecolors"] = "8B008B,98FB98,FF0000,FF7F50,00BFFF,FF69B4,00FF7F,DAA520,FF4500,E0FFFF"
+    chartConfig1["palettecolors"] = "8B008B,00FF7F,FF0000,FF7F50,FF4500,FF69B4,98FB98,DAA520,B22222,E0FFFF"
 
     chartConfig1["toolTipBorderColor"] = "#666666"
     chartConfig1["toolTipBgColor"] = "#efefef"
@@ -50,7 +50,7 @@ def chart_view(request):
     chartConfig2["caption"] = "Top 10 Frameworks com mais dados inseridos"
     chartConfig2["xAxisName"] = "Frameworks"
     chartConfig2["yAxisName"] = "Quantidade de Dados"
-    chartConfig2["palettecolors"] = "00FF00,FFD700,D2691E,9932CC,B22222,D8BFD8,FA8072,483D8B,0000FF,DC143C"
+    chartConfig2["palettecolors"] = "00FF00,00BFFF,DC143C,9932CC,FFD700,0000FF,FA8072,483D8B,D8BFD8,D2691E"
 
     chartConfig2["toolTipBorderColor"] = "#666666"
     chartConfig2["toolTipBgColor"] = "#efefef"
@@ -252,7 +252,9 @@ def montar_framework(framework,versao,u_id):
     args['ultimo_helloworld'] = versao.helloworld_set.last() if versao is not None else None
     args['vantagens'] = versao.opiniao_set.filter(eh_favoravel=True).all() if versao is not None else None
     args['desvantagens'] = versao.opiniao_set.filter(eh_favoravel=False).all() if versao is not None else None
-    args['comentarios'] = Comentario.obter_somente_comentarios(framework.id)
+    args['comentarios'] = framework.comentario_set.exclude(texto__exact='').exclude(respostas_id__isnull=False)
+    args['links'] = framework.link_set.all().annotate(qtd_voto=Count('voto')).order_by('-qtd_voto')
+
     args['lista_frameworks'] = Linguagem.obter_frameworks_linguagem(framework.linguagem_id)
     args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
  

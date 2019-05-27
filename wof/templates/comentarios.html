@@ -17,7 +17,7 @@
                                 <div class="bg-default clearfix">
                                     <div class="float-left form-inline">
                                         <a href="#" class="text-dark">
-                                            <h6 class="text-dark text-truncate">{{comentario.usuario.obter_nome_exibicao}}</h6>
+                                            <h6 class="text-dark">{{comentario.usuario.obter_nome_exibicao|truncatechars:35}}</h6>
                                         </a>
                                         <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
                                     </div>
@@ -78,7 +78,7 @@
                                                     <div class="float-left">
                                                         <div class="row ml-1">
                                                             <a href="#" class="text-dark">
-                                                                <h6 class="text-dark text-truncate">{{resposta.usuario.obter_nome_exibicao}}</h6>
+                                                                <h6 class="text-dark">{{resposta.usuario.obter_nome_exibicao|truncatechars:35}}</h6>
                                                             </a>
                                                                 <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
                                                         </div>

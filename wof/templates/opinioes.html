@@ -42,7 +42,7 @@
                             <div class="card">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                        <a href="#" class="text-dark text-truncate"><b>{{opiniao.usuario.obter_nome_exibicao}}</b></a>
+                                        <a href="#" class="text-dark"><b>{{opiniao.usuario.obter_nome_exibicao|truncatechars:35}}</b></a>
                                         <i class="fa fa-comment-o" aria-hidden="true"></i> :
                                         <i class="fa fa-quote-left fa-fw" aria-hidden="true"></i>
                                         {{opiniao.texto}}

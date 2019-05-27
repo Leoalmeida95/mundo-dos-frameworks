@@ -212,9 +212,10 @@ class Framework(models.Model):
         return Framework.objects.raw('''SELECT
                                             fram.id
                                             ,fram.nome
-                                            ,(count(distinct v.id)  + count(distinct fu.id)  +
-                                            count(distinct h.id)  + count(distinct o.id)  + 
-                                            count(distinct l.id)  + count(distinct c.id))
+                                            ,(count(distinct v.id) + count(distinct fu.id) +
+                                            count(distinct h.id) + count(distinct o.id) + 
+                                            count(distinct l.id) + count(distinct c.id) +
+                                            count(distinct vo.id))
                                             as total_contribuicoes
                                         FROM public.wofapp_framework as fram
                                         LEFT JOIN public.wofapp_versao v on v.framework_id = fram.id
@@ -223,6 +224,7 @@ class Framework(models.Model):
                                         LEFT JOIN public.wofapp_opiniao o on o.versao_id = v.id
                                         LEFT JOIN public.wofapp_link l on l.framework_id = fram.id
                                         LEFT JOIN public.wofapp_comentario c on c.framework_id = fram.id
+                                        LEFT JOIN public.wofapp_voto vo on vo.link_id = l.id
                                         GROUP BY fram.id
                                                 ,fram.nome
                                         ORDER BY total_contribuicoes DESC
@@ -382,6 +384,7 @@ class Link(models.Model):
             link = Link.objects.select_for_update().get(id=li_id)
             link.caminho = caminho
             link.usuario_id = user_id
+            link.voto_set.all().delete()
             link.save() 
 
 class Comentario(models.Model):
@@ -393,10 +396,6 @@ class Comentario(models.Model):
 
     def __str__(self):
         return self.texto
-
-    @staticmethod
-    def obter_somente_comentarios(fram_id):
-        return Comentario.objects.filter(framework_id=fram_id).exclude(texto__exact='').exclude(respostas_id__isnull=False)
 
     @staticmethod
     def obter_comentario_por_id(id):
