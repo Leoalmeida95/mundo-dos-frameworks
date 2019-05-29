@@ -344,6 +344,11 @@ class Opiniao(models.Model):
         return self.nome  
 
     @staticmethod
+    def obter_texto_opiniao(id):
+        o = Opiniao.objects.get(id=id)
+        return o.texto
+
+    @staticmethod
     def adicionar(texto,eh_favoravel,user_id,vs_id):
         op = Opiniao(
             texto=texto,
@@ -398,12 +403,9 @@ class Comentario(models.Model):
         return self.texto
 
     @staticmethod
-    def obter_comentario_por_id(id):
-        return Comentario.objects.get(id=id)
-
-    @staticmethod
-    def obter_comentario_por_id(id):
-        return Comentario.objects.get(id=id)
+    def obter_texto_comentario(id):
+        c = Comentario.objects.get(id=id)
+        return c.texto
 
     @staticmethod
     def adicionar(texto,fm_id,user_id):
@@ -460,10 +462,27 @@ class Denuncia(models.Model):
         return self.motivo
 
     @staticmethod
-    def comentario(motivo,cm_id,user_id):
+    def denunciar_comentario(motivo,cm_id,user_id):
         de = Denuncia(
             motivo=motivo,
             quem_denunciou_id=user_id,
             Comentario_id=cm_id
         )
         de.save()   
+
+    @staticmethod
+    def denunciar_opiniao(motivo,op_id,user_id):
+        de = Denuncia(
+            motivo=motivo,
+            quem_denunciou_id=user_id,
+            opiniao_id=op_id
+        )
+        de.save()
+
+    @staticmethod
+    def verifica_denuncia_comentario(cm_id,user_id):
+        return Denuncia.objects.filter(Comentario_id=cm_id,quem_denunciou_id=user_id).first()
+
+    @staticmethod
+    def verifica_denuncia_opiniao(op_id,user_id):
+        return Denuncia.objects.filter(opiniao_id=op_id,quem_denunciou_id=user_id).first()   

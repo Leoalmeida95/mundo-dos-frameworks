@@ -48,4 +48,5 @@ urlpatterns = [
     path('votar_link/<int:li_id>/<int:fm_id>', views.votar_link_view, name="votar_link"),
     #denuncia
     path('denuncia_comentario/<int:cm_id>', views.denuncia_comentario_view, name="denuncia_comentario"),
+    path('denuncia_opiniao/<int:op_id>', views.denuncia_opiniao_view, name="denuncia_opiniao"),
 ]

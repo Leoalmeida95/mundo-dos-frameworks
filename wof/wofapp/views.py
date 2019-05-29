@@ -622,26 +622,65 @@ def votar_link_view(request,li_id,fm_id):
 
 @login_required
 def denuncia_comentario_view(request,cm_id):
+    user = request.user
     args={}
     try:
         if request.method == 'POST':
-            user = request.user
             form = DenunciaForm(request.POST)
             if form.is_valid():
-                Denuncia.comentario(request.POST['motivo'],cm_id,user.id)
-                messages.info(request, 'O comentário foi denunciado com sucesso! Obrigado por sua contribuição.')
+                Denuncia.denunciar_comentario(request.POST['motivo'],cm_id,user.id)
+                messages.info(request, 'O conteúdo foi denunciado com sucesso! Obrigado por sua contribuição. o memso será avaliado pelos administradores.')
                 return HttpResponseRedirect('/')
             else:
                 erroMsg = form.errors['__all__'].data[0].message
                 messages.warning(request, erroMsg)
         else:
-            comentario = Comentario.obter_comentario_por_id(cm_id)
-            args['conteudo'] = comentario.texto
-            args['cm_id'] = comentario.id
-            args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
+            denuncia = Denuncia.verifica_denuncia_comentario(cm_id,user.id)
+            if denuncia:
+                messages.warning(request, 'Você já denunciou esse conteúdo!')
+                return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':denuncia.Comentario.framework_id}))
+            else:
+                args['denuncia'] = "Comentario"
+                args['conteudo'] = Comentario.obter_texto_comentario(cm_id)
+                args['cm_id'] = cm_id
+                args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
     except Exception:
         logger = logging.getLogger(__name__)
-        logger.exception("Erro ao obter comentário.")
-        messages.error(request, 'Erro ao obter comentário. Tente novamente mais tarde.')
+        logger.exception("Erro ao denunciar comentário.")
+        messages.error(request, 'Erro ao denunciar comentário. Tente novamente mais tarde.')
+        return HttpResponseRedirect('/')
+
+    return  render(request, 'denuncia.html', args)
+
+
+@login_required
+def denuncia_opiniao_view(request,op_id):
+    user = request.user
+    args={}
+    try:
+        if request.method == 'POST':
+            form = DenunciaForm(request.POST)
+            if form.is_valid():
+                Denuncia.denunciar_opiniao(request.POST['motivo'],op_id,user.id)
+                messages.info(request, 'O conteúdo foi denunciado com sucesso! Obrigado por sua contribuição. o memso será avaliado pelos administradores.')
+                return HttpResponseRedirect('/')
+            else:
+                erroMsg = form.errors['__all__'].data[0].message
+                messages.warning(request, erroMsg)
+        else:
+            denuncia = Denuncia.verifica_denuncia_opiniao(op_id,user.id)
+            if denuncia:
+                messages.warning(request, 'Você já denunciou esse conteúdo!')
+                return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':denuncia.opiniao.versao.framework_id}))
+            else:
+                args['denuncia'] = "Opinião"
+                args['conteudo'] = Opiniao.obter_texto_opiniao(op_id)
+                args['op_id'] = op_id
+                args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
+    except Exception:
+        logger = logging.getLogger(__name__)
+        logger.exception("Erro ao denunciar opinião.")
+        messages.error(request, 'Erro ao denunciar opinião. Tente novamente mais tarde.')
+        return HttpResponseRedirect('/')
 
     return  render(request, 'denuncia.html', args)

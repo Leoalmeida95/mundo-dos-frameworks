@@ -10,7 +10,11 @@
                 <i>{{conteudo}}</i>
                 <i class="fa fa-quote-right fa-fw" aria-hidden="true"></i>
                 <br/>
+                {%if denuncia == "Comentario"%}
                 <form class="form" role="form" method="POST" action="/denuncia_comentario/{{cm_id}}">
+                {%elif denuncia == "Opinião"%}
+                <form class="form" role="form" method="POST" action="/denuncia_opiniao/{{op_id}}">
+                {%endif%}
                 {% csrf_token %}
                     <div class="col-12">
                         <label for="codigo_exemplo" class="col-form-label mt-4">Motivo da denúncia:</label>
