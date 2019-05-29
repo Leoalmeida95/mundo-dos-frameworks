@@ -402,6 +402,10 @@ class Comentario(models.Model):
         return Comentario.objects.get(id=id)
 
     @staticmethod
+    def obter_comentario_por_id(id):
+        return Comentario.objects.get(id=id)
+
+    @staticmethod
     def adicionar(texto,fm_id,user_id):
         coment = Comentario(
             texto=texto,
@@ -444,7 +448,7 @@ class Voto(models.Model):
 
 class Denuncia(models.Model):
     data = models.DateTimeField(default=timezone.now)
-    motivo = models.CharField(max_length=500)
+    motivo = models.CharField(max_length=1000)
     quem_denunciou = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     resolvida = models.BooleanField(default=False)
     linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, blank=True, null=True)
@@ -454,3 +458,12 @@ class Denuncia(models.Model):
 
     def __str__(self):
         return self.motivo
+
+    @staticmethod
+    def comentario(motivo,cm_id,user_id):
+        de = Denuncia(
+            motivo=motivo,
+            quem_denunciou_id=user_id,
+            Comentario_id=cm_id
+        )
+        de.save()   

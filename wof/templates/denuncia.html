@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% block titulo %}Perguntas Frequentes{% endblock %} {% block conteudo %} {% load staticfiles %}
+
+<body>
+    <div class="col-md-12 mt-5">
+        <div class="card border-dark mb-3">
+            <div class="card-header"><i class="fa fa-flag text-secondary" aria-hidden="true"></i> Denuncia</div>
+            <div class="card-body text-dark">
+                <p class="card-title">Conteúdo do material denunciado: </p>
+                <i class="fa fa-quote-left fa-fw" aria-hidden="true"></i>
+                <i>{{conteudo}}</i>
+                <i class="fa fa-quote-right fa-fw" aria-hidden="true"></i>
+                <br/>
+                <form class="form" role="form" method="POST" action="/denuncia_comentario/{{cm_id}}">
+                {% csrf_token %}
+                    <div class="col-12">
+                        <label for="codigo_exemplo" class="col-form-label mt-4">Motivo da denúncia:</label>
+                        <textarea rows="7" class="form-control" name="motivo" id="motivo" 
+                        placeholder="Entre com uma explicação do porquê, na sua opinião, o conteúdo ser inadequado."
+                        required></textarea>
+                    </div>
+            </div>
+            <div class="card-footer">
+                <div class="bg-default clearfix">
+                    <button type="submit" class="btn btn-info float-right" >Denunciar</button>
+                </div>    
+            </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

@@ -33,7 +33,7 @@
                                                         <i class="fa fa-ellipsis-v fa-align-right mx-2" ></i>
                                                     </a>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
-                                                        <a class="dropdown-item" href="#">
+                                                        <a class="dropdown-item" href="{% url 'wofapp:denuncia_comentario' comentario.id %}">
                                                             <i class="fa fa-flag text-secondary" aria-hidden="true"> Denunciar</i> 
                                                         </a>
                                                         {%if user.id is comentario.usuario.id %}
@@ -90,7 +90,8 @@
                                                                 <i class="fa fa-ellipsis-v fa-align-right mx-2" ></i>
                                                             </a>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
-                                                                <a class="dropdown-item" href="#"><i class="fa fa-flag text-secondary" aria-hidden="true"></i> Denunciar</a>
+                                                                <a class="dropdown-item" href="{% url 'wofapp:denuncia_comentario' resposta.id %}">
+                                                                <i class="fa fa-flag text-secondary" aria-hidden="true"></i> Denunciar</a>
                                                                 {%if user.id is comentario.usuario.id %}
                                                                     <a class="dropdown-item" href="{% url 'wofapp:excluir_comentario' resposta.id framework.id %}" onclick="return confirm('Tem certeza que deseja excluir esta resposta?');">
                                                                     <i class="fa fa-trash text-secondary ml-1" aria-hidden="true"></i> Excluir

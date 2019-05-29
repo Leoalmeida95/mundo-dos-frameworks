@@ -619,3 +619,29 @@ def votar_link_view(request,li_id,fm_id):
         messages.error(request, 'Erro ao excluir framework favorito. Tente novamente mais tarde.')
 
     return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':fm_id}))
+
+@login_required
+def denuncia_comentario_view(request,cm_id):
+    args={}
+    try:
+        if request.method == 'POST':
+            user = request.user
+            form = DenunciaForm(request.POST)
+            if form.is_valid():
+                Denuncia.comentario(request.POST['motivo'],cm_id,user.id)
+                messages.info(request, 'O comentário foi denunciado com sucesso! Obrigado por sua contribuição.')
+                return HttpResponseRedirect('/')
+            else:
+                erroMsg = form.errors['__all__'].data[0].message
+                messages.warning(request, erroMsg)
+        else:
+            comentario = Comentario.obter_comentario_por_id(cm_id)
+            args['conteudo'] = comentario.texto
+            args['cm_id'] = comentario.id
+            args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
+    except Exception:
+        logger = logging.getLogger(__name__)
+        logger.exception("Erro ao obter comentário.")
+        messages.error(request, 'Erro ao obter comentário. Tente novamente mais tarde.')
+
+    return  render(request, 'denuncia.html', args)

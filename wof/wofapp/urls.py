@@ -46,4 +46,6 @@ urlpatterns = [
     path('editar_link/<int:li_id>/<int:fm_id>', views.editar_link_view, name="editar_link"),
     #voto
     path('votar_link/<int:li_id>/<int:fm_id>', views.votar_link_view, name="votar_link"),
+    #denuncia
+    path('denuncia_comentario/<int:cm_id>', views.denuncia_comentario_view, name="denuncia_comentario"),
 ]

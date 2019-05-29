@@ -383,3 +383,20 @@ class LinkForm(forms.ModelForm):
         
         return self.cleaned_data
 
+
+class DenunciaForm(forms.ModelForm):
+    motivo = forms.CharField(required=True, 
+        widget=forms.TextInput(attrs={'name': 'motivo'}))
+
+    class Meta:
+        model = Link
+        fields = ['motivo']
+
+    def clean(self):        
+        motivo = self.cleaned_data.get('motivo')
+        
+        if motivo is None:
+            raise forms.ValidationError('Entre com o motivo da denúncia.')
+        
+        return self.cleaned_data
+
