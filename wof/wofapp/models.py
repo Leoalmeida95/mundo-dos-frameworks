@@ -341,7 +341,7 @@ class Opiniao(models.Model):
     versao = models.ForeignKey(Versao, on_delete=models.CASCADE, null = False)
 
     def __str__(self):
-        return self.nome  
+        return self.texto  
 
     @staticmethod
     def obter_texto_opiniao(id):

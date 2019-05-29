@@ -93,6 +93,12 @@
 								<a class="btn btn-outline-warning btn-sm btn-block" role="button" href="/favoritos">
 									<i class="fa fa-star-o" aria-hidden="true"></i> Favoritos</a>
 							</div>
+							{%if user.is_superuser %}
+							<div class="dropdown-item">
+								<a class="btn btn-outline-success btn-sm btn-block" role="button" href="/admin">
+									<i class="fa fa-id-badge" aria-hidden="true"></i> Administrador</a>
+							</div>
+							{%endif%}
 							<div class="dropdown-item">
 								<a class="btn btn-outline-primary btn-sm btn-block" role="button" href="{% url 'wofapp:atualizar' %}">
 									<i class="fa fa-pencil fa-fw"></i> Atualizar Dados</a>
