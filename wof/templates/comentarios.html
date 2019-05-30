@@ -16,9 +16,7 @@
                             <div class="media-heading text-dark">
                                 <div class="bg-default clearfix">
                                     <div class="float-left form-inline">
-                                        <a href="#" class="text-dark">
-                                            <h6 class="text-dark">{{comentario.usuario.obter_nome_exibicao|truncatechars:35}}</h6>
-                                        </a>
+                                        <h6 class="text-dark">{{comentario.usuario.obter_nome_exibicao|truncatechars:35}}</h6>
                                         <small class="text-muted mb-1 ml-2">{{comentario.data|timesince}}</small>
                                     </div>
                                     {% if user.is_authenticated %}
@@ -77,12 +75,11 @@
                                                 <div class="bg-default clearfix">
                                                     <div class="float-left">
                                                         <div class="row ml-1">
-                                                            <a href="#" class="text-dark">
-                                                                <h6 class="text-dark">{{resposta.usuario.obter_nome_exibicao|truncatechars:35}}</h6>
-                                                            </a>
-                                                                <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
+                                                            <h6 class="text-dark">{{resposta.usuario.obter_nome_exibicao|truncatechars:35}}</h6>
+                                                            <small class="text-muted mb-1 ml-2">{{resposta.data|timesince}}</small>
                                                         </div>
                                                     </div>
+                                                    {% if user.is_authenticated %}
                                                     <div class="float-right">
                                                         <div class="dropright">
                                                             <a style="cursor:pointer" id="dropdownDenuncia" data-toggle="dropdown" 
@@ -92,7 +89,7 @@
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuvs">
                                                                 <a class="dropdown-item" href="{% url 'wofapp:denuncia_comentario' resposta.id %}">
                                                                 <i class="fa fa-flag text-secondary" aria-hidden="true"></i> Denunciar</a>
-                                                                {%if user.id is comentario.usuario.id %}
+                                                                {%if user.id is resposta.usuario.id %}
                                                                     <a class="dropdown-item" href="{% url 'wofapp:excluir_comentario' resposta.id framework.id %}" onclick="return confirm('Tem certeza que deseja excluir esta resposta?');">
                                                                     <i class="fa fa-trash text-secondary ml-1" aria-hidden="true"></i> Excluir
                                                                     </a>
@@ -100,6 +97,7 @@
                                                             </div>
                                                         </div> 
                                                     </div> 
+                                                    {%endif%}
                                                 </div>                                         
                                             </div>
                                             <p>{{resposta.texto}}</p>
