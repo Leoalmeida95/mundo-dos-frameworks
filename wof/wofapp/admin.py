@@ -20,6 +20,9 @@ class LinguagemAdmin(admin.ModelAdmin):
     )
     save_on_top = True
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
 class FrameworkAdmin(admin.ModelAdmin):
     model = Framework
     list_display = ['nome']
@@ -28,6 +31,9 @@ class FrameworkAdmin(admin.ModelAdmin):
         ('Dados da Framework', {'fields': ('nome','linguagem')}),
     )
     save_on_top = True
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 class UsuarioAdmin(BaseUserAdmin):
     # The forms to add and change user instances
@@ -54,6 +60,9 @@ class UsuarioAdmin(BaseUserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
 class DenunciaAdmin(admin.ModelAdmin):
     model = Denuncia
     list_filter = ['resolvida']
@@ -66,6 +75,9 @@ class DenunciaAdmin(admin.ModelAdmin):
     readonly_fields = ['motivo','data','quem_denunciou','Comentario','opiniao','framework','linguagem']
     save_on_top = True
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
 class ComentarioAdmin(admin.ModelAdmin):
     model = Comentario
     search_fields = ['texto','usuario']
@@ -74,12 +86,18 @@ class ComentarioAdmin(admin.ModelAdmin):
     exclude=['respostas']
     save_on_top = True
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
 class OpiniaoAdmin(admin.ModelAdmin):
     model = Opiniao
     search_fields = ['texto','usuario']
     list_display=['texto','usuario']
     readonly_fields = ['texto','usuario','versao','eh_favoravel']
     save_on_top = True
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 admin.site.register(Denuncia,DenunciaAdmin)
 admin.site.register(Opiniao,OpiniaoAdmin)
