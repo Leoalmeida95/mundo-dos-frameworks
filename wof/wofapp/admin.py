@@ -58,7 +58,7 @@ class DenunciaAdmin(admin.ModelAdmin):
     model = Denuncia
     list_filter = ['resolvida']
     search_fields = ['motivo',]
-    list_display=['resolvida','motivo']
+    list_display=['motivo','resolvida']
     fieldsets = (
         ('Motivo denúncia', {'fields': ('resolvida','motivo','data','quem_denunciou',)}),
         ('Conteúdo denúncia', {'fields': ('Comentario','opiniao','framework','linguagem',)}),
