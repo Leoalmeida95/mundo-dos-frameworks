@@ -372,7 +372,7 @@ class Link(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
     def __str__(self):
-        return self.path
+        return self.caminho
 
     @staticmethod
     def adicionar(caminho,user_id,fm_id):
@@ -451,8 +451,8 @@ class Voto(models.Model):
 class Denuncia(models.Model):
     data = models.DateTimeField(default=timezone.now)
     motivo = models.CharField(max_length=1000)
-    quem_denunciou = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     resolvida = models.BooleanField(default=False)
+    quem_denunciou = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     linguagem = models.ForeignKey(Linguagem, on_delete=models.SET_NULL, blank=True, null=True)
     framework = models.ForeignKey(Framework, on_delete=models.SET_NULL, blank=True, null=True)
     opiniao = models.ForeignKey(Opiniao, on_delete=models.SET_NULL, blank=True, null=True)
