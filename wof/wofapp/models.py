@@ -453,10 +453,10 @@ class Denuncia(models.Model):
     motivo = models.CharField(max_length=1000)
     quem_denunciou = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
     resolvida = models.BooleanField(default=False)
-    linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, blank=True, null=True)
-    framework = models.ForeignKey(Framework, on_delete=models.CASCADE, blank=True, null=True)
-    opiniao = models.ForeignKey(Opiniao, on_delete=models.CASCADE, blank=True, null=True)
-    Comentario = models.ForeignKey(Comentario, on_delete=models.CASCADE, blank=True, null=True)
+    linguagem = models.ForeignKey(Linguagem, on_delete=models.SET_NULL, blank=True, null=True)
+    framework = models.ForeignKey(Framework, on_delete=models.SET_NULL, blank=True, null=True)
+    opiniao = models.ForeignKey(Opiniao, on_delete=models.SET_NULL, blank=True, null=True)
+    Comentario = models.ForeignKey(Comentario, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return self.motivo
