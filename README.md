@@ -1,7 +1,4 @@
-# Mundo dos Frameros
-
-O objetivo do sistema é disponibilizar um ambiente que permita as pessoas verificarem 
-diversas informações sobre variados frameworks de linguagens de programação, sem a necessidade de realizar pesquisas custosas. Dessa forma, qualquer pessoa poderia aprender sobre o framework que desejar e ainda contribuir com o conhecimento que possui, gerando uma rede de dados atualizada e confiável.
+# Mundo dos Frameworks
 
 ![Página inicial do sistema](https://user-images.githubusercontent.com/25140680/58751916-1aaf0680-847c-11e9-8a35-8a006adcf4f6.PNG)
 
