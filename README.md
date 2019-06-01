@@ -3,6 +3,8 @@
 O objetivo do sistema é disponibilizar um ambiente que permita as pessoas verificarem 
 diversas informações sobre variados frameworks de linguagens de programação, sem a necessidade de realizar pesquisas custosas. Dessa forma, qualquer pessoa poderia aprender sobre o framework que desejar e ainda contribuir com o conhecimento que possui, gerando uma rede de dados atualizada e confiável.
 
+![Página Incial do Sistema](https://github.com/Leoalmeida95/wof_system/issues/2#issue-451107909)
+
 # Instalação
 
 Requisitos do sistema:
@@ -25,8 +27,3 @@ Intalar Node.js:
 Dentro do projeto executar o npm para instalar as dependências:
 * npm init 
 * npm i
-
-
-# Pronto! ;)
-
-![Página Incial do Sistema](https://github.com/Leoalmeida95/wof_system/issues/2#issue-451107909)
