@@ -34,7 +34,7 @@
                             </div>
                             <form class="form" role="form" method="POST" action="/votar_link/{{link.id}}/{{framework.id}}">
                                 {% csrf_token %}
-                                 <button type="submit" class="btn btn-outline-primary" {% if not user.is_authenticated %}disabled title='Autentique-se para votar neste link'{%else%}title='Votar nesse link'{%endif%}>
+                                 <button type="submit" class="btn btn-primary" {% if not user.is_authenticated %}disabled title='Autentique-se para votar neste link'{%else%}title='Votar nesse link'{%endif%}>
                                     <i class="fa fa-thumbs-up" aria-hidden="true"></i> {{link.voto_set.count}}</i>
                                 </button>
                             </form>
