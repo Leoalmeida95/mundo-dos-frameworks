@@ -91,7 +91,7 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
             return self.profissao        
 
     @staticmethod
-    def obter_usuario_por_id(id):
+    def obter_usuario(id):
         return Usuario.objects.get(pk=id)
 
     @staticmethod
@@ -110,7 +110,7 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
         self.ativo = True
         self.save()
 
-    def email_user(self, subject, message, from_email=None):
+    def enviar_email(self, subject, message, from_email=None):
         send_mail(subject, message, from_email, [self.email])
 
     def has_module_perms(self, app_label):
@@ -152,7 +152,7 @@ class Linguagem(models.Model):
         return Linguagem.objects.filter(id=id).first().framework_set.all().order_by('nome')
 
     @staticmethod
-    def verificar_nome_existente(nome):
+    def verificar_nome(nome):
         return Linguagem.objects.filter(nome=nome).first()
     
     @staticmethod
@@ -160,11 +160,11 @@ class Linguagem(models.Model):
         return Linguagem.objects.all().order_by('nome')
 
     @staticmethod
-    def obter_linguagem_por_id(id):
+    def obter_linguagem(id):
         return Linguagem.objects.get(id=id)
 
     @staticmethod
-    def obter_numero_frameworks():
+    def obter_top10_mais_frameworks():
         return Linguagem.objects.raw('''SELECT 
                                             l.id
                                             ,l.nome
@@ -185,6 +185,10 @@ class Linguagem(models.Model):
         ) 
         linguagem.save()
 
+    @staticmethod
+    def obter_nome_denunciado(id):
+        l = Linguagem.objects.get(id=id)
+        return l.nome
 
 class Framework(models.Model):
     nome = models.CharField(max_length=60)
@@ -196,11 +200,11 @@ class Framework(models.Model):
         return self.nome
 
     @staticmethod
-    def obter_framework_por_id(id):
+    def obter_framework(id):
         return Framework.objects.get(id=id)
 
     @staticmethod
-    def verificar_nome_existente(nome):
+    def verificar_nome(nome):
         return Framework.objects.filter(nome=nome).first()
 
     @staticmethod
@@ -248,7 +252,6 @@ class Framework(models.Model):
             fram.favoritado_por.add(user)
             fram.save()
 
-
     @staticmethod
     def excluir_favorito(id,user_id):
         with transaction.atomic():
@@ -256,6 +259,11 @@ class Framework(models.Model):
             user = Usuario.objects.get(id=user_id)
             fram.favoritado_por.remove(user)
             fram.save()
+
+    @staticmethod
+    def obter_nome_denunciado(id):
+        f = Framework.objects.get(id=id)
+        return f.nome
 
 class Versao(models.Model):
     numero = models.DecimalField(default=0, max_digits=10, decimal_places=3)
@@ -266,11 +274,11 @@ class Versao(models.Model):
         return str(self.numero)
 
     @staticmethod
-    def obter_versao_por_id(id):
+    def obter_versao(id):
         return Versao.objects.get(id=id)
 
     @staticmethod
-    def verificar_numero_existente(numero, fm_id):
+    def verificar_numero(numero, fm_id):
         return Versao.objects.filter(numero=numero,framework_id=fm_id).first()
 
     @staticmethod
@@ -344,7 +352,7 @@ class Opiniao(models.Model):
         return self.texto  
 
     @staticmethod
-    def obter_texto_opiniao(id):
+    def obter_texto_denunciado(id):
         o = Opiniao.objects.get(id=id)
         return o.texto
 
@@ -403,7 +411,7 @@ class Comentario(models.Model):
         return self.texto
 
     @staticmethod
-    def obter_texto_comentario(id):
+    def obter_texto_denunciado(id):
         c = Comentario.objects.get(id=id)
         return c.texto
 

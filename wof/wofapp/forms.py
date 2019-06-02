@@ -86,7 +86,7 @@ class CustomUserCreationForm(UserCreationForm):
             'token': account_activation_token.make_token(user),
             'protocol': 'https' if use_https else 'http',
         })
-        user.email_user('Ative sua conta no WOF System',message,from_email = 'wofsystem@gmail.com')
+        user.enviar_email('Ative sua conta no WOF System',message,from_email = 'wofsystem@gmail.com')
 
 class UserChangeForm(forms.ModelForm):
 
@@ -285,7 +285,7 @@ class VersaoForm(forms.ModelForm):
 
         if numero_versao is None:
             raise forms.ValidationError('O Número da Versão é obrigatório.')
-        elif Versao.verificar_numero_existente(numero_versao,fram_id):
+        elif Versao.verificar_numero(numero_versao,fram_id):
             raise forms.ValidationError('O framework já possui essa versão.')
         return self.cleaned_data
 
@@ -303,7 +303,7 @@ class LinguagemForm(forms.ModelForm):
 
         if nome is None:
             raise forms.ValidationError('O nome é obrigatório.')
-        elif Linguagem.verificar_nome_existente(nome):
+        elif Linguagem.verificar_nome(nome):
             raise forms.ValidationError('Essa Linguagem já está registrada no sistema.')
         return self.cleaned_data
 
@@ -329,9 +329,9 @@ class FrameworkForm(forms.ModelForm):
 
         if nome is None or nome is '' or linguagem_id is None:
             raise forms.ValidationError('Os campos são obrigatórios.')
-        elif Framework.verificar_nome_existente(nome):
+        elif Framework.verificar_nome(nome):
             raise forms.ValidationError('Essa Framework já está registrada no sistema.')
-        elif Linguagem.obter_linguagem_por_id(linguagem_id) is None:
+        elif Linguagem.obter_linguagem(linguagem_id) is None:
             raise forms.ValidationError('Escolha uma Linguagem válida para o Framework.')
         return self.cleaned_data
 

@@ -18,7 +18,7 @@ from .models import *
 
 def chart_view(request):
     linguagens_combo = Linguagem.obter_linguagens_minimo_um_framework()
-    top_linguagens = Linguagem.obter_numero_frameworks()
+    top_linguagens = Linguagem.obter_top10_mais_frameworks()
     top_frameworks = Framework.obter_top10_constribuicoes()
     
     dataSource1 = OrderedDict()
@@ -155,7 +155,7 @@ def ativar_conta_view(request, uidb64=None, token=None):
     assert uidb64 is not None and token is not None
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
-        user = Usuario.obter_usuario_por_id(uid)
+        user = Usuario.obter_usuario(uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
@@ -184,7 +184,7 @@ def reset_senha_confirmacao_view(request, uidb64=None, token=None):
     assert uidb64 is not None and token is not None
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
-        user = Usuario.obter_usuario_por_id(uid)
+        user = Usuario.obter_usuario(uid)
     except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
         user = None
 
@@ -262,14 +262,14 @@ def montar_framework(framework,versao,u_id):
 
 def frameworks_view(request,id):
     args = {}
-    framework = Framework.obter_framework_por_id(id)
+    framework = Framework.obter_framework(id)
     args = montar_framework(framework,framework.versao_set.last(),request.user.id)
     
     return render(request,'frameworks.html', args)
 
 def trocar_versao_view(request,vs_id):
     args = {}
-    versao = Versao.obter_versao_por_id(vs_id)
+    versao = Versao.obter_versao(vs_id)
     framework = versao.framework
     args = montar_framework(framework,versao,request.user.id)
     
@@ -436,7 +436,7 @@ def define_linguagem_adcframework_view(request,lg_id):
     args={}
     args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
     args['linguagens'] = Linguagem.obter_linguagens()
-    args['lg_escolhida'] = Linguagem.obter_linguagem_por_id(lg_id)
+    args['lg_escolhida'] = Linguagem.obter_linguagem(lg_id)
     args['exibe_modal_fram'] = "show"
 
     return render(request,'faq.html', args)
@@ -641,7 +641,7 @@ def denuncia_comentario_view(request,cm_id):
                 return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':denuncia.Comentario.framework_id}))
             else:
                 args['denuncia'] = "Comentario"
-                args['conteudo'] = Comentario.obter_texto_comentario(cm_id)
+                args['conteudo'] = Comentario.obter_texto_denunciado(cm_id)
                 args['cm_id'] = cm_id
                 args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
     except Exception:
@@ -674,7 +674,7 @@ def denuncia_opiniao_view(request,op_id):
                 return HttpResponseRedirect(reverse('wofapp:frameworks', kwargs={'id':denuncia.opiniao.versao.framework_id}))
             else:
                 args['denuncia'] = "Opinião"
-                args['conteudo'] = Opiniao.obter_texto_opiniao(op_id)
+                args['conteudo'] = Opiniao.obter_texto_denunciado(op_id)
                 args['op_id'] = op_id
                 args['linguagens_combo'] = Linguagem.obter_linguagens_minimo_um_framework()
     except Exception:

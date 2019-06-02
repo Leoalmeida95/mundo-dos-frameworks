@@ -33,7 +33,7 @@ class FrameworkAdmin(admin.ModelAdmin):
     save_on_top = True
 
     def has_add_permission(self, request, obj=None):
-        return False
+       return False 
 
 class UsuarioAdmin(BaseUserAdmin):
     # The forms to add and change user instances
@@ -61,6 +61,9 @@ class UsuarioAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
     def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
         return False
 
 class DenunciaAdmin(admin.ModelAdmin):
