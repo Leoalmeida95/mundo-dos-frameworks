@@ -85,7 +85,7 @@
                             {%endif%}
                             </div>
                             <div class="card-footer text-muted">                
-                                <button type="submit" class="btn btn-info">Salvar</button>
+                                <button type="submit" class="btn btn-info" {% if not user.is_authenticated %}disabled{%endif%}>Salvar</button>
                             </div>
                         </div>
                     </div>
