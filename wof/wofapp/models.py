@@ -73,7 +73,7 @@ class Usuario(PermissionsMixin, AbstractBaseUser):
         verbose_name_plural = _('Usuarios')
 
     def __str__(self):
-        return self.email
+        return self.primeiro_nome +" "+ self.ultimo_nome
 
     def obter_nome_completo(self):
         return self.primeiro_nome +" "+ self.ultimo_nome
@@ -271,7 +271,7 @@ class Versao(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null = False)
 
     def __str__(self):
-        return str(self.numero)
+        return str(self.numero) + ' ('+ str(self.framework.nome) +')'
 
     @staticmethod
     def obter_versao(id):

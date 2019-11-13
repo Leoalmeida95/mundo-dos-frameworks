@@ -139,7 +139,8 @@ def registrar_usuario_view(request):
                 form.enviar_email(user,request=request)
                 messages.info(request, 'Muito bem! Agora para concluir seu registro, por favor confirme sua conta no email que enviamos pra você.')
                 return HttpResponseRedirect(reverse('wofapp:home'))
-            except Exception:
+            except Exception as e:
+                erro = str(e)
                 logger = logging.getLogger(__name__)
                 logger.exception("Erro no registro de usuário.")
                 messages.error(request, 'Erro ao registrar usuário. Tente novamente mais tarde.')

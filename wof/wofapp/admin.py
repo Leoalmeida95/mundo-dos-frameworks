@@ -72,8 +72,9 @@ class DenunciaAdmin(admin.ModelAdmin):
     search_fields = ['motivo',]
     list_display=['motivo','resolvida']
     fieldsets = (
-        ('Motivo denúncia', {'fields': ('resolvida','motivo','data','quem_denunciou',)}),
+        ('Motivo denúncia', {'fields': ('motivo','data','quem_denunciou',)}),
         ('Conteúdo denúncia', {'fields': ('Comentario','opiniao','framework','linguagem',)}),
+        ('Essa Denúncia foi resolvida?', {'fields': ('resolvida',)}),
     )
     readonly_fields = ['motivo','data','quem_denunciou','Comentario','opiniao','framework','linguagem']
     save_on_top = True
@@ -92,15 +93,30 @@ class ComentarioAdmin(admin.ModelAdmin):
     def has_add_permission(self, request, obj=None):
         return False
 
+    def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['show_save_and_continue'] = False
+        extra_context['show_save'] = False
+        return super(OpiniaoAdmin, self).changeform_view(request, object_id, extra_context=extra_context)
+
 class OpiniaoAdmin(admin.ModelAdmin):
     model = Opiniao
     search_fields = ['texto','usuario']
     list_display=['texto','usuario']
+    fieldsets = (
+        ('Dados do Opinião Denunciada', {'fields': ('texto','usuario','versao', 'eh_favoravel')}),
+    )
     readonly_fields = ['texto','usuario','versao','eh_favoravel']
     save_on_top = True
 
     def has_add_permission(self, request, obj=None):
         return False
+
+    def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['show_save_and_continue'] = False
+        extra_context['show_save'] = False
+        return super(OpiniaoAdmin, self).changeform_view(request, object_id, extra_context=extra_context)
 
 admin.site.register(Denuncia,DenunciaAdmin)
 admin.site.register(Opiniao,OpiniaoAdmin)

@@ -68,9 +68,9 @@ WSGI_APPLICATION = 'wof.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'wofbase',
+        'NAME': 'wof',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
+        'PASSWORD': '14945042780',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -147,7 +147,7 @@ LOGIN_REDIRECT_URL = '/'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'wofsystem@gmail.com'
-EMAIL_HOST_PASSWORD = 'wofsystem@admin'
+EMAIL_HOST_PASSWORD = 'jqhthixvnteqeyqe'
 EMAIL_PORT = 587
 
 #permite validação de usuário ativo na autenticação
