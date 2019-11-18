@@ -1,6 +1,5 @@
 *.pyc
 node_modules
-static_files
 .vs
 settings.json
 launch.json
