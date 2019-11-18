@@ -5,19 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Django",
+            "name": "Python: Django",
             "type": "python",
             "request": "launch",
-            "stopOnEntry": false,
-            "pythonPath": "C:/Users/Leoal/AppData/Local/Programs/Python/Python36/python.exe",
-            "program": "${workspaceRoot}/manage.py",
+            "program": "${workspaceFolder}/manage.py",
+            "console": "integratedTerminal",
             "args": [
                 "runserver",
                 "--noreload"
             ],
-            "debugOptions": [
-                "RedirectOutput",
-            ]
+            "django": true
         },
     ]
 }
